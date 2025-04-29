@@ -1,0 +1,6 @@
+/frontend/node_modules
+/frontend/.env.local
+/frontend/.next
+
+/livekit/venv
+/livekit/.env
