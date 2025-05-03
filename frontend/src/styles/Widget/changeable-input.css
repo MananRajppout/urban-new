@@ -1,0 +1,73 @@
+.changeable-input{
+    display: grid;
+    grid-template-columns: 1fr max-content 1fr ;
+    align-items: center;
+    padding: 0 2em;
+    border-radius: var(--border-radius);
+    border: 1.5px solid #555768;
+    background: rgba(85, 87, 104, 0.2);
+    font-size: var(--medium-font);
+    color: white;
+    width: 100%;
+    outline: none;
+    height: 52px;
+}
+
+.changeable-input input{
+    border: none;
+    background-color: transparent;
+    padding: 12px 0;
+    padding-left: 2em;
+    color: rgba(255, 255, 255, 0.822);
+}
+
+.changeable-input .buttons img{
+    width: 14px;
+}
+
+.changeable-input span{
+    font-size: var(--medium-font);
+}
+
+.changeable-input .buttons{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 0px;
+}
+
+.changeable-input .buttons img:hover{
+    opacity: 0.7;
+}
+
+.changeable-input .buttons :first-child{
+    transform: rotate(180deg);
+}
+
+
+.changeable-input hr{
+    width: 1px;
+    height: 20px;
+    display: block;
+    border: none;
+    background-color: rgba(255, 255, 255, 0.308);
+}
+
+
+.changeable-input .right{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+
+@media only screen and (max-width: 800px) {
+    .changeable-input{
+        height: 54px;
+    }
+
+    .changeable-input .buttons img{
+        width: 12px;
+    }
+}

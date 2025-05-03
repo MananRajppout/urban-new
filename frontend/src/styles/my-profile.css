@@ -1,0 +1,206 @@
+.my-profile{
+    --new-surface-color: #181924;
+    margin-top: 100px;
+    margin-bottom: 100px;
+
+}
+
+.my-profile .profile-box{
+    display: grid;
+    /* grid-template-columns: max-content 1fr; */
+    align-items: center;
+    padding: 24px 32px;
+    gap: 2em;
+    background-color: var(--new-surface-color);
+    margin-bottom: 50px;
+}
+
+.my-profile .profile-box>img{
+    width: 200px;
+    height: 200px;
+}
+
+.my-profile h2{
+    color: white;
+    font-size: var(--big-font);
+    margin-top: 1em;
+    margin-bottom: 1em;
+    font-weight: normal;
+}
+
+.my-profile .profile-box>div{
+    padding: 24px;
+}
+
+.my-profile .profile-box h2{
+    margin: 0;
+    color: white;
+}
+
+.my-profile .profile-box p{
+    font-size: var(--medium-font);
+    color: var(--color-on-surface2);
+}
+
+.my-profile .profile-box .icon-holder{
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin: 32px 0;
+}
+
+.my-profile .profile-box .icon-holder img{
+    height: 24px;
+}
+
+.my-profile .profile-box .label{
+    background-color: white;
+    border-radius: 50px;
+    color: var(--color-surface2);
+    display: flex;
+    align-items: center;
+    padding: 0.5em 1.5em;
+    font-weight: 500;
+}
+
+.my-profile .profile-box .bottom{
+    display: flex;
+    align-content: center;
+    justify-content: space-between;
+}
+
+.my-profile .profile-box button{
+    border: none;
+    background-color: rgba(255, 255, 255, 0.15);
+    margin-left: auto;
+    border-radius: 50px;
+    padding: 0.5em 1.5em;
+    font-size: var(--medium-font);
+    color: white;
+}
+
+
+
+
+/* plan box */
+
+
+.my-profile .plan-box{
+    margin-top: 50px;
+    background-color: var(--new-surface-color);
+    padding-bottom: 32px;
+    margin-bottom: 50px;
+}
+
+.my-profile .plan-box h3{
+    color: white;
+}
+
+.my-profile .plan-box>*{
+    margin-left: 32px;
+    margin-right: 32px;
+}
+
+.my-profile .plan-box .title{
+    margin: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 60px;
+    font-size: var(--average-font2);
+    background-color: var(--color-surface3);
+    color: white;
+}
+
+
+.my-profile .plan-box ul{
+    padding-left: 20px;
+    font-size: var(--medium-font);
+    color: var(--color-on-surface2);
+    line-height: 2em;
+}
+
+.my-profile .plan-box p{
+    color: var(--color-on-surface2);
+    font-size: var(--medium-font);
+}
+
+
+.my-profile .plan-box button{
+    background-color: var(--color-primary);
+    color: white;
+    font-size: var(--average-font2);
+    padding: 0.7em 1.5em;
+    border-radius: var(--border-radius);
+    border: none;
+    outline: none;
+    margin-left: auto;
+    display: block;
+    width: max-content;
+    margin-top: 32px;
+}
+
+
+
+
+
+/* usages */
+
+.my-profile .uses-box{
+    padding: 32px;
+    background-color: var(--color-surface2);
+    margin-bottom: 50px;
+}
+
+.my-profile .uses-box h3{
+    margin-top: 0 !important;
+    color: white;
+}
+
+.my-profile .uses-box p{
+    font-size: var(--medium-font);
+    color: var(--color-on-surface2);
+}
+
+.my-profile .uses-box p span{
+    color: white;
+}
+
+
+.my-profile .button-holder button{
+    border: none;
+    padding: 1em;
+    background-color: var(--color-surface2);
+    text-align: center;
+    display: block;
+    width: 100%;
+    color: white;
+    font-size: var(--average-font2);
+    margin-bottom: 16px;
+}
+
+.my-profile  .button-holder  button.danger{
+    color: var(--color-secondary);
+    background-color: #FF000029;
+}
+
+
+
+
+@media only screen and (max-width: 800px) {
+    .my-profile .profile-box{
+        grid-template-columns: 100%;
+        align-items: center;
+        padding: 24px 32px;
+        gap: 2em;
+        justify-content: center;
+    }
+
+    .my-profile .profile-box *{
+        text-align: center;
+    }
+
+    .my-profile .profile-box>img{
+        margin: auto;
+    }
+}

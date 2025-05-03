@@ -1,0 +1,48 @@
+
+User : {
+    full_name;
+    email
+    phone_number
+    password
+    create_time
+}
+
+SubscriptionModel : {
+    title
+    allowed_chatbots = 1/2/5/10
+    credits 
+    price : // In terms of dollars always 
+    removed_chatbase
+}
+
+ChatMiddleware {
+    user_id
+    credits_left
+    subscribed_model_id:0
+    create_time
+}
+
+ChatBotModel { This table is specificly made for to handle the api request
+    id
+    user_id
+    chatgpt_model_type : gpt3/gpt4
+    base_prompt 
+    training_data
+    type : default : 'standard'
+    is_alive : false
+    soft_delete : false
+}
+
+ChatBotModelView { // This one being called first time, when doing the initialization
+    ChatBotModelView_id
+    bot_title : default : light
+    Default_message
+    theme : light/dark
+    align_chat_bubble = left/right
+    profile_picture : default -> should be a url
+    remove_powered_by : default -> false
+}
+
+
+
+// one cron should be running 

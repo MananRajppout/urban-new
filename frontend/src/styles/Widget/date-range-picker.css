@@ -1,0 +1,32 @@
+.date-range-picker input {
+  padding: 0;
+  border: none;
+  background-color: transparent !important;
+}
+
+.date-range-picker {
+  border: 1px solid var(--border-color);
+  font-size: var(--medium-font);
+  color: var(--color-on-surface);
+  padding: 0 1em;
+  border-radius: var(--border-radius);
+}
+
+.date-range-picker .react-datetimerange-picker__wrapper {
+  border: none !important;
+  gap: 1em;
+}
+
+.date-range-picker .react-datetimerange-picker__inputGroup {
+  display: flex;
+  align-items: center;
+  gap: 0.5em;
+}
+/* 
+.date-range-picker .react-datetimerange-picker__inputGroup span {
+  margin-right: 8px;
+} */
+
+.date-range-picker .react-datetimerange-picker__calendar * {
+  color: black;
+}

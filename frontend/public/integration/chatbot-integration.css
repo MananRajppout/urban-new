@@ -1,0 +1,211 @@
+.urban-chat-box {
+  position: fixed;
+  height: 100%;
+  bottom: 0;
+  right: 1rem;
+  left: unset;
+  background-color: transparent;
+  overflow: hidden;
+  z-index: 2147483646;
+  padding: 0 24px;
+  display: grid;
+  grid-template-rows: 1fr max-content;
+  align-items: flex-end;
+  pointer-events: none;
+}
+
+#urban-chat-pop-up {
+  position: fixed;
+  right: 0;
+  z-index: 2147483647;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  position: relative;
+}
+
+#urban-chat-pop-up * {
+  pointer-events: all !important;
+}
+
+#urban-chat-pop-up p {
+  font-size: 16px;
+  color: black;
+  padding: 1em;
+  border-radius: 8px;
+  box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+  background-color: white;
+  border: 1px solid rgb(231, 231, 231);
+  margin: 0;
+  margin-bottom: 0.5em;
+  transition: all;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+
+  animation-name: urban-chat-pop-up-anim;
+  animation-duration: 2s;
+}
+
+@keyframes urban-chat-pop-up-anim {
+  0% {
+    opacity: 0;
+    transform: translateY(100%);
+  }
+
+  40% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.urban-chat-box.left {
+  right: unset;
+  left: 3rem;
+}
+
+.urban-chat-box .hide {
+  display: none !important;
+}
+
+.urban-chat-box iframe {
+  border: none;
+  border-radius: 0.75rem;
+  width: 450px;
+  height: calc(100vh - 132px);
+  max-height: 700px;
+  background-color: white;
+  box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+  pointer-events: all !important;
+}
+
+@keyframes urban-chat-scale-up-anim {
+  0% {
+    opacity: 0;
+    transform: scale(0);
+  }
+
+  40% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.urban-chat-box > button {
+  background-color: transparent;
+  width: 60px;
+  border-radius: 50%;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-left: auto;
+  margin-top: 16px;
+  pointer-events: all !important;
+  border: none;
+  box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px;
+  border: 1px solid rgba(0, 0, 0, 0.158);
+  margin-bottom: 32px;
+  padding: 0 !important;
+  transition: all 0.3s;
+  /* transform: scale(0); */
+  animation-name: urban-chat-scale-up-anim;
+  animation-duration: 2s;
+}
+
+.urban-chat-box.left > button {
+  margin-right: auto;
+  margin-left: unset;
+}
+
+.urban-chat-box > button:hover {
+  scale: 1.1;
+}
+
+.urban-chat-box > button img {
+  border-radius: 50%;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+#urban-chat-arrow {
+  width: 28px;
+  height: auto;
+  transform: translateY(-3px);
+}
+
+.urban-close-btn {
+  position: absolute;
+  top: 0;
+  right: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  z-index: 999999;
+  background-color: white;
+  border-radius: 50%;
+  border: 1px solid rgb(201, 201, 201);
+  transform: translate(50%, -50%) rotate(45deg);
+  opacity: 0;
+  transition: all 0.3s;
+}
+
+.urban-chat-pop-up:hover .urban-close-btn {
+  opacity: 1 !important;
+}
+
+@media only screen and (max-width: 650px) {
+  .urban-chat-box > button.hide-chat {
+    display: none;
+  }
+
+  #urban-chat-pop-up {
+    right: 16px;
+    display: none !important;
+  }
+
+  #urban-chat-pop-up p {
+    padding: 0.6em 1em;
+    font-size: 14px;
+  }
+
+  .urban-chat-box {
+    width: 100%;
+    height: 100%;
+  }
+
+  .urban-chat-box iframe {
+    border-radius: 0;
+    width: 100%;
+    height: 100%;
+    max-height: unset;
+    box-shadow: unset;
+  }
+
+  .urban-chat-box {
+    right: 0;
+    padding: 0;
+  }
+
+  .urban-chat-box.left {
+    right: unset;
+    left: 0;
+  }
+
+  .urban-chat-box > button {
+    margin-right: 24px;
+    width: 55px;
+    height: 55px;
+  }
+
+}

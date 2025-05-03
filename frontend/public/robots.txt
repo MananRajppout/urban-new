@@ -1,0 +1,9 @@
+# *
+User-agent: *
+Allow: /
+
+# Host
+Host: https://urbanchat.ai
+
+# Sitemaps
+Sitemap: https://urbanchat.ai/sitemap.xml

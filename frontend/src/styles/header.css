@@ -1,0 +1,126 @@
+header {
+    background-color: var(--color-surface);
+}
+
+
+
+header .page {
+    display: grid;
+    grid-template-columns: max-content auto max-content;
+    justify-content: space-between;
+    align-items: center;
+    height: 80px;
+}
+
+header .center a {
+    color: var(--color-on-surface);
+}
+
+header .center a.active,
+header .center a:hover {
+    color: var(--color-on-surface-light);   
+    text-decoration: underline;
+}
+
+
+header .logo {
+    height: 40px;
+}
+
+header .profile-img {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+header .profile-img img {
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    object-fit: cover;
+}
+
+header .center {
+    display: flex;
+    gap: 16px;
+    background-color: var(--color-surface3);
+    /* background-color: red !important; */
+    height: 42px;
+    border-radius: 50px;
+    justify-content: center;
+    align-items: center;
+    padding: 0 2em;
+    margin-left: 100px;
+}
+
+.active-link {
+    color: darkcyan;
+    font-weight: bold; 
+}
+
+
+header .right {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+}
+
+header button.simple a {
+    color: var(--color-on-secondary);
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+header button.simple svg {
+    fill: var(--color-on-secondary);
+}
+
+header button.simple {
+    background-color: var(--color-secondary);
+
+    border: none;
+    padding: 0 1em;
+    border-radius: 50px;
+    height: 42px;
+}
+
+/* header .right .profile-img{
+    background-color:red;
+} */
+
+
+@media only screen and (max-width: 850px) {
+    header .center {
+        display: none;
+    }
+
+    header .page {
+        grid-template-columns: max-content max-content;
+        height: 80px;
+    }
+}
+
+
+@media only screen and (max-width: 600px) {
+
+    header button.simple {
+        padding: 0 1em;
+    }
+
+    header .profile-img {
+        display: none;
+    }
+
+    header button.simple a {
+        gap: 0.5em;
+    }
+
+    header button.simple svg {
+        width: 16px;
+    }
+
+    header button.outline{
+        display: none !important;
+    }
+}

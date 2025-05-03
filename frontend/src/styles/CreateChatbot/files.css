@@ -1,0 +1,73 @@
+.files-holder .inner-holder {
+  display: grid;
+  width: 100%;
+  gap: 12px;
+  min-height: 300px;
+  margin-top: 60px;
+  max-height: 500px;
+  overflow: auto;
+}
+
+.files-holder .file-tab hr {
+  width: 1px;
+  height: 32px;
+  border: none;
+  background-color: rgba(255, 255, 255, 0.233);
+  margin: 0;
+}
+
+
+.files-holder .inner-holder .file-tab {
+  min-height: 90px;
+  border-radius: 20px;
+  border: 1px dashed #05668d;
+  background-color: #05668d18;
+  display: grid;
+  grid-template-columns: max-content max-content auto max-content;
+  gap: 1em;
+  align-items: center;
+  padding: 0 1.5em;
+  color: white;
+  font-size: var(--medium-font);
+  width: 100%;
+  height: max-content;
+}
+
+.files-holder .file-tab button {
+  background-color: transparent;
+  border-radius: 50px;
+  padding: 0.6em 1.5em;
+  color: #ff0000;
+  border: 1px solid #ff0000;
+  background-color: #ff000021;
+  font-size: var(--medium-font);
+}
+
+.files-holder .file-tab span{
+  word-break: break-all;
+  padding: 1em 0;
+}
+
+.files-holder>div>button {
+  font-size: var(--medium-font);
+  color: white;
+  padding: 0.8em 1em;
+  display: block;
+  border-radius: 50px;
+  background-color: #27293c;
+  position: relative;
+  border: none;
+  width: max-content;
+  height: max-content;
+  margin: auto;
+  margin-top: 20px;
+}
+
+.files-holder>div>button input {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0.001;
+}

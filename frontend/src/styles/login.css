@@ -1,0 +1,142 @@
+.login .page {
+    min-height: 80vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.login p{
+    color: rgba(255, 255, 255, 0.664);
+}
+
+
+.login .left a{
+    display: block;
+    text-align: left !important;
+}
+
+.login p a{
+    text-decoration: none;
+    font-weight: 600;
+    color: white;
+}
+
+
+.login h2 {
+    color: white;
+    font-weight: 600;
+}
+
+.login hr{
+    border: none;
+    border-bottom: 1px solid var(--color-surface3);
+    width: 100px;
+}
+
+
+
+.login button{
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 3em;
+    margin-top: 2em;
+    border-radius: var(--border-radius);
+    font-size: var(--medium-font);
+    background-color:var(--color-primary);
+}
+
+.login button.outline{
+    background-color: transparent;
+    border: 1px dashed var(--border-color);
+    color: var(--color-on-surface2);
+}
+
+.login button.google {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1em;
+    background-color: var(--color-surface3);
+    color: white;
+}
+
+.login button.google img{
+
+    width: 1.3em;
+    height: auto;
+
+}
+
+
+.login .box{
+    max-width: 400px;
+    text-align: center;
+    flex-direction: column;
+    width: 100%;
+}
+
+.login .input-holder .input-box-heading {
+    color: #8d99ae;
+    font-size: var(--medium-font);
+    margin-top: 2em;
+    margin-bottom: 0.5em;
+    text-align: left !important;
+    display: block;
+}
+
+.login .input-holder input:focus {
+    border-color: #a0a2ad;
+}
+
+
+.login .input-holder input {
+    padding: 1em;
+    border-radius: var(--border-radius);
+    border: 1.5px solid var(--border-color);
+    background: rgba(85, 87, 104, 0.2);
+    font-size: var(--medium-font);
+    color: #eaeaec;
+    width: 100%;
+    outline: none;
+}
+
+
+.login .msg-box{
+
+    border: 1px dashed var(--border-color);
+    padding: 1em;
+    border-radius: var(--border-radius);
+}
+
+
+.login .msg-box a{
+    width: max-content;
+    display: inline-block;
+    margin: 0;
+}
+
+.login .msg-box button{
+    width: max-content;
+    margin: 0;
+    margin-top: 1em;
+}
+
+.login .input-holder .error {
+    color: rgb(224, 29, 29) !important;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 8px;
+    /* background-color:green !important; */
+}
+.login .email-box .error {
+    color: rgb(224, 29, 29) !important;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 8px;
+    /* background-color:green !important; */
+}

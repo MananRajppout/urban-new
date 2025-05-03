@@ -1,0 +1,24 @@
+version: 0.2
+
+phases:
+  install:
+    runtime-versions:
+      nodejs: 18
+    commands:
+      - echo Logging in to Amazon ECR...
+      - aws --version
+      - aws ecr get-login-password --region eu-south-1 | docker login --username AWS --password-stdin 760112257198.dkr.ecr.eu-south-1.amazonaws.com
+  build:
+    commands:
+      - echo Building Docker image...
+      - docker build -t urbanchat_backend .
+      - docker tag urbanchat_backend:latest 760112257198.dkr.ecr.eu-south-1.amazonaws.com/urbanchat_backend:latest
+  post_build:
+    commands:
+      - echo Pushing Docker image to Amazon ECR...
+      - docker push 760112257198.dkr.ecr.eu-south-1.amazonaws.com/urbanchat_backend:latest
+      - echo Deploying to Amazon ECS...
+      - aws ecs update-service --cluster urbanchat-backend-cluster --service urbanchat-apis-service --force-new-deployment
+
+artifacts:
+  files: []

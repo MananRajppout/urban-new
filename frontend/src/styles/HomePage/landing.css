@@ -1,0 +1,244 @@
+.landing{
+    position: relative;
+    
+}
+
+
+.landing .page {
+    display:flex;
+    /* display: grid; */
+    /* grid-template-columns: 1fr 1fr; */
+    align-items: center;
+    margin-top: 60px;
+    margin-bottom: 150px;
+    justify-content: center;
+    
+}
+
+.landing .page .left{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 80px;
+    /* background-color: rebeccapurple; */
+   
+}
+
+
+.landing-layer{
+    width: 100%;
+    height: auto;
+    position: absolute;
+    z-index: -1;
+    top: 45%;
+    transform: translateY(-40%);
+   
+
+}
+
+.heading{
+    font-size:65px;
+    width: 70vw;
+    margin-top: 30px;
+    line-height: 1.09em;
+    
+}
+
+
+
+.landing h1 {
+    font-size: 65px;
+    /* font-family: 'Montserrat'; */
+    margin-top: 0;
+    margin-bottom: 0;
+    line-height: 1.2em;
+    font-weight: normal;
+    font-weight: 600;
+
+}
+
+.landing h1 span {
+    font-weight: bold !important;
+}
+
+.landing .page .left .heading-text{
+    margin-bottom: 0;
+    transform: translateY(-30px);
+}
+
+
+
+.landing .buttons{
+    display: flex;
+    align-items: center;
+}
+
+.landing .play-btn{
+    display: flex;
+    align-items: center;
+    gap: 1em;
+    background-color: transparent;
+    border: none;
+}
+
+
+
+
+.landing .right {
+    position: relative;
+}
+
+.landing .right img{
+    width: 100%;
+}
+
+
+
+.landing .bot {
+    width: 100%;
+}
+
+.landing .gradient {
+    position: absolute;
+    right: 10vw;
+    top: -10vh;
+    z-index: -1;
+    opacity: 0.9;
+}
+
+.landing .phone{
+    display: none;
+}
+
+
+.landing .coming-soon{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1em;
+    margin-top: 2em;
+    background-color: var(--color-primary);
+    width: max-content;
+    margin: auto;
+    padding: 0 12px;
+    border-radius: 50px;
+    height: 65px;
+    transform: translateY(50%);
+    
+}
+
+.landing .coming-soon img{
+    height: 37px;
+    display: block;
+    margin-left: 1em;
+}
+
+.landing .coming-soon div{
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+.landing .coming-soon span{
+    display: block;
+    color: white !important;
+}
+
+.landing .coming-soon .label{
+    font-size: var(--small-font2);
+    opacity: 0.6;
+}
+
+.landing .coming-soon .title{
+    font-size: var(--medium-font);
+}
+
+.landing .coming-soon .text{
+    font-size: var(--small-font);
+    opacity: 0.8;
+}
+
+.landing .coming-soon button{
+    background-color: white !important;
+    color: #3E3E3E !important;
+    margin-left: 3em;
+}
+
+
+
+/* below css  for the SeeDemoVoice*/
+/* Container and select styling */
+.dropdown-container {
+    width: 400px;
+    text-align: start;
+}
+
+
+
+
+
+
+
+@media only screen and (max-width: 1100px) {
+    .landing h1 {
+        font-size: 60px;
+    }
+
+    .landing .gradient {
+        top: -15vh;
+    }
+
+}
+
+@media only screen and (max-width: 900px){
+    /* .landing .gradient {
+        bottom: -100px;
+    } */
+}
+
+@media only screen and (max-width: 800px) {
+    .landing .gradient {
+        display: none;
+    }
+    .landing .page {
+        grid-template-columns: 100%;
+
+    }
+
+    .landing .phone{
+        display: grid;
+    }
+
+    .landing .desktop{
+        display: none;
+    }
+
+    .landing .gradient {
+        bottom: 0px;
+        opacity: 0.5;
+
+    }
+
+}
+
+
+
+
+@media only screen and (max-width: 700px) {
+    .landing .right {
+        grid-template-columns: 2fr 1fr;
+    }
+
+    .landing .coming-soon{
+        display: none;
+        
+    }
+}
+
+
+
+
+@media only screen and (max-width: 550px) {
+    .landing .gradient {
+        bottom: -50px;
+    }
+}

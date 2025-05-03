@@ -1,0 +1,217 @@
+.tabs {
+  display: flex;
+  justify-content: flex-start;
+  border-bottom: 1px solid rgba(234, 234, 234, 0.1);
+  margin-bottom: 1rem;
+}
+
+.tab {
+  padding: 10px 20px;
+  cursor: pointer;
+  margin-right: 10px;
+  font-weight: bold;
+  background: none;
+  border: none;
+  color: #aaa;
+  border-bottom: 2px solid transparent;
+  transition: color 0.3s, border-bottom 0.3s;
+}
+.glassy-table {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 5px;
+}
+  
+.tab.active {
+  border-bottom: 2px solid var(--color-primary);
+  color: #fff;
+}
+
+.tab-content {
+  margin-top: 20px;
+}
+
+.outline-btn {
+  width: 230px;
+  background: none;
+  border: 2px solid #fff;
+  padding: 10px 20px;
+  color: #fff;
+  /* border-radius: 8px; */
+  font-size: 13px;
+  cursor: pointer;
+  transition: background 0.3s, color 0.3s;
+}
+
+.outline-btn:hover {
+  background: var(--color-primary);
+  color: #fff;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 20px; 
+}
+
+/* .grid > div {
+  padding: 20px;
+  border-radius: 10px;
+  text-align: left;
+  color: #fff;
+} */
+
+
+.fade-background {
+  /* height: 100vh; */
+  background-color:#10121B;
+  padding: 20px;
+  border-radius: 10px;
+  /* border: 20px solid #191B25; */
+}
+.flip-card {
+  background-color: transparent;
+  width: 320px;
+  height: 200px;
+  perspective: 1000px;
+  color: white;
+  margin: 20px;
+  transition: box-shadow 0.5s ease; 
+}
+
+.flip-card-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  text-align: center;
+  transition: transform 0.5s;
+  transform-style: preserve-3d;
+  border-radius: 15px;
+}
+
+.flip-card:hover .flip-card-inner {
+  transform: rotateY(180deg);
+}
+
+.flip-card-front, .flip-card-back {
+  background-color: #0d0c0c;
+  perspective: 1000px;
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  backface-visibility: hidden;
+  border-radius: 1.5rem;
+}
+
+.flip-card-front {
+  padding: 20px;
+}
+
+.logo-mc {
+  width: 40px;
+  height: 40px;
+}
+
+.chip {
+  width: 30px;
+  height: 30px;
+}
+
+.number {
+  font-weight: bold;
+  font-size: 1.1rem;
+}
+
+.valid_thru {
+  font-size: 0.9rem;
+}
+
+.date_8264 {
+  font-size: 1rem;
+  font-weight: bold;
+}
+
+/* Back of the card */
+.strip {
+  height: 40px;
+  background: repeating-linear-gradient(
+    45deg,
+    #303030,
+    #303030 10px,
+    #202020 10px,
+    #202020 20px
+  );
+  width: 100%;
+  top: 20px;
+}
+
+.back-content {
+  margin-top: 80px;
+}
+
+.signature-box {
+  width: 150px;
+  height: 30px;
+  background-color: white;
+}
+
+.cvv-box {
+  width: 50px;
+  height: 30px;
+  background-color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: black;
+  font-weight: bold;
+}
+
+.flip-card-back {
+  transform: rotateY(180deg);
+}
+
+.card-delete-btn{
+  font-size: 2rem;
+  position: absolute;
+  top: -26px;
+  right: 20px;
+  cursor: pointer;
+  background-color: black;
+  border-radius: 50%;
+  height:25px;
+  width: 25px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: all .3s linear;
+}
+
+.card-delete-btn:hover{
+  background-color: rgb(197, 1, 1);
+}
+
+
+
+
+
+/* .card-delete-btn::before{
+  content:'';
+  background: rgb(213, 1, 1);
+  height: 25px;
+  width: 25px;
+  position:absolute;
+  border-radius: 50%;
+  top: 100%;
+  left: 0px;
+  z-index: 0;
+  transition: .2s linear;
+}
+
+.card-delete-btn:hover::before{
+  top: 0;
+} */

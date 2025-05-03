@@ -1,0 +1,110 @@
+.error-page * {
+  box-sizing: border-box;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif !important;
+}
+
+.error-page {
+  background-color: black;
+  overflow-y: auto;
+
+  --heading1: 80px;
+  --heading2: 40px;
+}
+
+.error-page h1,
+.error-page h2 {
+  color: white !important;
+  /* font-family: "Roboto"; */
+  margin: 0;
+}
+
+.error-page h1 {
+  font-size: var(--heading1);
+  font-weight: 700;
+  letter-spacing: 8px;
+  margin-bottom: 0.5em;
+  line-height: 1em;
+}
+
+.error-page h2 {
+  font-size: var(--heading2);
+  font-weight: 600;
+  letter-spacing: 2px;
+}
+
+.error-page p {
+  font-size: var(--medium-font);
+  color: #a1a1aa !important;
+}
+
+.error-page .center {
+  display: grid;
+  grid-template-columns: 1.2fr 1fr;
+  align-items: center;
+  min-height: 100vh;
+}
+
+.error-page .right {
+  position: relative;
+}
+
+.error-page .layer {
+  width: 100%;
+  height: auto;
+}
+
+.error-page .right .astro {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 60%;
+  height: auto;
+  transform: translate(-50%, -50%);
+}
+
+.error-page button {
+  margin-top: 2em;
+  border-radius: 60px;
+  color: white !important;
+}
+
+@media only screen and (max-width: 1100px) {
+  .error-page .center {
+    display: flex;
+    flex-direction: column-reverse;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .error-page .right {
+    width: 50vw;
+  }
+
+  .error-page * {
+    text-align: center;
+  }
+
+  .error-page {
+    --heading1: 70px;
+    --heading2: 32px;
+  }
+}
+
+@media only screen and (max-width: 700px) {
+  .error-page {
+    --heading1: 60px;
+    --heading2: 28px;
+  }
+
+  .error-page .right {
+    width: 70vw;
+  }
+}
+
+@media only screen and (max-width: 500px) {
+  .error-page {
+    --heading1: 42px;
+    --heading2: 20px;
+  }
+}

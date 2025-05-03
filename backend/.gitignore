@@ -1,0 +1,8 @@
+node_modules
+venv/
+analysis/
+data_migration/
+package-lock.json
+tmp/
+test.js
+.env

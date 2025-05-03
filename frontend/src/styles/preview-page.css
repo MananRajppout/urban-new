@@ -1,0 +1,19 @@
+.preview-page {
+    margin-top: 100px;
+    --new-surface-color: #181924;
+    margin-bottom: 100px;
+}
+
+.preview-page h2,
+.preview-page h3 {
+    color: white;
+    font-size: var(--big-font);
+    margin-top: 1em;
+    margin-bottom: 1em;
+    font-weight: normal;
+}
+
+.preview-page p {
+    color: var(--color-on-surface2);
+    font-size: var(--medium-font);
+}

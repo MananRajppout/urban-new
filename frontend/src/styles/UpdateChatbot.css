@@ -1,0 +1,77 @@
+
+.update-chatbot{
+    background-color: var(--color-surface);
+    min-height: 400px;
+    overflow: auto;
+}
+
+
+.update-chatbot .header h1{
+    font-size: var(--big-font);
+    margin-top: 0;
+    margin-bottom: 16px;
+    text-align: center;
+    font-weight: 600;
+}
+
+.update-chatbot .header{
+    margin-top: 30px;
+    margin-bottom: 30px;
+}
+
+.update-chatbot .header span{
+    font-size: var(--medium-font);
+    display: block;
+    text-align: center;
+}
+
+.update-chatbot .page{
+    margin-bottom: 300px;
+}
+
+
+
+/* .update-chatbot .tab-container{
+    display: flex;
+    overflow: auto;
+    gap: 16px;
+    border-bottom: 1px solid #1F202F;
+    overflow: auto;
+    white-space: pre;
+}
+
+.update-chatbot .tab-container span{
+    display: inline-block;
+    padding: 16px 21px;
+    color: #8D99AE;
+    font-size: var(--medium-font);
+    border-bottom: 4px solid transparent;
+    cursor: pointer;
+}
+
+.update-chatbot .tab-container span:last-child{
+    color: #FF0000 !important;
+}
+
+.update-chatbot .tab-container span.active, .update-chatbot .tab-container span:hover{
+    color: white;
+    border-bottom: 4px solid white;
+} */
+
+
+@media only screen and (max-width: 700px){
+    
+    .update-chatbot .header h1{
+        font-size: 24px;
+    }
+    
+    .update-chatbot .header span{
+        font-size: 14px;
+
+    }
+}
+
+
+
+
+

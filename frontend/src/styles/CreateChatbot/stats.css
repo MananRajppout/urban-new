@@ -1,0 +1,71 @@
+.stats {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-top: 16px;
+}
+
+.stats .header {
+  display: flex;
+  justify-content: space-between;
+  padding: 0px 24px;
+}
+
+.count {
+  padding: 12px 24px;
+  background-color: #1b242e;
+  color: white;
+  border-radius: 16px;
+  min-height: 80px;
+}
+
+.count div:nth-child(1) {
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 1.57143;
+}
+
+.count div:nth-child(2) {
+  font-weight: 500;
+  line-height: 1.5;
+  font-size: 24px;
+}
+
+.counts {
+  display: flex;
+  gap: 16px;
+}
+
+.chart-box {
+  background-color: #1b242e;
+}
+
+.stats .chart {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.stats .chart .header {
+  display: flex;
+  justify-content: space-between;
+  padding: 0px 24px;
+}
+.stats .chart .header .title {
+  font-weight: 500;
+  line-height: 1.55556;
+  font-size: 1.125rem;
+}
+.stats .chart .header .filter {
+  display: flex;
+  flex-direction: column;
+  align-items: end;
+}
+/* tooltip for area chart */
+.chart-area-tooltip {
+  position: relative;
+  background-color: #1b242e;
+  color: #fff;
+  border: none;
+  outline: none;
+  padding: 6px 12px;
+}

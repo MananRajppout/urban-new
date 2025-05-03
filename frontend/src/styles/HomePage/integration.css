@@ -1,0 +1,153 @@
+.integrate-section {
+    margin-bottom: 50px;
+    margin-top: 200px;
+}
+
+
+.integrate-section .card-holder {
+    display: flex;
+    align-items: center;
+    gap: 40px;
+    overflow-x: auto;
+}
+
+
+.integrate-section .card {
+    width: 570px;
+    min-width: 570px;
+    min-height: 260px;
+    padding: 30px 40px;
+    padding-right: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+
+}
+
+.integrate-section .card:first-child {
+    --max-dd: max(var(--page-gap), ((100% - var(--max-page-width)) * 0.5));
+    margin-left: var(--max-dd);
+}
+
+.integrate-section .card:last-child {
+    --max-dd: max(var(--page-gap), ((100% - var(--max-page-width)) * 0.5));
+    margin-right: var(--max-dd);
+}
+
+
+.integrate-section .card p {
+    font-size: 20px;
+    color: white;
+    font-weight: 500;
+}
+
+
+
+.integrate-section .green {
+    background-color: #38B647;
+}
+
+.integrate-section .green button div{
+    background-color: #38B647;
+}
+
+
+.integrate-section .blue {
+    background-color: #0063E2;
+}
+
+.integrate-section .blue button div{
+    background-color: #0063E2;
+}
+
+
+.integrate-section .green-dark {
+    background-color: #5A863E;
+}
+
+.integrate-section .green-dark button div{
+    background-color: #5A863E;
+}
+
+
+
+.integrate-section .sky-blue {
+    background-color: #00749A;
+}
+
+.integrate-section .sky-blue button div{
+    background-color: #00749A;
+}
+
+
+
+.integrate-section a{
+    text-decoration: none;
+}
+
+.integrate-section button {
+    border-radius: 100px;
+    background: rgba(234, 234, 236, 0.20);
+    width: max-content;
+    border: none;
+    outline: none;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    padding-left: 26px;
+    cursor: pointer;
+}
+
+.integrate-section button:hover{
+    background: rgba(234, 234, 236, 0.40);
+}
+
+.integrate-section button span{
+    color: white;
+    font-size: var(--medium-font);
+    font-weight: bold;
+}
+
+.integrate-section button div{
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 6px 3px;
+}
+
+
+
+
+
+.integrate-section .dots{
+    margin-top: 40px;
+    margin-bottom: 20vh;
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    justify-content: center;
+}
+
+
+.integrate-section .dots span{
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background-color: #DBDBDB;
+}
+
+.integrate-section .dots span.active{
+    background-color: #AA07E0;
+}
+
+
+
+@media only screen and (max-width: 700px) {
+    .integrate-section.desktop{
+        display: none !important;
+    }
+  }
+  

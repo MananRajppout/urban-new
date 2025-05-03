@@ -1,0 +1,22 @@
+.globe{
+    transform: translateY(-50px) translateX(70px);
+}
+
+@media(max-width:768px){
+    .globe{
+        transform: translateY(0px) translateX(0px);
+    }
+    .globe-parent{
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+}
+
+@media(max-width:615px){
+    .globe{
+        transform: translateX(-20px);
+    }
+}
+

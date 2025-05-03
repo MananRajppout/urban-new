@@ -1,0 +1,21 @@
+name: Deploy Node.js App
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: self-hosted # Runs on your self-hosted runner
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Install Dependencies
+        run: |
+          pnpm install --no-frozen-lockfile
+
+      - name: Restart Server
+        run: |
+          pm2 restart urbanchat-lab-backend || pm2 start pnpm --name "urbanchat-lab-backend" -- run start

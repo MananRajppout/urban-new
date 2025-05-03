@@ -1,0 +1,41 @@
+
+.trial-section .trial{
+    background-color: var(--color-primary);
+    padding: 1rem 2rem;
+    border-radius: 50px;
+
+}
+
+
+.trial-section {
+    margin-top: 3rem;
+    margin-bottom: 5rem;
+}
+
+
+
+.trial-section h2{
+    font-size: var(--big-font);
+    font-weight: 600;
+    font-size: 56px;
+    text-align: center;
+
+}
+
+.trial-section p{
+    max-width: 500px;
+    color: white;
+
+}
+
+
+.trial-section button{
+    background-color: #212121 !important;
+    color: var(--color-primary);
+    padding-left: 2.5em;
+    padding-right: 2.5em;
+    margin: 2em auto;
+    font-weight: 600;
+
+}
+

@@ -1,0 +1,222 @@
+
+/* General Reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Arial', sans-serif;
+    color: #ffffff;
+  
+    line-height: 1.6;
+}
+
+
+
+
+.content {
+    background-color: #000;
+    /* overflow-y: scroll; */
+}
+
+/* Main Containers */
+
+.main-container{
+    height: 100vh;
+    /* background-color: red; */
+  
+    padding: 0px 60px 50px 60px;
+    overflow: scroll;
+}
+
+.main-box {
+    color: #ffffff;
+}
+
+.sub-main {
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+/* Sidebar Navigation */
+.side-nav {
+    color: #d1d5db;
+    border-radius: 0 10px 10px 0;
+}
+
+/* Table Styles */
+.head-info {
+    font-size: 14px;
+    text-align: left;
+}
+
+.head-info tr th {
+    font-weight: 600;
+    color: #b3b3b3;
+    padding: 10px;
+    text-transform: uppercase;
+}
+
+.head-info tr td {
+    padding: 10px;
+    color: #d4d4d8;
+    border-bottom: 1px solid #202223;
+}
+
+
+.user-page {
+    background-color: #036566;
+    color: #ffffff;
+    padding: 8px;
+    border-radius: 4px;
+    text-align: center;
+}
+
+.send-inv {
+    background-color: #036566;
+    color: #ffffff;
+    font-size: 14px;
+    padding: 8px 16px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.2s;
+}
+
+.send-inv:hover {
+    background-color: #044243;
+    transform: scale(1.02);
+}
+
+/* Typography */
+.acces1 {
+    font-weight: 500;
+    color: #468faf;
+}
+
+.access {
+    font-size: 14px;
+}
+
+/* Popup Modal */
+.pop-up {
+    width: 600px;
+    padding: 16px;
+    border-radius: 8px;
+    background-color: #10121B;
+    color: #ffffff;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.5);
+}
+.modal-overlay {
+    width: 100%;
+    height: 100%;
+    /* background-color: black; */
+   
+    position: fixed;
+    inset: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 50; /* Make sure it's above all other content */
+  }
+  
+  .modal-content {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: row;
+    max-width: 1400px;
+    height: 100vh;
+    background-color: #000000;
+    border-radius: 8px;
+    overflow: hidden;
+  }
+  
+  
+  .modal-photo img {
+    max-width: 100%;
+    object-fit: cover;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25);
+  }
+  
+
+
+
+
+
+/* Form Elements */
+input, select, textarea {
+    background-color: #242632;
+    color: #ffffff;
+    border: 1px solid #343a40;
+    padding: 10px 12px;
+    border-radius: 4px;
+    width: 100%;
+    margin-bottom: 10px;
+    transition: border-color 0.3s;
+}
+
+input:focus, select:focus, textarea:focus {
+    border-color: #036566;
+    outline: none;
+}
+
+/* Textarea Specific */
+textarea {
+    resize: none;
+    min-height: 120px;
+    padding: 10px;
+}
+
+/* Button Styles */
+button {
+    font-size: 14px;
+    padding: 10px 16px;
+    border-radius: 4px;
+    background-color: #131028;
+    color: #ffffff;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    border: none;
+}
+
+button:hover {
+    background-color: #373939; 
+}
+/* for button effect */
+
+/* Overlay for Modals */
+.fixed {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: fixed;
+    inset: 0;
+    background-color: rgba(0, 0, 0, 0.7);
+    z-index: 1000;
+}
+
+/* Utilities */
+.bor {
+    border-bottom: 1px solid #202223;
+}
+
+
+
+@keyframes fade-in {
+    from {
+      opacity: 0;
+      transform: scale(0.95);
+    }
+    to {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+  
+  .animate-fade-in {
+    animation: fade-in 0.2s ease-in-out;
+  }

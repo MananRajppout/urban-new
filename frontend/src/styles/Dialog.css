@@ -1,0 +1,379 @@
+.dialog-outer {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 999;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.452);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.country-down-arrow{
+  position: absolute;
+  font-size: 1.8rem !important;
+  font-weight:lighter;
+  right:20px;
+  top: 10px;
+  color:rgb(184, 176, 176);
+  cursor: pointer;
+}
+
+.dialog-outer .video-dialog {
+  display: grid;
+  grid-template-columns: 1fr max-content;
+  gap: 1em;
+  align-items: center;
+}
+
+.dialog-outer .video-dialog iframe {
+  border: none;
+  outline: 1px solid rgba(255, 255, 255, 0.13);
+  border-radius: var(--border-radius);
+}
+
+.dialog-outer .youtube {
+  background-color: rgb(206, 62, 62) !important;
+  color: white !important;
+}
+
+.dialog button {
+  border-radius: var(--border-radius) !important;
+  text-align: center;
+}
+
+.dialog {
+  max-width: 600px;
+  min-height: 200px;
+  width: 100%;
+  border-radius: 8px;
+  background-color: var(--color-surface3);
+  padding: 24px;
+  font-size: var(--medium-font);
+}
+
+.dialog.mini {
+  max-width: 400px;
+  min-height: 250px;
+}
+
+.dialog .title {
+  text-align: center;
+  margin-top: 0;
+  color: white;
+  font-weight: normal;
+  font-size: var(--average-font);
+}
+
+.dialog p.note {
+  background-color: rgba(255, 255, 255, 0.164);
+  padding: 16px 12px;
+  border-radius: 8px;
+  color: rgb(197, 197, 197);
+  margin-bottom: 1.5em;
+}
+
+.dialog p.note.center {
+  text-align: center;
+}
+
+.dialog p.note a {
+  color: white;
+  font-weight: bold;
+  text-decoration: underline;
+}
+
+.dialog button.danger {
+  background-color: rgba(255, 0, 0, 0.164);
+  color: var(--color-on-secondary);
+}
+
+.dialog .warning {
+  text-align: center;
+  margin: 2em 0;
+  font-size: var(--medium-font);
+  color: rgba(255, 255, 255, 0.753);
+  line-height: 1.5em;
+}
+
+.dialog .col-2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  align-items: center;
+  gap: 1em;
+}
+
+.dialog .col-2 button {
+  width: 100%;
+}
+
+.dialog input {
+  font-size: var(--medium-font);
+  outline: none;
+}
+
+
+.dialog input:focus{
+  outline: 1px solid var(--border-color);
+}
+
+.dialog .input-image {
+  width: 100px;
+  height: 100px;
+  position: relative;
+  margin: 2em auto;
+}
+
+.dialog .input-image .edit-icon {
+  width: 32px;
+  height: 32px;
+  background-color: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  right: 0;
+  bottom: 0;
+}
+
+.dialog .center-title {
+  display: block;
+  text-align: center;
+  color: white;
+  font-size: var(--average-font);
+}
+
+.dialog .input-image .edit-icon svg {
+  fill: var(--color-primary);
+  width: 16px;
+  height: 16px;
+}
+
+.dialog .input-image input {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  opacity: 0.001;
+}
+
+.dialog .input-image img {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  border: 1px solid var(--border-color);
+  object-fit: cover;
+}
+
+.dialog .input-container {
+  margin-bottom: 16px;
+}
+
+.dialog .input-container p.heading {
+  color: rgba(255, 255, 255, 0.596);
+  margin: 0;
+  margin-top: 8px;
+  margin-bottom: 8px;
+}
+
+.dialog .input-container .grid-auto-max {
+  display: grid;
+  grid-template-columns: auto max-content;
+  gap: 12px;
+  align-items: center;
+}
+
+.dialog .input-container .text-field {
+  padding: 16px 12px;
+  background-color: rgba(255, 255, 255, 0.041);
+  border-radius: var(--border-radius);
+  border: 1px solid var(--border-color);
+  color: white;
+  margin: 0;
+  /* font-family: sans-serif; */
+}
+
+.dialog .input-container .copy-btn {
+  background-color: transparent;
+  border: none;
+  fill: white;
+  background-color: rgba(255, 255, 255, 0.075);
+  height: 55px;
+  width: 55px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--border-radius);
+}
+
+.dialog .input-container .copy-btn svg {
+  fill: white;
+}
+
+.dialog .submit-btn {
+  margin-left: auto;
+  background-color: white;
+  color: black;
+  border-radius: var(--border-radius);
+  display: block;
+  font-size: var(--medium-font);
+}
+
+.dialog .status-card {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border: 1px solid var(--border-color);
+  background-color: var(--color-surface);
+  padding: 12px;
+  border-radius: var(--border-radius);
+}
+
+.dialog .status-card span {
+  color: white;
+}
+
+.dialog .status-card .left,
+.dialog .status-card .right {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+@media screen and (max-width: 1000px) {
+  .dialog-outer .video-dialog iframe {
+    display: none;
+  }
+}
+
+/* shopify */
+
+.dialog.shopify .input-container {
+  margin: 0;
+}
+
+.dialog.shopify {
+  position: relative;
+  padding-top: 80px;
+}
+
+.dialog.shopify .layer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 60px;
+  background-color: #5a863e;
+  border-radius: var(--border-radius) var(--border-radius) 0 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.dialog.shopify .layer img {
+  height: 24px;
+}
+
+.dialog.shopify.calendly .layer {
+  background-color: rgb(0, 107, 255);
+}
+
+/* .dialog */
+
+.dialog .profile-btn-holder {
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+}
+
+/* --sketch picker */
+
+.sketch-picker input {
+  background-color: transparent;
+  width: 100%;
+  color: black;
+  min-height: unset;
+  padding: 6px 2px !important;
+  display: block;
+  width: 100% !important;
+  text-align: center;
+  border-radius: 2px;
+}
+
+
+.flex-gap{
+  display: flex;
+  align-items: center;
+  gap:20px;
+  justify-content: end;
+}
+
+
+
+
+/* select-search component */
+.custom-select-container {
+  position: relative;
+  width: 100%;
+}
+
+.custom-select-selected, .custom-select-search{
+  background-color: rgba(255, 255, 255, 0.075);
+  padding: 15px;
+  border-radius: 10px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.custom-select-dropdown {
+  position: absolute;
+  background-color: var(--color-surface2);
+  width: 100%;
+  border-radius: 10px;
+  top:0;
+  z-index: 99;
+}
+
+.custom-select-option {
+  padding: 10px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+}
+
+
+.custom-select-option-container{
+  overflow-y: auto;
+
+  margin-top: 10px;
+  height: 250px;
+}
+.custom-select-option:hover {
+  background-color: var(--color-surface3);
+}
+
+
+.ghost-button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  text-decoration: underline;
+  padding: 0;
+  font: inherit;
+}
+
+.ghost-button:hover {
+  font-weight: 500;  
+
+}
+
+
+
+
+
+

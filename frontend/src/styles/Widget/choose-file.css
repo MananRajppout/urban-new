@@ -1,0 +1,39 @@
+
+.choose-file-widget {
+    position: relative;
+}
+
+
+.choose-file-widget button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 200px;
+    height: 50px;
+    background-color: #8d99ae;
+    font-size: var(--medium-font);
+    color: white;
+    border-radius: var(--border-radius);
+    border: none;
+    outline: none;
+}
+
+.choose-file-widget input{
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    opacity: 0.001;
+}
+
+
+
+
+
+@media only screen and (max-width: 800px) {
+    .choose-file-widget button {
+        width: 170px;
+        height: 54px;
+    }
+}

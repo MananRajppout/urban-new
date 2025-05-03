@@ -1,0 +1,40 @@
+.live-demo-section {
+    background-color: var(--color-surface);
+    padding: 75px 0;
+    padding-top: 0;
+}
+
+
+.live-demo-section h2 {
+    font-size: 40px;
+    text-align: center;
+    color: var(--color-primary);
+}
+
+.live-demo-section .live-demo{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+}
+
+
+.live-demo-section .page>div>p {
+    text-align: center;
+    max-width: 700px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+
+.live-demo-section .chat-bot-holder {
+    margin: auto;
+    margin-top: 3rem;
+    max-width: 860px;
+}
+
+@media only screen and (max-width: 650px){
+    .live-demo-section{
+        display: none;
+    }
+}

@@ -1,0 +1,104 @@
+
+Move the stripe to test mode -> test_mode_keys
+
+pub_key = Frontend
+secret_key = backend
+
+Frontend -> (subscribe)button -> signed_url -> [payment] -> done
+            [strip_Notification_of_payment] -> /url -> (update_user_account)
+
+
+
+
+// exports.createSubscription = catchAsyncError(async (req, res, next) => {
+//     const { pricing_plan_id } = req.body;
+
+//     const current_user_plan = await getPricingPlan(req.user.id);
+//     if (current_user_plan.id == pricing_plan_id){
+//         return res.status(300).json({message:"You already have purchased the subscription", success:false})
+//     }
+
+//     const plan = await PricePlan.findById(pricing_plan_id);
+//     var customer_id="";
+
+//     if (!req.user.customer_payment_id){
+//         const customer = await stripe.customers.create({
+//             name: req.user.name,
+//             email: req.user.email,
+//             payment_method: req.body.paymentMethod,
+//             invoice_settings: {
+//               default_payment_method: req.body.paymentMethod,
+//             },
+//         });
+//         req.user.customer_payment_id = customer.id;
+//         await req.user.save()
+//         customer_id = customer.id;
+//     } else{
+//         const customer = await stripe.customers.retrieve(req.user.customer_payment_id);
+//         customer_id = customer.id;
+//     }
+
+
+//     const subscription = await stripe.subscriptions.create({
+//         customer: customer.id,
+//         // items: [{ price: priceId }],
+//         items: [{
+//                 price_data: {
+//                     currency:"usd",
+//                     product:plan._id,
+//                     recurring:{
+//                         interval: plan.period
+//                     }
+//                 }
+//             }
+//         ],
+//         payment_settings: {
+//           payment_method_options: {
+//             card: {
+//               request_three_d_secure: 'any',
+//             },
+//           },
+//           payment_method_types: ['card'],
+//           save_default_payment_method: 'on_subscription',
+//         },
+//         expand: ['latest_invoice.payment_intent'],                                              
+//         success_url: `https://urbanchat.ai/api/stripe-sub-success-callback?session_id={CHECKOUT_SUBSCRIPTION_ID}`,
+//         cancel_url: `https://urbanchat.ai/api/stripe-sub-failure-callback?session_id={CHECKOUT_SUBSCRIPTION_ID}`,
+//     });
+
+//     await PaymentHistory.create({
+//         user_id: req.user.id,
+//         currency: "usd",
+//         cost: plan.cost,
+//         plan_id:pricing_plan_id,
+//         stripe_session_id: subscription.id
+//     });
+
+//     return res.status(200).json({message:"success", stripeSessionId:subscription.id, clientSecret: subscription.latest_invoice.payment_intent.client_secret,});
+
+// });
+
+
+
+// exports.stripeSubSuccessCallback = catchAsyncError(async (req, res, next) => {
+//     const {session_id} = req.query;
+//     const payment_history = await PaymentHistory.findOne({stripe_session_id:session_id});
+//     const paid_plan = await PricePlan.findById(payment_history.plan_id);
+
+//     const session = await stripe.subscriptions.retrieve(session_id);
+//     if (session.status === 'paid') {
+//         payment_history.payment_status = "paid"
+//         await payment_history.save()
+//         await updatePricingPlan(payment_history.user_id, paid_plan);
+//     }
+//     return res.redirect("https://urbanchat.ai/my-profile");
+// });
+
+// exports.stripeSubFailedCallback = catchAsyncError(async (req, res, next) => {
+//     const {session_id} = req.query;
+//     const payment_history = await PaymentHistory.findOne({stripe_session_id:session_id});
+//     payment_history.payment_status = "failed"
+//     await payment_history.save()
+
+//     return res.redirect("https://urbanchat.ai/my-profile");
+// });

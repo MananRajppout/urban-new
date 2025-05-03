@@ -1,0 +1,66 @@
+.create-chat {
+  background-color: var(--color-surface);
+  min-height: 400px;
+  overflow: auto;
+}
+
+.create-chat .header h1 {
+  font-size: var(--big-font);
+  margin-top: 0;
+  margin-bottom: 16px;
+  font-weight: 600;
+}
+
+.create-chat .header {
+  margin-top: 32px;
+  margin-bottom: 32px;
+}
+
+.create-chat .header span {
+  font-size: var(--medium-font);
+}
+
+.create-chat .page {
+  margin-bottom: 300px;
+}
+
+.create-chat .tab-container {
+  display: flex;
+  /* min-width: max-content; */
+  overflow: auto;
+  gap: 0.5em;
+  border-bottom: 1px solid #1f202f;
+  overflow: auto;
+  white-space: pre;
+}
+
+.create-chat .tab-container span {
+  display: inline-block;
+  padding: 1em 1.3em;
+  color: #8d99ae;
+  font-size: var(--medium-font);
+  border-bottom: 4px solid transparent;
+  cursor: pointer;
+}
+
+.create-chat .tab-container a:last-child span {
+  color: #ff0000 !important;
+}
+
+.create-chat .tab-container span.active,
+.create-chat .tab-container span:hover {
+  color: white;
+  border-bottom: 4px solid white;
+}
+
+@media only screen and (max-width: 800px) {
+  .create-chat .header h1 {
+    font-size: 24px;
+    margin-bottom: 16px;
+  }
+
+  .create-chat .header {
+    margin-top: 30px;
+    margin-bottom: 30px;
+  }
+}

@@ -4,3 +4,8 @@
 
 /livekit/venv
 /livekit/.env
+
+/livekit/**/*.pyc
+/livekit/services/__pycache__
+/livekit/utils/__pycache__
+/livekit/__pycache__

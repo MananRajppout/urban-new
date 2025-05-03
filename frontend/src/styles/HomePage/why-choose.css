@@ -1,0 +1,139 @@
+.why-choose-section{
+    background-color: var(--color-surface);
+    padding-top: 120px;
+    padding-bottom: 75px;
+}
+
+.why-choose-section h2{
+    font-size: 40px;
+}
+
+
+.why-choose-section .holder{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 50px; 
+}
+
+.why-choose-section button{
+    margin-top: 4rem;
+}
+
+
+.why-choose-section .left{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 35px;
+}
+
+.why-choose-section .right{
+    position: sticky;
+    top: 0;
+    height: max-content;
+}
+
+.why-choose-section .card{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 1.5em;
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius);
+    padding: 2rem 1rem;
+    cursor: pointer;
+}
+
+.why-choose-section .card.active, .why-choose-section .card:hover{
+    border: 1px solid var(--color-primary);
+    background-color: var(--color-primary);
+
+}
+
+.why-choose-section .card.active svg, .why-choose-section .card:hover svg{
+    fill: rgba(255, 255, 255, 0.685);
+}
+
+.why-choose-section .card.active p, .why-choose-section .card:hover p{
+    color: rgba(255, 255, 255, 0.685);
+}
+
+.why-choose-section .card.active span, .why-choose-section .card:hover span{
+    color: white;
+}
+
+
+.why-choose-section .card span{
+    font-size: 20px;
+    /* font-weight: bold; */
+}
+
+.why-choose-section .card p{
+    margin: 0;
+}
+
+.why-choose-section .card svg{
+    fill: var(--color-on-surface2);
+    height: 70px;
+}
+
+
+
+
+@media only screen and (max-width: 1200px) {
+    .why-choose-section .holder{
+        display: flex;
+        flex-direction: column-reverse;
+    }
+
+    .why-choose-section .right{
+        position: static;
+        top: unset;
+    }
+
+    .why-choose-section .left{
+        grid-template-columns: 1fr 1fr 1fr;
+        gap: 24px;
+    }
+}
+
+@media only screen and (max-width: 900px){
+    .why-choose-section .left{
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+
+@media only screen and (max-width: 700px){
+    .why-choose-section{
+        padding-top: 0;
+    }
+    .why-choose-section .card{
+        gap: 1em;
+        padding: 1rem;
+    }
+
+    .why-choose-section .left{
+        gap: 16px;
+    }
+
+    .why-choose-section .card span{
+        font-size: 18px;
+    }
+
+    .why-choose-section .card svg{
+        height: 52px;
+    }
+
+    .why-choose-section h2{
+        font-size: 32px;
+    }
+    
+    
+}
+
+@media only screen and (max-width: 500px){
+    .why-choose-section .left{
+        grid-template-columns: 100%;
+    }
+}

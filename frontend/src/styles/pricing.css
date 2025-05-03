@@ -1,0 +1,152 @@
+.pricing {
+    margin-top: 50px;
+}
+
+.pricing h2,
+.pricing h3 {
+    color: white;
+    font-size: var(--average-font);
+    margin-top: 1em;
+    margin-bottom: 1em;
+    font-weight: normal;
+}
+
+.pricing h2 {
+    margin-bottom: 0.5em;
+    font-size: var(--big-font);
+}
+
+.pricing .center {
+    text-align: center;
+}
+
+.pricing-toggle {
+    margin-top: 4em;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1em;
+}
+
+.pricing-toggle h3 {
+    margin: 0;
+}
+
+.pricing .pricing-cards {
+    margin: 100px auto;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1em;
+    color: white;
+    flex-grow : 1;
+    justify-content: center;
+
+}
+
+.pricing .pricing-cards .card {
+    background-color: var(--color-surface2);
+    border-radius: 4px;
+    position: relative;
+    padding-top: 2em;
+    flex-grow : 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    width: max-content;
+    max-width: 290px;
+}
+
+.pricing .pricing-cards .card:nth-child(even) {
+    background-color: #022B3B;
+}
+
+.pricing .pricing-cards .price {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+}
+
+.pricing .pricing-cards .price h2 {
+    margin-top: 0.5em;
+}
+
+.pricing .pricing-cards .card .label {
+    position: absolute;
+    left: 0;
+    top: 0;
+    transform: translateY(-100%);
+    width: 100%;
+    background-color: white;
+    padding: 0.5em;
+    text-align: center;
+    color: #022B3B;
+    font-weight: 600;
+    border-radius: 4px 4px 0 0;
+}
+
+.pricing .pricing-cards .list {
+    margin-top: 60px;
+    padding: 0 2em;
+}
+
+.pricing .pricing-cards .list p {
+    font-size: var(--medium-font);
+    display: flex;
+    gap: 1em;
+    align-items: center;
+}
+
+.pricing .pricing-cards .list p::before {
+    content: "";
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background-color: #38B64780;
+    flex: none;
+}
+
+.pricing .pricing-cards button{
+    margin-top: 3em;
+    width: 100%;
+    display: block;
+    height: 2.5em;
+    background-color: #555768;
+    border: none;
+    font-size: var(--average-font2);
+    border-radius: 4px;
+    color: #ffffff;
+}
+
+.pricing .pricing-cards button:nth-child(odd) {
+    background-color: white;
+    color: #022B3B;
+}
+
+
+@media only screen and (max-width: 600px) {
+
+    .pricing .pricing-cards {
+        flex-wrap: unset;
+        flex-direction: column;
+    }
+
+    .pricing .pricing-cards .label-card{
+        margin-top: 2em;
+    }
+    
+    .pricing .pricing-cards .card {
+        /* background-color: var(--color-surface2);
+        border-radius: 4px;
+        position: relative;
+        padding-top: 2em;
+        flex-grow : 1;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        width: max-content; */
+        width: 100%;
+        max-width: unset;
+    }
+    
+}

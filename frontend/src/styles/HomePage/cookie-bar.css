@@ -1,0 +1,62 @@
+.cookies-bar {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background-color: var(--color-primary);
+    z-index: 1000;
+    transform: translateY(100%);
+    transition: all 0.3s;
+    padding: 0.5rem 0;
+}
+
+.cookies-bar.show{
+    transform: translateY(0);
+
+}
+
+
+.cookies-bar .page>div {
+    display: grid;
+    grid-template-columns: 1fr max-content;
+    align-items: center;
+    gap: 1rem;
+
+}
+
+
+.cookies-bar p {
+    color: rgba(255, 255, 255, 0.651);
+    font-size: var(--small-font);
+}
+
+.cookies-bar button{
+    font-size: var(--small-font);
+}
+
+.cookies-bar .buttons{
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+}
+
+.cookies-bar .primary{
+    background-color: white !important;
+    color: var(--color-primary) !important;
+    font-weight: 600;
+
+}
+
+
+@media only screen and (max-width: 600px) {
+    .cookies-bar .page>div {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
+        gap: 0;
+    }
+
+    .cookies-bar .buttons{
+        gap: 0.5rem;
+    }
+}

@@ -1,0 +1,600 @@
+
+
+.sidebar-container {
+  transition: all 0.3s ease-in-out;
+}
+
+
+.sidebar-logo img {
+  transition: all 0.3s ease;
+}
+
+.sidebar-logo {
+  transition: margin-left 0.3s ease;
+}
+
+
+
+.menu {
+  width: 100%; /* Or the desired width, e.g., '250px' */
+  display: flex;
+  flex-direction: column;
+  
+  align-items: flex-start; 
+  justify-content: flex-start; 
+}
+
+.menu ul {
+  
+  padding-left: 0;
+  margin-left: 0;
+}
+.menu ul {
+  width: 100%; /* Make it occupy the full width of its container */
+ 
+  padding: 0; /* Reset padding if needed */
+  margin: 0; /* Reset margin */
+  box-sizing: border-box;
+  text-decoration: none; /* Includes padding in width calculation */
+}
+.menu ul {
+  list-style: none; /* Removes bullets from the list */
+  padding: 0;
+  margin: 0;
+}
+
+.menu ul li a {
+  text-decoration: none; /* Removes underline from links */
+  color: inherit; /* Ensures the link inherits the color from its parent */
+}
+.menu-item {
+  height: 40px;
+  font-size: 12px;
+  background-color: #191B25;
+  color: #98A0AE;
+  transition: all 0.3s ease;
+}
+
+.menu-item:hover {
+  background-color: #252833;
+}
+
+.menu-item.active {
+  background-color: #000080; /* Dark blue */
+  color: white; /* White text */
+}
+
+
+
+
+
+
+
+
+.profile-section img {
+  transition: all 0.3s ease;
+}
+
+/* Increase content width when sidebar is expanded */
+.sidebar-container.open {
+  width: 250px;
+}
+.main-content {
+  overflow:auto !important;
+  width:1380px !important;
+}
+
+.main-content {
+  transition: margin-left 0.3s ease;
+  
+}
+
+.open .main-content {
+  width: 1400px !important;
+ 
+}
+.assistant-main {
+  display: flex;
+  height: 100vh; /* Full viewport height */
+ /* border: 2px solid red; */
+ padding: 10px 10px 10px 0px;
+}
+
+.sidebar-container{
+  background-color: #191B25 !important;
+
+}
+
+.sidebar-container {
+  position: fixed; /* Sidebar stays fixed */
+  border: 2px solid rgb(44, 41, 41);
+  border-top-right-radius: 10px;
+  border-bottom-right-radius: 10px;
+  top: 0;
+  left: 0;
+  width: 5rem; 
+  height: 100%; 
+  
+  transition: width 0.5s ease, background-color 0.5s ease;
+}
+
+.sidebar-container.open {
+  width: 15rem; 
+ 
+  /* background-color: #15171f; */
+}
+
+
+
+.agent-container {
+  flex: 1;
+  overflow: auto; 
+  transition: all 0.5s ease;
+  /* background-color:#191B25; */
+ 
+}
+
+.sidebar-container.open ~ .agent-container {
+  margin-left: 15rem; 
+  transition: margin-left 0.5s ease; 
+  
+}
+
+
+
+.assistant-main{
+ 
+ 
+  transition: all .3s linear;
+
+  
+  background-color:#191B25;
+
+}
+
+
+
+
+
+
+
+
+
+
+.menu li img, .menu li svg {
+  display: block; 
+}
+
+
+
+.sidebar-container {
+  
+  display: flex;
+  overflow: hidden;
+  height: 100vh;
+  background-color: #000000;
+  color: #fff;
+  font-family: Arial, sans-serif;
+  
+}
+
+.banner {
+  display: flex;
+  justify-content: center;
+  color: white;
+  padding: 10px;
+  align-items: center;
+  z-index:800;
+}
+
+.sidebar-layout {
+  width: 15%;
+  
+  position: fixed;
+  height: 100vh;
+  padding-inline: 20px;
+
+}
+
+.main-content {
+  overflow:auto !important;
+  margin-left: 15%;
+  width: 100%;
+}
+
+.nav-layout {
+  z-index: 999;
+  /* padding: 20px 30px 20px 20px; */
+  background-color: #000000;
+  top: 0;
+  font-size: 1.5em;
+  width: 100vw;
+  display: flex;
+  justify-content: space-between;
+  
+}
+
+
+
+
+.profile-img img {
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  object-fit: cover;
+}
+
+.nav-paths {
+  display: flex;
+  gap: 16px;
+  background-color: var(--color-surface3);
+  height: 42px;
+  border-radius: 50px;
+  align-items: center;
+  padding: 0 2em;
+  text-decoration: none;
+}
+
+@media only screen and (max-width: 850px) {
+  .nav-paths {
+    display: none;
+  }
+}
+
+.nav-paths a {
+  color: var(--color-on-surface);
+  text-decoration: none;
+}
+
+.nav-paths a:hover,
+.nav-paths a.active {
+  color: var(--color-on-surface-light);
+  text-decoration: underline;
+}
+
+
+
+
+.fade {
+  background-color: var(--color-surface2);
+  font-family: Inter;
+  font-size: 15px;
+  height: 86vh;
+  overflow-y: hidden;
+  width: 100%;
+  font-weight: 400;
+  line-height: 21.98px;
+  text-align: left;
+  padding: 40px;
+  border-radius: 20px;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+/* common styles in ai assistant */
+
+.fade-text {
+  color: var(--color-on-surface2);
+  margin-block: 10px;
+}
+
+.fixed-sidebar {
+  width: 15%;
+  height: 82vh;
+  overflow: auto;
+  background-color: var(--color-surface2);
+  display: flex;
+  position: fixed;
+  left: 15%;
+  flex-direction: column;
+  padding: 20px;
+  border-radius: 20px;
+}
+
+.fill-btn,
+.outline-btn,
+.ghost-btn {
+  background:none;
+  border: none;
+  color: #fff;
+  padding: 10px 20px;
+  text-align: left;
+  cursor: pointer;
+  word-wrap: break-word;
+  margin: 5px;
+  font-family: Montserrat;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 28px;
+}
+
+.gray-btn {
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  fill: white;
+  background-color: rgba(255, 255, 255, 0.075);
+  height: 55px;
+  width: 55px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--border-radius);
+}
+
+.dialog .input-container .copy-btn svg {
+  fill: white;
+}
+
+.fill-btn {
+  background-color: var(--color-primary); 
+  border-radius: 50px; 
+}
+
+.outline-btn {
+  background-color: transparent;
+  border: 1px solid #ffffff;
+  border-radius: 50px;
+}
+
+textarea,
+input,
+select {
+  padding: 12px;
+  border-radius: var(--border-radius);
+  border: 1.5px solid var(--border-color);
+  background-color: #55576833;
+  font-size: var(--medium-font);
+  color: #eaeaec;
+  width: 100%;
+  outline: none;
+  resize: none;
+}
+textarea{
+  height: 65vh;
+  /* border: 2px solid red; */
+}
+
+.flex-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.flex-gap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+.flex-start {
+  display: flex;
+  align-items: center;
+  justify-content: start;
+  gap: 10px;
+}
+
+.flex-between {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.grid-center {
+  display: grid;
+  align-items: center;
+  justify-content: center;
+}
+
+.flex {
+  display: flex;
+}
+
+.flex-end {
+  display: flex;
+  align-items: center;
+  justify-content: end;
+}
+
+.flex-col {
+  flex-direction: column;
+
+}
+
+.info-text {
+  background-color: #191b25;
+  padding: 8px 10px;
+  width: fit-content;
+  border-radius: 10px;
+  color: rgb(197, 197, 197);
+  margin-bottom: 1.5em;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.sidebar-layout ul {
+  list-style: none;
+  padding: 0;
+}
+
+.sidebar-layout ul li {
+  display: flex;
+  align-items: center;
+  padding: 10px;
+  cursor: pointer;
+}
+
+.sidebar-layout ul li.active {
+  background-color: var(--color-primary);
+}
+
+.hamburger-menu {
+  display: none;
+  font-size: 30px;
+  cursor: pointer;
+  margin: 10px;
+  background: transparent;
+  border: none;
+  color: white;
+}
+
+/* Responsive styles for smaller screens */
+@media (max-width: 768px) {
+  .nav-layout{
+    display: none;
+  }
+  .sidebar-container {
+    flex-direction: column;
+    justify-content: flex-start;
+    padding-top: 10px;
+    height: auto;
+  }
+  .banner {
+    padding: 10px 12px; 
+    font-size: 0.7rem;
+    margin-left: 30px;
+    margin-right: 30px;
+  }
+  .hamburger-menu {
+    display: block;
+    position: fixed;
+    top: 5px;
+    right: 15px;
+    z-index: 1001;
+  }
+  
+  .sidebar-layout {
+    position: fixed;
+    padding: 15px;
+    top: 0;
+    left: 0;
+    height: 100%;
+    background-color: #000;
+    z-index: 1000;
+    transform: translateX(-100%);
+    width: 100%;
+    transition: transform 0.3s ease-in-out;
+  }
+  .fixed-sidebar {
+    display: flex;
+    position: block;
+    flex-direction: row;
+    height: fit-content;
+    width: 91%;
+    position: absolute;
+   left: 4%;
+   overflow-x:scroll;
+    
+  }
+.settings-container{
+  margin-top: 120px;
+}
+  .sidebar-container.open .sidebar-layout {
+    transform: translateX(0);
+  }
+  .main-content {
+    overflow-y: auto; 
+    height: 100vh;
+    width: 100%;
+    position: absolute;
+    margin: auto 0;    
+  }
+  .fill-btn,
+  .outline-btn,
+  .ghost-btn {
+    padding: 6px 12px;
+    font-size: 12px;
+    line-height: 24px;
+    margin: 5px;
+    text-align: center; /* Center text for smaller screens */
+  }
+
+  .gray-btn {
+    height: 45px;
+    width: 45px;
+  }
+}
+@media (max-width: 480px) {
+  .fill-btn,
+  .outline-btn,
+  .ghost-btn {
+    padding: 5px 10px;
+    font-size: 11px;
+    line-height: 22px;
+    width: 100%; 
+    text-align: center;
+  }
+
+  .gray-btn {
+    height: 40px;
+    width: 40px;
+    border-radius: 8px; 
+  }
+}
+
+
+
+
+/*this is the css of the dropdown*/
+/* Dropdown Container */
+.dropdown-container {
+  position: relative;
+  display: inline-block;
+  /* background-color: green; */
+}
+
+/* Dropdown Button */
+.dropdown-button {
+  padding: 15px 20px;
+  cursor: pointer;
+  border: none;
+  background-color:var(--color-surface2);
+  color: white;
+  font-size: 13px;
+  width: 500px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.393);
+  outline: none;
+}
+
+/* Dropdown Arrow */
+.dropdown-arrow {
+  display: inline-block;
+  font-size: 13px;
+  transition: transform 0.3s ease;
+}
+
+/* Rotate Arrow When Open */
+.dropdown-arrow.open {
+  transform: rotate(180deg);
+}
+
+/* Dropdown Menu */
+.dropdown-menu {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  background-color:#0F121B;
+  opacity: 0;
+  transform: scaleY(0);
+  transform-origin: top;
+  /* transition: transform 0.3s ease, opacity 0.3s ease; */
+  transition: all .3s linear;
+  overflow:auto;
+  padding-left: 20px;
+  padding-bottom: 20px;
+  /* padding-top: 20px; */ 
+  width:500px;
+  z-index: 1;
+}
+
+/* Dropdown Menu Open State */
+.dropdown-menu.open {
+  opacity: 1;
+  transform: scaleY(1);
+}

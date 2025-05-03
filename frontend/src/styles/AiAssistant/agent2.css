@@ -1,0 +1,301 @@
+/* General Button Styling */
+
+
+
+
+
+
+
+.agent-btn {
+  padding: 12px 24px;
+  width: 100%;
+  border: 1px solid transparent;
+  border-radius: 25px;
+  background-color: #3498db;
+  color: white;
+  text-align: center;
+  display: inline-block;
+  font-weight: 600;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.agent-btn.active {
+  background-color: #121b21;
+}
+
+.agent-btn:hover {
+  background-color: #2980b9;
+  transform: scale(1.05); /* Slight scale on hover */
+}
+
+/* Button Container */
+.agent-btn-container {
+  width: 170px;
+  background-color: #ffffff;
+  color: #000000;
+  /* position: fixed; */
+  top: 60px;
+  right: 40px;
+  padding: 5px 0px;
+  font-size: 13px;
+  font-weight: 600;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1) !important;
+  cursor: pointer;
+}
+
+.agent-btn-container:hover{
+  background-color: rgb(240, 233, 233);
+}
+
+/* Agent Information Section */
+.agent_info {
+  height: 50px;
+  background-color: #191b25;
+  color: #98a0ae;
+  display: flex;
+  align-items: center; 
+  justify-content: space-between; 
+  border-radius: 8px 8px 0 0; 
+  padding: 0 15px; 
+  gap: 10px; 
+}
+
+.agent_info p {
+  font-size: 12.5px;
+  margin: 0;
+  white-space: nowrap; 
+  text-transform: capitalize; 
+  letter-spacing: 1px; 
+  flex-shrink: 0; 
+  padding: 4px;
+  align-items: center; 
+  text-align: center; 
+  height: 30px; 
+  line-height: 1.2;
+  font-size: 12.5px;
+  font-weight: normal; 
+  text-transform: capitalize;
+  letter-spacing: 1px; 
+  color: #b0bec5; 
+  box-sizing: border-box;
+ 
+}
+
+/* Main List */
+.main_list {
+  height: 50px;
+  display: flex; 
+  align-items: center;
+  justify-content: space-between;
+  cursor: pointer;
+  background-color: #10121b;
+  border-bottom: 1px solid #2f2d2d;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+  padding: 0 15px; 
+  gap: 10px;
+  /* border: 2px solid red; */
+}
+
+.main_list:hover {
+  background-color: #191b25;
+  transform: translateX(1px); 
+}
+
+.main_list p{
+  width: 300px;
+  display: flex;
+ 
+  /* border: 2px solid red; */
+  font-size: 12px;
+  font-weight: 500;
+  /* color: #b0bec5; */
+  letter-spacing: 1px;
+  white-space: nowrap; 
+  text-transform: capitalize;
+  text-align: center; 
+  flex-shrink: 0; 
+  padding: 4px; 
+  height: 30px; 
+  line-height: 1.2;
+  display: flex;
+  align-items: center;
+  /* justify-content: center; */
+  /* border: 2px solid red; */
+  
+  box-sizing: border-box; 
+}
+
+/* Agent List Container */
+.agent-list {
+  display: flex;
+  flex-direction: column; /* Stack items vertically */
+  gap: 10px; /* Spacing between list items */
+  background-color: #10121b;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Agent Details Section */
+.agent_details {
+  width: 100% !important;
+  height: 75vh;
+  overflow-y: auto; /* Allows scrolling */
+  background-color: #10121b;
+}
+
+/* Ensure responsiveness */
+@media (max-width: 768px) {
+  .agent_info,
+  .main_list {
+    padding: 0 10px; /* Adjust padding for smaller screens */
+  }
+
+  .agent_info p,
+  .main_list p {
+    font-size: 11px; /* Adjust font size for smaller screens */
+  }
+}
+
+
+
+/* Agent Name Input Field */
+.Agent_name {
+  width: 500px;
+  background-color: transparent;
+  border: 2px solid #3498db;
+  border-radius: 25px;
+  padding-left: 20px;
+  padding-right: 20px;
+  height: 40px;
+  color: #ecf0f1;
+  font-size: 16px;
+  outline: none;
+  transition: border 0.3s ease;
+}
+
+.Agent_name:focus {
+  border-color: #2980b9;
+}
+
+/* Container for Agent Section */
+
+
+.agent-container{
+  padding: 20px;
+}
+
+.dele_btn{
+  background-color: transparent;
+  border: none;
+}
+
+
+
+
+
+
+
+
+/* testing */
+
+.agentid-header{
+  display: flex !important;
+  align-items: center !important;
+  gap: 20px !important;
+  /* background-color:var(--color-surface2) !important; */
+  background-color: #0F121B;
+  position: fixed !important;
+  width: 100% !important;
+  padding: 15px 20px !important;
+  z-index: 1000 !important;
+  /* border: 2px solid red; */
+}
+.agent-container{
+  display: flex;
+  /* flex-direction: column; */
+  justify-content: center;
+  gap: 3px;
+ 
+}
+
+.agent-container1{
+  
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 3px;
+  
+}
+
+.back-button{
+  padding:5px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 5px;
+  font-size: 20px;
+  border:1px solid var(--color-on-surface2);
+  cursor:pointer;
+}
+.gray-btn1 {
+  background-color: transparent;
+  cursor: pointer;
+  fill: rgba(202, 202, 202, 0.616);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border:none;
+  border-bottom: 1px solid rgba(211, 210, 210, 0.667);
+  width: fit-content;
+  padding: 0;
+}
+
+.agentname-container h5{
+  font-size: 18px;
+  font-weight: 500;
+  padding: 0;
+}
+
+.voice-gpt-containe{
+  background-color:black;
+  height: 70px;
+  width: 100%;
+  padding-left: 25px;
+  position:absolute;
+  left: 0;
+  top:0;
+
+}
+
+.voice-container p{
+  font-size: 13px !important;
+}
+
+.voice-gpt-containe{
+  display: flex;
+  font-size: 13px !important;
+  gap: 10px;
+  align-items: center;
+}
+
+.test-btn{
+  border-radius: 10px !important;
+  font-size: 13px !important;
+  padding: 8px 10px !important;
+  line-height: 19px !important;
+  margin: 0 !important;
+  margin-bottom:0.5em !important;
+  color:rgb(228, 228, 228) !important;
+  transition: all .3s ease-in-out;
+}
+.test-btn:hover{
+  scale: 1.07;
+}
+
+
+
+.setting-container-copy{
+  background-color:#0F121B;
+}

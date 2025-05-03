@@ -1,0 +1,35 @@
+pipeline {
+    agent any  // Run on any available agent
+
+    stages {
+        stage('Run Git Script') {
+            steps {
+                // Run the git.sh script
+                sh 'cd /internal/urbanchat_backend && bash git.sh'
+            }
+        }
+        stage('build') {
+            steps {
+                // npm install
+                sh 'cd /internal/urbanchat_backend && docker build . -t urbanchat_backend --platform=linux/arm64/v8'
+            }
+        
+        }
+        stage('container') {
+            steps {
+                // npm install
+                sh 'cd /internal/urbanchat_backend && docker run --name urbanchat_backend -d -p 8080:8080 urbanchat_backend'
+            }
+        }
+
+    }
+
+    post {
+        success {
+            echo 'Script executed successfully.'
+        }
+        failure {
+            echo 'Script execution failed.'
+        }
+    }
+}
