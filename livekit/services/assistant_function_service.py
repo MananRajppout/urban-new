@@ -33,12 +33,6 @@ class AssistantFnc(llm.FunctionContext):
             # Say the final words (await if say is async)
             await self.agent.say(last_speak)
 
-            # Log to chat history
-            self.chat_ctx.append(
-                role="assistant",
-                text=last_speak
-            )
-
             # Word-based duration estimate
             word_count = len(last_speak.split())
             duration = round(word_count / (120 / 60), 2) + 1

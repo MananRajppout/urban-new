@@ -9,3 +9,5 @@
 /livekit/services/__pycache__
 /livekit/utils/__pycache__
 /livekit/__pycache__
+/livekit/livekit-plugins-smallest/build
+/livekit/livekit-plugins-smallest/livekit_plugins_smallest.egg-info

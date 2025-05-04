@@ -11,7 +11,7 @@ from livekit.agents import (
     metrics
 )
 from livekit.agents.pipeline import VoicePipelineAgent
-from livekit.plugins import deepgram, openai, silero
+from livekit.plugins import deepgram, openai, silero, smallest, elevenlabs
 from livekit.plugins.deepgram import tts
 from services.assistant_function_service import AssistantFnc
 from app_types.assistant_type import Assistant
@@ -75,19 +75,27 @@ async def entrypoint(ctx: JobContext):
         text=generate_prompt(assistant_info)
     )
 
-    dg_model = "nova-3-general"
-    #if call phone then we will use this model
-    if participant.kind == rtc.ParticipantKind.PARTICIPANT_KIND_SIP:
-        dg_model = "nova-2-phonecall"
+    print(assistant_info.get("voice_engine_name"),"voice_engine_name")
 
+    tts = None
+    if assistant_info.get("voice_engine_name") == "smallest":
+        tts = smallest.TTS(voice=assistant_info.get("voice_id"))
+    elif assistant_info.get("voice_engine_name") == "elevenlabs":
+        tts = elevenlabs.TTS(voice=assistant_info.get("voice_id"))
+    elif assistant_info.get("voice_engine_name") == "sarvam":
+         tts = smallest.TTS(voice=assistant_info.get("voice_id"))
+    else:
+        tts = smallest.TTS(voice=assistant_info.get("voice_id"))
 
+    dg_model = "nova-3"
+    
 
     agent = VoicePipelineAgent(
         vad=ctx.proc.userdata["vad"],
-        stt=deepgram.STT(model=dg_model,language="multi"),
+        stt=deepgram.STT(language="hi",model=dg_model),
         llm=openai.LLM(model='gpt-4o'),
         # tts=openai.TTS(),
-        tts=tts.TTS(model="aura-asteria-en"),
+        tts=tts,
         chat_ctx=initial_ctx,
         fnc_ctx=fnc_ctx
     )
