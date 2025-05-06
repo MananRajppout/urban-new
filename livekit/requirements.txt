@@ -4,7 +4,8 @@ livekit-plugins-google>=0.11.2
 livekit-plugins-openai[vertex]>=0.10.10,<1.0.0
 livekit-plugins-silero>=0.7.5
 livekit-plugins-rag>=0.2.4
-livekit-agents[elevenlabs]~=1.0
+livekit-plugins-elevenlabs>=0.8.2
 python-dotenv~=1.0
 aiofile~=3.8.8
 openai
+pytz

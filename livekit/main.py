@@ -18,6 +18,7 @@ from app_types.assistant_type import Assistant
 from app_types.callconfig_type import CallContext
 from services.api_service import fetch_assistant_id, call_webhook_pickup, call_webhook_hangup
 from utils.generate_prompt import generate_prompt
+from livekit.agents import tokenize
 
 import json
 logger = logging.getLogger("voice-assistant")
@@ -60,7 +61,9 @@ async def entrypoint(ctx: JobContext):
             )
         )
         return
+
     
+
     #call webhook pickup
     isWebCall = call_ctx.get('callType') == 'web'
     if isWebCall:
@@ -75,26 +78,51 @@ async def entrypoint(ctx: JobContext):
         text=generate_prompt(assistant_info)
     )
 
-    print(assistant_info.get("voice_engine_name"),"voice_engine_name")
+
+
+
+    #initialize tts
+    tts_engine_name = assistant_info.get("voice_engine_name")
+    voice_id = assistant_info.get("voice_id")
+
+   
 
     tts = None
-    if assistant_info.get("voice_engine_name") == "smallest":
-        tts = smallest.TTS(voice=assistant_info.get("voice_id"))
-    elif assistant_info.get("voice_engine_name") == "elevenlabs":
-        tts = elevenlabs.TTS(voice=assistant_info.get("voice_id"))
-    elif assistant_info.get("voice_engine_name") == "sarvam":
-         tts = smallest.TTS(voice=assistant_info.get("voice_id"))
+    if tts_engine_name == "smallest":
+        tts = smallest.TTS(voice=voice_id)
+    elif tts_engine_name == "elevenlabs":
+        tts = elevenlabs.TTS(api_key=assistant_info.get("elevenlabs_api_key"))
+    elif tts_engine_name == "sarvam":
+        tts = smallest.TTS(voice=voice_id)
+    elif tts_engine_name == "deepgram":
+        tts = deepgram.TTS(model=voice_id)
+
+
+    gpt_model = assistant_info.get("chatgpt_model")
+    gpt_llm = None
+    if gpt_model == 'gpt-4o-mini':
+        gpt_llm = openai.LLM(model='gpt-4o-mini')
+    elif gpt_model == 'gpt-4.1-2025-04-14':
+        gpt_llm = openai.LLM(model='gpt-4.1-2025-04-14')
     else:
-        tts = smallest.TTS(voice=assistant_info.get("voice_id"))
+        gpt_llm = openai.LLM(model='gpt-4o-mini')
+
+
+
+
 
     dg_model = "nova-3"
     
+    def replace_words(assistant: VoicePipelineAgent, text: str):
+        return tokenize.utils.replace_words(
+            text=text, replacements={r"\*": " "}
+        )
 
     agent = VoicePipelineAgent(
         vad=ctx.proc.userdata["vad"],
-        stt=deepgram.STT(language="hi",model=dg_model),
-        llm=openai.LLM(model='gpt-4o'),
-        # tts=openai.TTS(),
+        stt=deepgram.STT(model=dg_model),
+        llm=gpt_llm,
+        before_tts_cb=replace_words,
         tts=tts,
         chat_ctx=initial_ctx,
         fnc_ctx=fnc_ctx
@@ -102,7 +130,7 @@ async def entrypoint(ctx: JobContext):
     
 
     #function calling
-    fnc_ctx.register(agent=agent,chat_ctx=initial_ctx,ctx=ctx,assistant_info={})
+    fnc_ctx.register(agent=agent,chat_ctx=initial_ctx,ctx=ctx,assistant_info=assistant_info)
     agent.start(ctx.room, participant)
     usage_collector = metrics.UsageCollector()
 

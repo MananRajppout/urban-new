@@ -82,4 +82,20 @@ def call_webhook_hangup(call_ctx: CallContext,assistant: Assistant,chat_ctx: Cha
         print(e)
         return None
 
-
+def get_request(url:str):
+    try:
+        response = requests.get(url)
+        response = response.json()
+        return response
+    except Exception as e:
+        print(e)
+        return None
+    
+def post_request(url:str,json):
+    try:
+        response = requests.post(url,json=json)
+        response = response.json()
+        return response
+    except Exception as e:
+        print(e)
+        return None

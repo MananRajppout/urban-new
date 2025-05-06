@@ -3,6 +3,7 @@ from livekit.agents import llm, JobContext
 from livekit.agents.pipeline import VoicePipelineAgent
 import asyncio
 from livekit import api
+from services.calcom_service import fetch_avaible_slots,book_appointment_request
 
 class AssistantFnc(llm.FunctionContext):
     ctx: JobContext
@@ -56,9 +57,11 @@ class AssistantFnc(llm.FunctionContext):
     ):
         """Fetches all available slots"""
         await self.agent.say(message)
-
-        #fetching live is pending
-        return "Only Sunday is avaible"
+        availableSlots = fetch_avaible_slots(self.assistant_info.get("calendar_tools")[0])
+        return {
+            "instruction": f"Firstly, complete the current conversation, then respond to the user with the available slots: {availableSlots}. Make sure that the text is readable, which means it should be like '24th and 25th april twenty fourth and twenty fifth April we have slots available which date do you prefer?'. This should not be in a JSON format, but rather in a natural, easy-to-understand way. For instance, if we are discussing available times, it should be clear like, 'user tells which date he want than you will tell on 25th we have 9am to 1pm.' rather than using just the numeric format. most importantly, if the user choose to book appointment, make sure to invoke the 'book_appointment' function.",
+            "output": availableSlots
+        }
 
     
 
@@ -76,9 +79,26 @@ class AssistantFnc(llm.FunctionContext):
 
         # Simulate booking process (or plug in your logic here)
         print("Booking Details:")
-        print(f"Name: {name}, Email: {email}, Reason: {reason}")
+        eventTypeId = self.assistant_info.get("calendar_tools")[0].get("AvailabilityCaleventTypeId")
+        api_key = self.assistant_info.get("calendar_tools")[0].get("AvailabilityCalapiKey")
+        timeZone = self.assistant_info.get("calendar_tools")[0].get("AvailabilityCaltimezone")
 
-        return {
-            "status": "success",
-            "message": f"Appointment booked for {name} on {start}."
-        }
+        res = book_appointment_request({
+            "eventTypeId": int(eventTypeId),
+            "start": start,
+            "responses": {
+                "location": {
+                    "optionValue": location,
+                    "value": location
+                },
+                "email": email,
+                "name": name
+            },
+            "metadata": {
+                "reason": reason
+            },
+            "timeZone": timeZone,
+            "language": "en"
+        },api_key)
+
+        return res
