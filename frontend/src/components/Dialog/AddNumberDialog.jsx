@@ -111,10 +111,11 @@ const AddNumberDialog = ({ open, onOpenChange, onNumberPurchased, getBoughtPhone
       const stripePublicKey = process.env.NEXT_PUBLIC_STRIPE_PUBLIC_KEY;
   
       const stripe = await loadStripe(stripePublicKey);
-      const result = stripe.redirectToCheckout({
+      const result = await stripe.redirectToCheckout({
         sessionId: res.data.stripeSessionId,
       });
-   
+      console.log("result", result);
+
 
       getBoughtPhoneNumber();
       onDialogClose();

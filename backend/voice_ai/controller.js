@@ -37,7 +37,7 @@ const {
 } = require("./stats_service");
 const { AccessToken:LivekitAccessToken } = require("livekit-server-sdk");
 
-const { Restriction } = require("../user/model");
+const { Restriction, User } = require("../user/model");
 const {
   generatePrereordedAudio,
 } = require("../services/elevenlabs.service.js");
@@ -451,7 +451,8 @@ exports.fetchAIAgents = catchAsyncError(async (req, res, next) => {
 exports.fetchSingleAiAgent = catchAsyncError(async (req, res, next) => {
   const agentId = req.params.agent_id;
 
-  const aiAgent = await AiAgent.findOne({ _id: agentId });
+  let aiAgent = await AiAgent.findOne({ _id: agentId });
+  
 
   if (!aiAgent) {
     return res.status(404).json({
@@ -460,6 +461,12 @@ exports.fetchSingleAiAgent = catchAsyncError(async (req, res, next) => {
     });
   }
 
+  const user = await User.findById(aiAgent.user_id);
+  aiAgent = JSON.parse(JSON.stringify(aiAgent))
+  if(user.elevenlabs_api_key){
+    aiAgent["elevenlabs_api_key"] = user.elevenlabs_api_key
+  }
+  
   res.status(200).json({
     success: true,
     message: "AI agent fetched successfully",
@@ -871,7 +878,6 @@ exports.fetchVoices = catchAsyncError(async (req, res) => {
   const elevenlabs = new ElevenLabsVoiceHelper();
   const deepgram = new DeepGramVoiceHelper();
   const elevenLabApiKey = req.user.elevenlabs_api_key;
-
   const elevenLabsVoices = await elevenlabs.fetchVoices(elevenLabApiKey);
   const deepgramVoices = await deepgram.fetchVoices();
   // const deepGramVoices = await deepgram.fetchVoices();

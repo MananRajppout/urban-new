@@ -1,7 +1,13 @@
 const { VoiceAiInvoice } = require("../voice_ai/model");
+const sipClient = require("./configs/liveClient");
 const plivoClient = require("./configs/plivoClient");
 const { PlivoPhoneRecord } = require("./model/plivoModel");
 const mongoose=require("mongoose")
+const dotenv = require('dotenv');
+dotenv.config();
+const {
+  AiAgent,
+} = require("../voice_ai/model");
 
 exports.getNumberRateInCent = (countryISO) => {
   if (countryISO === "US") {
@@ -224,6 +230,20 @@ exports.buyNumberFunction = async (user_id, countryISO,plan_id,session_id,type='
 
    numberDetails = await plivoClient.numbers.get(searchedNumber.number);
 
+   const agent = await AiAgent.findOne({
+    user_id: user_id,
+  });
+
+  console.log("creating sip trunk...");
+  const sipTrunkId = await this.createSIPTrunks(searchedNumber.number);
+  console.log("sip trunk created", sipTrunkId);
+  console.log("creating dispatch rule...");
+  const dispatchRuleId = await this.createSIPDispatchRule(sipTrunkId, searchedNumber.number, agent?._id || undefined);
+  console.log("dispatch rule created", dispatchRuleId);
+  console.log("creating sip outbound trunk...");
+  const sipOutboundTrunkId = await this.createOutboundTrunk(searchedNumber.number);
+  console.log("sip outbound trunk created", sipOutboundTrunkId);
+
 
 
   // Create a phone record
@@ -238,7 +258,10 @@ exports.buyNumberFunction = async (user_id, countryISO,plan_id,session_id,type='
     monthly_rental_fee: totalAmount,
     currency: countryISO === "IN" ? "INR" : "INR",
     renewal_date: numberDetails.renewalDate || "",
-    plan_id:plan_id
+    plan_id:plan_id,
+    sip_outbound_trunk_id: sipOutboundTrunkId,
+    sip_trunk_dispatch_rule_id: dispatchRuleId,
+    sip_trunk_id: sipTrunkId,
   });
 
   await phoneRecord.save();
@@ -383,3 +406,133 @@ exports.deletePlivoNumberPaymentFailed = async (plan_id, user_id, stripeSubId) =
   }
 };
 
+
+exports.createSIPTrunks = async (number) => {
+  try {
+    const numbers = [`+${number}`];
+    const name = `Inbound Trunk for ${number}`;
+
+    // Trunk options
+    const trunkOptions = {
+      krispEnabled: true,
+    };
+
+    const trunk = await sipClient.createSipInboundTrunk(
+      name,
+      numbers,
+      trunkOptions,
+    );
+
+    console.log(trunk, 'trunk created');
+    return trunk.sipTrunkId;
+
+  } catch (err) {
+    console.log(err, 'error in creating sip trunks');
+    return null;
+  }
+}
+
+exports.createSIPDispatchRule = async (trunkId,phoneNumber,agentId,dispatchRuleId=null) => {
+  if(dispatchRuleId){
+    await sipClient.deleteSipDispatchRule(dispatchRuleId);
+  }
+
+  try {
+    const metadata = {
+      agentId: agentId,
+      callType: "telephone",
+      callId: "test-call-id",
+      dir: "inbound",
+      customer_name: "test-customer-name",
+      context: "test-context",
+      phone_number: `+${phoneNumber}`,
+      isWebCall: false
+    }
+
+    const rule = {
+      roomPrefix: "call-",
+      type: 'individual'
+    };
+
+    const options = {
+      name: `Call Rule for ${phoneNumber}`,
+      trunkIds: [trunkId],
+      metadata: JSON.stringify(metadata)
+    };
+
+    if(!agentId){
+      options.metadata = undefined;
+    }
+    
+    const dispatchRule = await sipClient.createSipDispatchRule(rule, options);
+    console.log("created dispatch rule", dispatchRule);
+    return dispatchRule.sipDispatchRuleId
+  } catch (err) {
+    console.log(err, 'error in creating sip dispatch rule');
+    return null;
+  }
+}
+
+
+exports.createOutboundTrunk = async (phoneNumber) => {
+  try {
+    const address = process.env.PLIVO_OUTBOUND_SIP_TRUNK;
+    const numbers = [`+${phoneNumber}`];
+
+    // Trunk options
+    const trunkOptions = {
+      auth_username: process.env.PLIVO_OUTBOUND_AUTH_USERNAME,
+      auth_password: process.env.PLIVO_OUTBOUND_AUTH_PASSWORD
+    };
+
+    const trunk = await sipClient.createSipOutboundTrunk(
+      `Outbound Trunk for ${phoneNumber}`,
+      address,
+      numbers,
+      trunkOptions
+    );
+    console.log("created outbound trunk", trunk);
+    return trunk.sipTrunkId;
+  } catch (error) {
+    console.log(error, 'error in creating outbound trunk');
+    return null;
+  }
+}
+
+
+exports.createSIPParticipant = async (toNumber,fromNumber, trunkId,agentId) => {
+  try {
+    const metadata = {
+      agentId: agentId,
+      callType: "telephone",
+      callId: "test-call-id",
+      dir: "outbound",
+      customer_name: "test-customer-name",
+      context: "test-context",
+      phone_number: `+${fromNumber}`,
+      isWebCall: false
+    }
+
+    // Name of the room to attach the call to
+    const roomName = `call-${toNumber}-${Date.now()}`;
+
+    const sipParticipantOptions = {
+      participantIdentity: `identity-${Date.now()}`,
+      participantName: JSON.stringify(metadata),
+      krispEnabled: true
+    };
+
+   
+    const participant = await sipClient.createSipParticipant(
+      trunkId,
+      toNumber,
+      roomName,
+      sipParticipantOptions
+    );
+    console.log("created sip participant", participant);
+    return participant.sipCallId;
+  } catch (error) {
+    console.log(error, 'error in creating sip participant');
+    return null;
+  }
+}

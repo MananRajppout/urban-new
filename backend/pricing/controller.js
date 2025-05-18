@@ -172,7 +172,7 @@ exports.createStripeSession = catchAsyncError(async (req, res, next) => {
       },
     ],
     allow_promotion_codes: true,
-    customer: req.user.customer_payment_id,
+    // customer: req.user.customer_payment_id,
 
     subscription_data: {
       metadata: {
@@ -190,7 +190,8 @@ exports.createStripeSession = catchAsyncError(async (req, res, next) => {
     },
 
 
-    success_url: `https://backend.urbanchat.ai/api/stripe-success-callback?session_id={CHECKOUT_SESSION_ID}&plan_type=${planType}&country&countryISO=${country_iso}`,
+    // success_url: `https://backend.urbanchat.ai/api/stripe-success-callback?session_id={CHECKOUT_SESSION_ID}&plan_type=${planType}&country&countryISO=${country_iso}`,
+    success_url: `http://localhost:4000/api/stripe-success-callback?session_id={CHECKOUT_SESSION_ID}&plan_type=${planType}&country&countryISO=${country_iso}`,
 
 
     // success_url: `http://localhost:3000/success?session_id={CHECKOUT_SESSION_ID}&plan_type=${planType}`,
@@ -283,7 +284,7 @@ exports.stripeSuccessCallback = catchAsyncError(async (req, res, next) => {
 
     if (paid_plan === "buy_number") {
 
-
+      console.log("Buying number")
       await buyNumberFunction(payment_history.user_id, payment_history.country_iso, payment_history.plan_id, session_id);
     } else {
       await updatePricingPlan(payment_history.user_id, paid_plan, plan_type);

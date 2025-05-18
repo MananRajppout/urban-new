@@ -34,20 +34,31 @@ async def entrypoint(ctx: JobContext):
     #initialize llm
     
     
-    fnc_ctx = AssistantFnc()
 
     logger.info(f"connecting to room {ctx.room.name}")
     await ctx.connect(auto_subscribe=AutoSubscribe.AUDIO_ONLY)
 
 
+
+
     # wait for the first participant to connect
     participant = await ctx.wait_for_participant()
+    fnc_ctx = AssistantFnc(ctx.room.name,participant.identity)
     logger.info(f"starting voice assistant for participant {participant.identity}")
 
     #get call metadata
-    call_ctx: CallContext = json.loads(participant.metadata)
-    
-    
+    call_ctx: CallContext = {}
+    try:
+        call_ctx = json.loads(participant.metadata if participant.metadata else participant.name)
+    except Exception as e:
+        logger.error(f"error parsing metadata: {e}")
+        await ctx.api.room.delete_room(
+            api.DeleteRoomRequest(
+                room=ctx.room.name,
+            )
+        )
+        return
+    logger.info(f"call_ctx: {call_ctx}")
 
 
 
@@ -130,7 +141,7 @@ async def entrypoint(ctx: JobContext):
     
 
     #function calling
-    fnc_ctx.register(agent=agent,chat_ctx=initial_ctx,ctx=ctx,assistant_info=assistant_info)
+    fnc_ctx.register(agent=agent,chat_ctx=initial_ctx,ctx=ctx,assistant_info=assistant_info,call_ctx=call_ctx)
     agent.start(ctx.room, participant)
     usage_collector = metrics.UsageCollector()
 

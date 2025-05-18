@@ -88,6 +88,10 @@ const ModelSelection = ({
       voice.voice_name = "Raman";
       voice.voice_id = "raman";
       voice.voice_engine_name = "smallest";
+    }else if (value == "deepgram"){
+      voice.voice_name = "Luna";
+      voice.voice_id = "aura-luna-en";
+      voice.voice_engine_name = "deepgram";
     }
 
     setVoice(voice);

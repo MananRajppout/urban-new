@@ -4,21 +4,32 @@ from livekit.agents.pipeline import VoicePipelineAgent
 import asyncio
 from livekit import api
 from services.calcom_service import fetch_avaible_slots,book_appointment_request
+from livekit.protocol import sip as proto_sip
+import os
+from app_types.callconfig_type import CallContext
 
 class AssistantFnc(llm.FunctionContext):
     ctx: JobContext
     agent: VoicePipelineAgent
     chat_ctx: llm.ChatContent
     assistant_info: None
+    room_name: str
+    participant_identity: str
+    livekit_api: api.LiveKitAPI
+    call_ctx: CallContext
 
-    def __init__(self):
+    def __init__(self,room_name,participant_identity):
         super().__init__()
-    
-    def register(self, agent, chat_ctx, ctx, assistant_info):
+        self.room_name = room_name
+        self.participant_identity = participant_identity
+        self.livekit_api = api.LiveKitAPI(api_key=os.getenv("LIVEKIT_API_KEY"),api_secret=os.getenv("LIVEKIT_API_SECRET"),url=os.getenv("LIVEKIT_URL"))
+
+    def register(self, agent, chat_ctx, ctx, assistant_info, call_ctx):
         self.agent = agent
         self.chat_ctx = chat_ctx
         self.ctx = ctx
         self.assistant_info = assistant_info
+        self.call_ctx = call_ctx
 
     @llm.ai_callable()
     async def hang_up_call(
@@ -102,3 +113,39 @@ class AssistantFnc(llm.FunctionContext):
         },api_key)
 
         return res
+    
+
+
+    @llm.ai_callable()
+    async def transfer_call(
+        self,
+        transfer_to_number: Annotated[str, llm.TypeInfo(description="The number to transfer the call to in E.164 format.")],
+        error_message: Annotated[str, llm.TypeInfo(description="The error message to speak if the transfer fails.")],
+    ):
+        """Transfers the call to the specified number."""
+        print(f"transfer_call function called.",transfer_to_number)
+        
+        if self.call_ctx.get("callType") == "web":
+            await self.agent.say("I'm sorry, but I can't transfer the call to a web call. Please try again with a valid phone number.")
+            return
+        
+        try:
+
+            transfer_to = f"tel:{transfer_to_number}"
+        
+
+            transfer_request = proto_sip.TransferSIPParticipantRequest(
+                participant_identity=self.participant_identity,
+                room_name=self.room_name,
+                transfer_to=transfer_to,
+                play_dialtone=True
+            )
+        
+            # Transfer caller
+            await self.livekit_api.sip.transfer_sip_participant(transfer_request)
+            print(f"Successfully transferred participant {self.participant_identity} to {transfer_to}")
+        except Exception as e:
+            print(f"Error transferring participant {self.participant_identity} to {transfer_to}: {e}")
+            await self.agent.say(error_message)
+        
+        

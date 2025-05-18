@@ -18,6 +18,10 @@ const {
   getNumberRateInCent,
   justPhoneNumber,
   numberRateInCurrency,
+  createSIPTrunks,
+  createSIPDispatchRule,
+  createOutboundTrunk,
+  createSIPParticipant,
 } = require("../utils");
 // exports.getAllNumbers = catchAsyncError(async (req, res) => {
 //   const numbers = await PlivoPhoneRecord.find({
@@ -222,6 +226,19 @@ exports.buyNumber = catchAsyncError(async (req, res) => {
     });
   }
   const numberDetails = await plivoClient.numbers.get(searchedNumber.number);
+  const agent = await AiAgent.findOne({
+    user_id: user_id,
+  });
+
+  console.log("creating sip trunk...");
+  const sipTrunkId = await createSIPTrunks(searchedNumber.number);
+  console.log("sip trunk created", sipTrunkId);
+  console.log("creating dispatch rule...");
+  const dispatchRuleId = await createSIPDispatchRule(sipTrunkId, searchedNumber.number, agent?._id || undefined);
+  console.log("dispatch rule created", dispatchRuleId);
+  console.log("creating sip outbound trunk...");
+  const sipOutboundTrunkId = await createOutboundTrunk(searchedNumber.number);
+  console.log("sip outbound trunk created", sipOutboundTrunkId);
 
   // create a phone record
   const phoneRecord = new PlivoPhoneRecord({
@@ -235,7 +252,11 @@ exports.buyNumber = catchAsyncError(async (req, res) => {
     monthly_rental_fee: countryISO == "IN" ? "499" : "2",
     currency: countryISO == "IN" ? "INR" : "USD",
     renewal_date: numberDetails.renewalDate || "",
+    sip_outbound_trunk_id: sipOutboundTrunkId,
+    sip_trunk_dispatch_rule_id: dispatchRuleId,
+    sip_trunk_id: sipTrunkId,
   });
+
   await phoneRecord.save();
 
   res.status(200).json({
@@ -354,6 +375,11 @@ exports.updateAgentPhoneNumber = catchAsyncError(async (req, res) => {
   }
 
   const phone_number = phoneRecord.phone_number;
+  console.log("creating dispatch rule...");
+  const dispatchRuleId = await createSIPDispatchRule(phoneRecord.sip_trunk_id, phone_number, agent_id, phoneRecord.sip_trunk_dispatch_rule_id);
+  console.log("dispatch rule created", dispatchRuleId);
+  phoneRecord.sip_trunk_dispatch_rule_id = dispatchRuleId;
+  await phoneRecord.save();
 
   // check phone_number is not associated with any other agent
   // if yes, remove the association
@@ -591,18 +617,41 @@ exports.hangupWebhook = catchAsyncError(async (req, res) => {
 
 exports.makeCall = catchAsyncError(async (req, res) => {
   const { from, to } = req.body;
-  const serverUrl = process.env.SERVER_URL;
-  const answer_url = `${serverUrl}/api/phone/webhook/voice`;
-  const response = await plivoClient.calls.create(from, to, answer_url);
-  const callHistory = new CallHistory({ caller_id: response.requestUuid });
+  // const serverUrl = process.env.SERVER_URL;
+  // const answer_url = `${serverUrl}/api/phone/webhook/voice`;
+  // const response = await plivoClient.calls.create(from, to, answer_url);
+
+  const phoneRecord = await PlivoPhoneRecord.findOne({
+    phone_number: from,
+  });
+
+  if (!phoneRecord) {
+    return res.status(400).json({
+      success: false,
+      message: "Phone number not found",
+    });
+  }
+
+  const agent = await AiAgent.findOne({
+    plivo_phone_number: from,
+  });
+
+  if (!agent) {
+    return res.status(400).json({
+      success: false,
+      message: "Agent not found",
+    });
+  }
+  const sipCallId = await createSIPParticipant(to, from, phoneRecord.sip_outbound_trunk_id, agent._id);
+  const callHistory = new CallHistory({ caller_id: sipCallId });
   if (!callHistory) {
     console.log("callHistory not created in makeCall");
   } else {
-    console.log("Call History created in make Call", response);
+    console.log("Call History created in make Call", sipCallId);
   }
   res.status(200).json({
     success: true,
-    response,
+    sipCallId,
   });
   // Store the row number in call history
 });

@@ -11,3 +11,5 @@
 /livekit/__pycache__
 /livekit/livekit-plugins-smallest/build
 /livekit/livekit-plugins-smallest/livekit_plugins_smallest.egg-info
+voice.pem
+/venv

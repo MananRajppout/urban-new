@@ -3,8 +3,9 @@ export const STTOptions = [
 ];
 
 export const LLMOptions = [
-  // { name: "GPT-4o Mini", value: "gpt-4o-mini" },
-  { name: "GPT 4o Realtime", value: "gpt-4o-realtime-preview-2024-12-17" },
+  { name: "GPT-4o Mini", value: "gpt-4o-mini" },
+  { name: "GPT-4.1", value: "gpt-4.1-2025-04-14" },
+  // { name: "GPT 4o Realtime", value: "gpt-4o-realtime-preview-2024-12-17" },
   // {
   //   name: "GPT 4o mini Realtime",
   //   value: "gpt-4o-mini-realtime-preview-2024-12-17",
@@ -15,6 +16,7 @@ export const TTSOptions = [
   { name: "ElevenLabs", value: "elevenlabs" },
   { name: "SrAi", value: "sarvam" },
   { name: "SAi", value: "smallest" },
+  { name: "Deepgram", value: "deepgram" },
 ];
 
 export const VoiceOptions = [

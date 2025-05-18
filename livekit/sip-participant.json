@@ -1,0 +1,8 @@
+{
+    "sip_trunk_id": "ST_WJ4JKjJgUmH4",
+    "sip_call_to": "+918279741233",
+    "room_name": "my-sip-room",
+    "participant_identity": "sip-test",
+    "participant_name": "{\"agentId\": \"67ab2ca78178f516a1e8b43e\", \"callType\": \"telephone\", \"callId\": \"test-call-id\", \"dir\": \"outbound\", \"customer_name\": \"test-customer-name\", \"context\": \"test-context\", \"phone_number\": \"+912231043972\"}",
+    "krisp_enabled": true
+  }

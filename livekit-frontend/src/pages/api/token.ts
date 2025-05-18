@@ -5,8 +5,16 @@ import { AccessToken } from "livekit-server-sdk";
 import type { AccessTokenOptions, VideoGrant } from "livekit-server-sdk";
 import { TokenResult } from "../../lib/types";
 
+// import {SipClient} from "livekit-server-sdk";
+
+
 const apiKey = process.env.LIVEKIT_API_KEY;
 const apiSecret = process.env.LIVEKIT_API_SECRET;
+// const apiHost = process.env.NEXT_PUBLIC_LIVEKIT_URL as string;
+
+// const sipClient = new SipClient(apiHost, apiKey, apiSecret);
+// sipClient.deleteSipDispatchRule("SDR_HRoPJ8pHDhxf");
+// console.log(sipClient,"delete sip trunk");
 
 const createToken = (userInfo: AccessTokenOptions, grant: VideoGrant) => {
   const at = new AccessToken(apiKey, apiSecret, userInfo);

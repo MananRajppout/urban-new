@@ -16,6 +16,19 @@ const plivoPhoneRecordSchema = new mongoose.Schema({
     type: String,
     default: ""
   },
+  sip_trunk_id: {
+    type: String,
+    default: ""
+  },
+  sip_outbound_trunk_id: {
+    type: String,
+    default: ""
+  },
+  sip_trunk_dispatch_rule_id: {
+    type: String,
+    default: ""
+  },
+  
   country: {
     type: String,
     required: true,
