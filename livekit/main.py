@@ -19,6 +19,7 @@ from app_types.callconfig_type import CallContext
 from services.api_service import fetch_assistant_id, call_webhook_pickup, call_webhook_hangup
 from utils.generate_prompt import generate_prompt
 from livekit.agents import tokenize
+from time import time
 
 import json
 logger = logging.getLogger("voice-assistant")
@@ -43,6 +44,7 @@ async def entrypoint(ctx: JobContext):
 
     # wait for the first participant to connect
     participant = await ctx.wait_for_participant()
+    s = time()
     fnc_ctx = AssistantFnc(ctx.room.name,participant.identity)
     logger.info(f"starting voice assistant for participant {participant.identity}")
 
@@ -75,11 +77,7 @@ async def entrypoint(ctx: JobContext):
 
     
 
-    #call webhook pickup
-    isWebCall = call_ctx.get('callType') == 'web'
-    if isWebCall:
-        logger.info("Web call")
-        call_webhook_pickup(call_ctx,assistant_info)
+    
 
     
 
@@ -113,8 +111,8 @@ async def entrypoint(ctx: JobContext):
     gpt_llm = None
     if gpt_model == 'gpt-4o-mini':
         gpt_llm = openai.LLM(model='gpt-4o-mini')
-    elif gpt_model == 'gpt-4.1-2025-04-14':
-        gpt_llm = openai.LLM(model='gpt-4.1-2025-04-14')
+    elif gpt_model == 'gpt-4.1-nano-2025-04-14':
+        gpt_llm = openai.LLM(model='gpt-4.1-nano-2025-04-14')
     else:
         gpt_llm = openai.LLM(model='gpt-4o-mini')
 
@@ -139,11 +137,24 @@ async def entrypoint(ctx: JobContext):
         fnc_ctx=fnc_ctx
     )
     
-
+    
     #function calling
     fnc_ctx.register(agent=agent,chat_ctx=initial_ctx,ctx=ctx,assistant_info=assistant_info,call_ctx=call_ctx)
     agent.start(ctx.room, participant)
+
+    print("Total time",s-time())
+    s = time()
+    await agent.say(assistant_info.get('welcome_message_text'), allow_interruptions=True)
+    print("Speack time",s-time())
     usage_collector = metrics.UsageCollector()
+
+
+
+    #call webhook pickup
+    isWebCall = call_ctx.get('callType') == 'web'
+    if isWebCall:
+        logger.info("Web call")
+        call_webhook_pickup(call_ctx,assistant_info)
 
 
     #event handling
@@ -174,7 +185,6 @@ async def entrypoint(ctx: JobContext):
 
     
     #shutdown callback
-    await agent.say(assistant_info.get('welcome_message_text'), allow_interruptions=True)
     ctx.add_shutdown_callback(log_usage)
 
 if __name__ == "__main__":
