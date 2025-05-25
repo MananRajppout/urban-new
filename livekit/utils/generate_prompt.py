@@ -2,7 +2,12 @@ from app_types.assistant_type import Assistant
 
 
 def generate_prompt(assistant: Assistant):
-    calendar_tools = assistant.get('calendar_tools')[0]
+    calendar_tools = None
+    try:
+      calendar_tools = assistant.get('calendar_tools')[0]
+    except Exception as e:
+      print(e)
+
     instructions = assistant.get('base_prompt')
     hang_up_prompt = assistant.get('hang_up_prompt')
     prompt = ""
