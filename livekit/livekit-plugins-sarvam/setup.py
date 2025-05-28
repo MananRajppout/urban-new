@@ -21,15 +21,15 @@ import setuptools.command.build_py
 here = pathlib.Path(__file__).parent.resolve()
 about = {}
 with open(
-    os.path.join(here, "livekit", "plugins", "smallest", "version.py"), "r"
+    os.path.join(here, "livekit", "plugins", "sarvam", "version.py"), "r"
 ) as f:
     exec(f.read(), about)
 
 
 setuptools.setup(
-    name="livekit-plugins-smallest",
+    name="livekit-plugins-sarvam",
     version=about["__version__"],
-    description="LiveKit Agents Plugin for Smallest",
+    description="LiveKit Agents Plugin for sarvam",
     long_description=(here / "README.md").read_text(encoding="utf-8"),
     long_description_content_type="text/markdown",
     url="https://github.com/livekit/agents",
@@ -45,12 +45,12 @@ setuptools.setup(
         "Programming Language :: Python :: 3.10",
         "Programming Language :: Python :: 3 :: Only",
     ],
-    keywords=["webrtc", "realtime", "audio", "video", "livekit", "smallest"],
+    keywords=["webrtc", "realtime", "audio", "video", "livekit", "sarvam"],
     license="Apache-2.0",
     packages=setuptools.find_namespace_packages(include=["livekit.*"]),
     python_requires=">=3.9.0",
     install_requires=["livekit-agents[codecs]>=0.8.0.dev0"],
-    package_data={"livekit.plugins.smallest": ["py.typed"]},
+    package_data={"livekit.plugins.sarvam": ["py.typed"]},
     project_urls={
         "Documentation": "https://docs.livekit.io",
         "Website": "https://livekit.io/",
