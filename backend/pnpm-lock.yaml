@@ -122,6 +122,9 @@ importers:
       langchain:
         specifier: ^0.1.0
         version: 0.1.5(@aws-sdk/client-dynamodb@3.496.0)(@aws-sdk/credential-provider-node@3.496.0)(@pinecone-database/pinecone@2.2.1)(@smithy/eventstream-codec@2.1.1)(@smithy/protocol-http@3.1.1)(@smithy/signature-v4@2.1.1)(@smithy/util-utf8@2.1.1)(axios@1.6.5)(encoding@0.1.13)(googleapis@126.0.1(encoding@0.1.13))(handlebars@4.7.8)(jsonwebtoken@9.0.2)(lodash@4.17.21)(mongodb@5.9.1)(openai@4.25.0(encoding@0.1.13))(ws@8.18.0)(youtube-transcript@1.2.1)
+      livekit-server-sdk:
+        specifier: ^2.12.0
+        version: 2.13.0
       mongoose:
         specifier: ^7.5.1
         version: 7.6.8
@@ -301,6 +304,9 @@ packages:
 
   '@aws-sdk/util-utf8-browser@3.259.0':
     resolution: {integrity: sha512-UvFa/vR+e19XookZF8RzFZBrw2EUkQWxiBW0yYQAhvk3C+QVGl0H3ouca8LDBlBfQKXwmW3huo/59H8rwb1wJw==}
+
+  '@bufbuild/protobuf@1.10.1':
+    resolution: {integrity: sha512-wJ8ReQbHxsAfXhrf9ixl0aYbZorRuOWpBNzm8pL8ftmSxQx/wnJD5Eg861NwJU/czy2VXFIebCeZnZrI9rktIQ==}
 
   '@deepgram/captions@1.2.0':
     resolution: {integrity: sha512-8B1C/oTxTxyHlSFubAhNRgCbQ2SQ5wwvtlByn8sDYZvdDtdn/VE2yEPZ4BvUnrKWmsbTQY6/ooLV+9Ka2qmDSQ==}
@@ -709,6 +715,9 @@ packages:
   '@langchain/openai@0.0.31':
     resolution: {integrity: sha512-fkuXzzaRk4NZX3xXP3fzg74fIEFmTSnTTHuIt+3NpDW4qgVfoJ6/hK6iVarCM0L5F/IxNAgqdEPXFFCAAmJuUQ==}
     engines: {node: '>=18'}
+
+  '@livekit/protocol@1.39.0':
+    resolution: {integrity: sha512-Zar6711kJk1MjI+63DJoyCxv8deNphIIan7tK9C5f+Zy3v2Pvjs6Yz7cFoOeDK/rY7b7deA2wfYxUi2S5XLp7w==}
 
   '@mongodb-js/saslprep@1.1.4':
     resolution: {integrity: sha512-8zJ8N1x51xo9hwPh6AWnKdLGEC5N3lDa6kms1YHmFBoRhTpJR6HG8wWk0td1MVCu9cD4YBrvjZEtd5Obw0Fbnw==}
@@ -1138,9 +1147,17 @@ packages:
     resolution: {integrity: sha512-YTd+6wGlNlPxSuri7Y6X8tY2dmm12UMH66RpKMhiX6rsk5wXXnYgbUcOt8kiS31/AjfoTOvCsE+w8nZQLQnzHA==}
     engines: {node: '>= 0.4'}
 
+  camelcase-keys@9.1.3:
+    resolution: {integrity: sha512-Rircqi9ch8AnZscQcsA1C47NFdaO3wukpmIRzYcDOrmvgt78hM/sj5pZhZNec2NM12uk5vTwRHZ4anGcrC4ZTg==}
+    engines: {node: '>=16'}
+
   camelcase@6.3.0:
     resolution: {integrity: sha512-Gmy6FhYlCY7uOElZUSbxo2UCDH8owEk996gkbrpsgGtrJLM3J7jGxl9Ic7Qwwj4ivOE5AWZWRMecDdF7hqGjFA==}
     engines: {node: '>=10'}
+
+  camelcase@8.0.0:
+    resolution: {integrity: sha512-8WB3Jcas3swSvjIeA2yvCJ+Miyz5l1ZmB6HFb9R1317dt9LCQoswg/BGrmAmkWVEszSrrg4RwmO46qIm2OEnSA==}
+    engines: {node: '>=16'}
 
   caseless@0.12.0:
     resolution: {integrity: sha512-4tYFyifaFfGacoiObjJegolkwSU4xQNGbVgUiNYVUxbQ2x2lUsFvY4hVgVzGiIe6WLOPqycWXA40l+PWsxthUw==}
@@ -1767,6 +1784,9 @@ packages:
   jose@4.15.4:
     resolution: {integrity: sha512-W+oqK4H+r5sITxfxpSU+MMdr/YSWGvgZMQDIsNoBDGGy4i7GBPTtvFKibQzW06n3U3TqHjhvBJsirShsEJ6eeQ==}
 
+  jose@5.10.0:
+    resolution: {integrity: sha512-s+3Al/p9g32Iq+oqXxkW//7jk2Vig6FF1CFqzVXoTUXt2qz89YWbL+OwS17NFYEvxC35n0FKeGO2LGYSxeM2Gg==}
+
   js-object-utilities@2.2.0:
     resolution: {integrity: sha512-gVw7FwD6r7mNNjzSKJ74uxvqNIGu7hb67K+Xvwus9JRBTWLezxcg77cCFOmTbiToV09BqdYmIJ+zfL3UiWDtpQ==}
 
@@ -2028,6 +2048,10 @@ packages:
   limiter@1.1.5:
     resolution: {integrity: sha512-FWWMIEOxz3GwUI4Ts/IvgVy6LPvoMPgjMdQ185nN6psJyBJ4yOpzqm695/h5umdLJg2vW3GR5iG11MAkR2AzJA==}
 
+  livekit-server-sdk@2.13.0:
+    resolution: {integrity: sha512-fQJI/zEJRPeXKdKMkEfJNYSSnvmuPQsk2Q+X6tPfUrJPy7fnyYPax/icf/CZ8EYZQBhFgSD7WaKOYGSSfGSyZw==}
+    engines: {node: '>=18'}
+
   lodash.clonedeep@4.5.0:
     resolution: {integrity: sha512-H5ZhCF25riFd9uB5UCkVKo61m3S/xZk1x4wA6yp/L3RFP6Z/eHH1ymQcGLo7J3GMPfm0V/7m1tryHuGVxpqEBQ==}
 
@@ -2064,6 +2088,10 @@ packages:
 
   lru-memoizer@2.2.0:
     resolution: {integrity: sha512-QfOZ6jNkxCcM/BkIPnFsqDhtrazLRsghi9mBwFAzol5GCvj4EkFT899Za3+QwikCg5sRX8JstioBDwOxEyzaNw==}
+
+  map-obj@5.0.0:
+    resolution: {integrity: sha512-2L3MIgJynYrZ3TYMriLDLWocz15okFakV6J12HXvMXDHui2x/zgChzg1u9mFFGbbGWE+GsLpQByt4POb9Or+uA==}
+    engines: {node: ^12.20.0 || ^14.13.1 || >=16.0.0}
 
   math-intrinsics@1.1.0:
     resolution: {integrity: sha512-/IXtbwEk5HTPyEwyKX6hGkYXxM9nbj64B+ilVJnC/R6B0pH5G4V3b0pVbL7DBj4tkhBAppbQUlf6F6Xl9LHu1g==}
@@ -2423,6 +2451,10 @@ packages:
     engines: {node: '>=0.4.x'}
     deprecated: The querystring API is considered Legacy. new code should use the URLSearchParams API instead.
 
+  quick-lru@6.1.2:
+    resolution: {integrity: sha512-AAFUA5O1d83pIHEhJwWCq/RQcRukCkn/NSm2QsTEMle5f2hP0ChI2+3Xb051PZCkLryI/Ir1MVKviT2FIloaTQ==}
+    engines: {node: '>=12'}
+
   random-bytes@1.0.0:
     resolution: {integrity: sha512-iv7LhNVO047HzYR3InF6pUcUsPQiHTM1Qal51DcGSuZFBil1aBBWG5eHPNek7bvILMaYJ/8RU1e8w1AMdHmLQQ==}
     engines: {node: '>= 0.8'}
@@ -2658,6 +2690,10 @@ packages:
   twilio@5.4.0:
     resolution: {integrity: sha512-kEmxzdOLTzXzUEXIkBVwT1Itxlbp+rtGrQogNfPtSE3EjoEsxrxB/9tdMIEbrsioL8CzTk/+fiKNJekAyHxjuQ==}
     engines: {node: '>=14.0'}
+
+  type-fest@4.41.0:
+    resolution: {integrity: sha512-TeTSQ6H5YHvpqVwBRcnLDCBnDOHWYu7IvGbHT6N8AOymcr9PJGjc1GTtiWZTYg0NCgYwvnYWEkVChQAr9bjfwA==}
+    engines: {node: '>=16'}
 
   type-is@1.6.18:
     resolution: {integrity: sha512-TkRKr9sUTxEH8MdfuCSP7VizJyzRNMjj2J2do2Jr3Kym598JVdEksuzPQCnlFPW4ky9Q+iA+ma9BGm06XQBy8g==}
@@ -3270,6 +3306,8 @@ snapshots:
     dependencies:
       tslib: 2.6.2
 
+  '@bufbuild/protobuf@1.10.1': {}
+
   '@deepgram/captions@1.2.0':
     dependencies:
       dayjs: 1.11.13
@@ -3453,6 +3491,10 @@ snapshots:
       zod-to-json-schema: 3.22.3(zod@3.22.4)
     transitivePeerDependencies:
       - encoding
+
+  '@livekit/protocol@1.39.0':
+    dependencies:
+      '@bufbuild/protobuf': 1.10.1
 
   '@mongodb-js/saslprep@1.1.4':
     dependencies:
@@ -4072,7 +4114,16 @@ snapshots:
       call-bind-apply-helpers: 1.0.1
       get-intrinsic: 1.2.6
 
+  camelcase-keys@9.1.3:
+    dependencies:
+      camelcase: 8.0.0
+      map-obj: 5.0.0
+      quick-lru: 6.1.2
+      type-fest: 4.41.0
+
   camelcase@6.3.0: {}
+
+  camelcase@8.0.0: {}
 
   caseless@0.12.0:
     optional: true
@@ -4789,6 +4840,8 @@ snapshots:
 
   jose@4.15.4: {}
 
+  jose@5.10.0: {}
+
   js-object-utilities@2.2.0: {}
 
   js-tiktoken@1.0.16:
@@ -5039,6 +5092,13 @@ snapshots:
 
   limiter@1.1.5: {}
 
+  livekit-server-sdk@2.13.0:
+    dependencies:
+      '@bufbuild/protobuf': 1.10.1
+      '@livekit/protocol': 1.39.0
+      camelcase-keys: 9.1.3
+      jose: 5.10.0
+
   lodash.clonedeep@4.5.0: {}
 
   lodash.includes@4.3.0: {}
@@ -5070,6 +5130,8 @@ snapshots:
     dependencies:
       lodash.clonedeep: 4.5.0
       lru-cache: 4.0.2
+
+  map-obj@5.0.0: {}
 
   math-intrinsics@1.1.0: {}
 
@@ -5429,6 +5491,8 @@ snapshots:
 
   querystring@0.2.0: {}
 
+  quick-lru@6.1.2: {}
+
   random-bytes@1.0.0: {}
 
   range-parser@1.2.1: {}
@@ -5733,6 +5797,8 @@ snapshots:
     transitivePeerDependencies:
       - debug
       - supports-color
+
+  type-fest@4.41.0: {}
 
   type-is@1.6.18:
     dependencies:

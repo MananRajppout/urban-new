@@ -11,7 +11,7 @@ from livekit.agents import (
     metrics
 )
 from livekit.agents.pipeline import VoicePipelineAgent
-from livekit.plugins import deepgram, openai, silero, smallest, elevenlabs
+from livekit.plugins import deepgram, openai, silero, smallest, elevenlabs,sarvam
 from livekit.plugins.deepgram import tts
 from services.assistant_function_service import AssistantFnc
 from app_types.assistant_type import Assistant
@@ -33,8 +33,8 @@ def prewarm(proc: JobProcess):
 
 async def entrypoint(ctx: JobContext):
     #initialize llm
-    
-    
+
+
 
     logger.info(f"connecting to room {ctx.room.name}")
     await ctx.connect(auto_subscribe=AutoSubscribe.AUDIO_ONLY)
@@ -75,11 +75,11 @@ async def entrypoint(ctx: JobContext):
         )
         return
 
-    
 
-    
 
-    
+
+
+
 
 
     initial_ctx = llm.ChatContext().append(
@@ -94,7 +94,7 @@ async def entrypoint(ctx: JobContext):
     tts_engine_name = assistant_info.get("voice_engine_name")
     voice_id = assistant_info.get("voice_id")
 
-   
+
 
     tts = None
     if tts_engine_name == "smallest":
@@ -102,7 +102,7 @@ async def entrypoint(ctx: JobContext):
     elif tts_engine_name == "elevenlabs":
         tts = elevenlabs.TTS(api_key=assistant_info.get("elevenlabs_api_key"))
     elif tts_engine_name == "sarvam":
-        tts = smallest.TTS(voice=voice_id)
+        tts = sarvam.TTS(speaker=voice_id,target_language_code="hi-IN",model="bulbul:v1")
     elif tts_engine_name == "deepgram":
         tts = deepgram.TTS(model=voice_id)
 
@@ -121,7 +121,7 @@ async def entrypoint(ctx: JobContext):
 
 
     dg_model = "nova-3"
-    
+
     def replace_words(assistant: VoicePipelineAgent, text: str):
         return tokenize.utils.replace_words(
             text=text, replacements={r"\*": " "}
@@ -136,8 +136,8 @@ async def entrypoint(ctx: JobContext):
         chat_ctx=initial_ctx,
         fnc_ctx=fnc_ctx
     )
-    
-    
+
+
     #function calling
     fnc_ctx.register(agent=agent,chat_ctx=initial_ctx,ctx=ctx,assistant_info=assistant_info,call_ctx=call_ctx)
     agent.start(ctx.room, participant)
@@ -165,11 +165,11 @@ async def entrypoint(ctx: JobContext):
     @agent.on("user_stopped_speaking")
     def user_started_speaking():
         print("User speaking stopped.")
-    
+
     @agent.on("agent_started_speaking")
     def agent_started_speaking():
         print("Agent speaking started.")
-    
+
     @agent.on("agent_stopped_speaking")
     def agent_stopped_speaking():
         print("Agent speaking stopped.")
@@ -183,7 +183,7 @@ async def entrypoint(ctx: JobContext):
         #call webhook hangup
         call_webhook_hangup(call_ctx,assistant_info,initial_ctx)
 
-    
+
     #shutdown callback
     ctx.add_shutdown_callback(log_usage)
 
