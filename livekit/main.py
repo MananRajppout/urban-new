@@ -126,6 +126,15 @@ async def entrypoint(ctx: JobContext):
         assistant_info=assistant_info,
         call_ctx=call_ctx,
     )
+
+    # function calling
+    fnc_ctx.register(
+        agent=agent,
+        chat_ctx=initial_ctx,
+        ctx=ctx,
+        assistant_info=assistant_info,
+        call_ctx=call_ctx,
+    )
     agent.start(ctx.room, participant)
 
     print("Total time", s - time())
@@ -148,7 +157,7 @@ async def entrypoint(ctx: JobContext):
         print("User speaking start.")
 
     @agent.on("user_stopped_speaking")
-    def user_started_speaking():
+    def user_stopped_speaking():
         print("User speaking stopped.")
 
     @agent.on("agent_started_speaking")
