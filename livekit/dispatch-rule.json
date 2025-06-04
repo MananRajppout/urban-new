@@ -1,6 +1,6 @@
 {
     "name": "Call Rule",
-    "trunk_ids": ["ST_fnvgZhTtyum6"],
+    "trunk_ids": ["ST_97DLMUtjdgdb"],
     "rule": {
       "dispatchRuleIndividual": {
         "roomPrefix": "call-"

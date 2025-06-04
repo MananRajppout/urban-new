@@ -10,9 +10,11 @@ const Playground = ({ setIsConnected, isConnected,handleHangUpCall }) => {
     console.log(roomState,"roomState")
     useEffect(() => {
         if (roomState === ConnectionState.Connected) {
-            setTimeout(() => {
-                setIsConnected(true)
-            }, 3000)
+            // setTimeout(() => {
+            //     setIsConnected(true);
+            // }, 3000)
+            
+            setIsConnected(true);
             localParticipant.setMicrophoneEnabled(true);
         }
 
