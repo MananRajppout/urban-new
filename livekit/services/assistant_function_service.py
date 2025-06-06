@@ -35,7 +35,7 @@ class AssistantFnc(llm.FunctionContext):
     async def hang_up_call(
         self,
         last_speak: Annotated[
-            str, llm.TypeInfo(description="Optional final sentence to say before hanging up the call.")
+            str, llm.TypeInfo(description="Optional final sentence to say before hanging up the call. Make sure you don't add any emojis—just simple text is needed here.")
         ]
     ):
         """Ends the call. Optionally speaks a final sentence before hanging up."""
