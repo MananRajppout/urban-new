@@ -24,8 +24,8 @@ def generate_prompt(assistant: Assistant):
           Critical Note:
             - most importanly If you want to book appointment or you choose to book appoinment, make sure to invoke the 'book_appointment' function.
             - If you need to fetch available slots or you choose to fetch avaible slots, make sure to invoke the 'get_available_slots' function.
-            - If the conversation has ended or you choose to hang up the call, make sure to invoke the 'hang_up_call' function is very critical thing so make sure.
             - Don't user '*' in any response give response in normal text no need to give response in markdown.
+            - This is extremely important - If the conversation is over or you're planning to disconnect the call, you must call the hang_up_call() function. Failing to do this may cause serious issues like stuck sessions, call leaks, or user confusion. So always double-check and ensure hang_up_call() is invoked. This is absolutely critical.
         """
     else: 
         prompt = f"""
@@ -38,7 +38,7 @@ def generate_prompt(assistant: Assistant):
 
           Critical Note:
             - Don't user '*' in any response give response in normal text no need to give response in markdown.
-            - If the conversation has ended or you choose to hang up the call, make sure to invoke the 'hang_up_call' function is very critical thing so make sure.
+            - This is extremely important - If the conversation is over or you're planning to disconnect the call, you must call the hang_up_call() function. Failing to do this may cause serious issues like stuck sessions, call leaks, or user confusion. So always double-check and ensure hang_up_call() is invoked. This is absolutely critical.
         """
     
     return prompt
