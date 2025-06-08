@@ -81,7 +81,7 @@ class AssistantFnc(llm.FunctionContext):
         self,
         start: Annotated[str, llm.TypeInfo(description="The start date and time of the booking in ISO 8601 format.")],
         location: Annotated[str, llm.TypeInfo(description="The chosen location option for the appointment.")],
-        email: Annotated[str, llm.TypeInfo(description="The email address of the client.")],
+        email: Annotated[str, llm.TypeInfo(description="The email address of the client. make sure email shound be valid.")],
         name: Annotated[str, llm.TypeInfo(description="The full name of the client.")],
         reason: Annotated[str, llm.TypeInfo(description="The reason for the appointment or meeting.")],
         language: Annotated[str, llm.TypeInfo(description="The language preference for the appointment.")]
