@@ -1,7 +1,7 @@
 from app_types.assistant_type import Assistant
 
 
-def generate_prompt(assistant: Assistant):
+def generate_prompt(assistant: Assistant,call_ctx):
     calendar_tools = None
     try:
       calendar_tools = assistant.get('calendar_tools')[0]
@@ -11,6 +11,22 @@ def generate_prompt(assistant: Assistant):
     instructions = assistant.get('base_prompt')
     hang_up_prompt = assistant.get('hang_up_prompt')
     prompt = ""
+
+    customer_name = call_ctx.get('customer_name')
+    context = call_ctx.get('context')
+    to_phone_number = call_ctx.get('to_phone_number')
+
+    if customer_name:
+      instructions = instructions.replace("{{customer_name}}", customer_name)
+
+    if context:
+      instructions = instructions.replace("{{context}}", context)
+
+    if to_phone_number:
+      instructions = instructions.replace("{{phone_number}}", to_phone_number)
+    
+
+    print(instructions,context,customer_name,to_phone_number)
     
     if calendar_tools:
         prompt = f"""

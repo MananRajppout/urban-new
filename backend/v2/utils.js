@@ -4,6 +4,7 @@ const plivoClient = require("./configs/plivoClient");
 const { PlivoPhoneRecord } = require("./model/plivoModel");
 const mongoose=require("mongoose")
 const dotenv = require('dotenv');
+const uuid = require("uuid")
 dotenv.config();
 const {
   AiAgent,
@@ -500,17 +501,19 @@ exports.createOutboundTrunk = async (phoneNumber) => {
 }
 
 
-exports.createSIPParticipant = async (toNumber,fromNumber, trunkId,agentId) => {
+exports.createSIPParticipant = async (toNumber,fromNumber, trunkId,agentId,customer_name=undefined, context=undefined ) => {
   try {
+    const caller_id = uuid.v4();
     const metadata = {
       agentId: agentId,
       callType: "telephone",
-      callId: "test-call-id",
+      callId: caller_id,
       dir: "outbound",
-      customer_name: "test-customer-name",
-      context: "test-context",
+      customer_name: customer_name,
+      context: context,
       phone_number: `+${fromNumber}`,
-      isWebCall: false
+      isWebCall: false,
+      to_phone_number: toNumber
     }
 
     // Name of the room to attach the call to
@@ -530,7 +533,7 @@ exports.createSIPParticipant = async (toNumber,fromNumber, trunkId,agentId) => {
       sipParticipantOptions
     );
     console.log("created sip participant", participant);
-    return participant.sipCallId;
+    return caller_id;
   } catch (error) {
     console.log(error, 'error in creating sip participant');
     return null;

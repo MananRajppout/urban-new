@@ -157,7 +157,7 @@ async def entrypoint(ctx: JobContext):
 
     # Create initial chat context
     initial_ctx = llm.ChatContext().append(
-        role="system", text=generate_prompt(assistant_info)
+        role="system", text=generate_prompt(assistant_info,call_ctx)
     )
 
     # Initialize TTS and LLM engines in parallel for faster setup

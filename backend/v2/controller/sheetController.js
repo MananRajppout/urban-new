@@ -3,6 +3,8 @@ const { SheetConfig, AiAgent } = require("../../voice_ai/model.js");
 const googleSheetsService = require("../../services/googlesheets.service");
 const axios = require("axios");
 const plivoClient = require("../configs/plivoClient");
+const { createSIPParticipant } = require("../utils.js");
+const { PlivoPhoneRecord } = require("../model/plivoModel.js");
 const CallHistory = require("../../voice_ai/model.js").CallHistory;
 
 exports.configureSheet = catchAsyncError(async (req, res) => {
@@ -368,6 +370,8 @@ async function processNextCall(config, agent) {
         config.current_row
       );
 
+    
+
       if (!row) {
         config.status = 'completed';
         await config.save();
@@ -404,19 +408,23 @@ async function processNextCall(config, agent) {
         // await agent.save();
 
         // Make call using plivoClient
-        const serverUrl = process.env.SERVER_URL;
-        const answer_url = `${serverUrl}/api/phone/webhook/voice?outbound=true&customer_name=${encodeURIComponent(customerName || '')}&context=${encodeURIComponent(context || '')}&phone_number=${encodeURIComponent(phoneNumber)}`;
+        // const serverUrl = process.env.SERVER_URL;
+        // const answer_url = `${serverUrl}/api/phone/webhook/voice?outbound=true&customer_name=${encodeURIComponent(customerName || '')}&context=${encodeURIComponent(context || '')}&phone_number=${encodeURIComponent(phoneNumber)}`;
 
-        const response = await plivoClient.calls.create(
-          agent.plivo_phone_number,
-          phoneNumber,
-          answer_url
-        );
+        // const response = await plivoClient.calls.create(
+        //   agent.plivo_phone_number,
+        //   phoneNumber,
+        //   answer_url
+        // );
+
+        const phoneRecord = await PlivoPhoneRecord.findOne({
+          phone_number: agent.plivo_phone_number,
+        })
         
-
+        const sipCallId = await createSIPParticipant(phoneNumber, agent.plivo_phone_number, phoneRecord.sip_outbound_trunk_id, agent._id, customerName,context);
         // Create a new CallHistory record with all required fields
         const callHistory = new CallHistory({
-          caller_id: response.requestUuid,
+          caller_id: sipCallId,
           user_id: agent.user_id,
           agent_id: agent._id,
           voice_name: agent.voice_name,
