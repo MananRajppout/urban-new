@@ -1,0 +1,46 @@
+{
+  "name": "plivo_realtime_integration",
+  "version": "1.0.0",
+  "main": "dist/index.js",
+  "type": "module",
+  "scripts": {
+    "start": "node dist/src/index.js",
+    "build": "tsc --build",
+    "dev": "tsc-watch --onSuccess \"node dist/src/index.js\"",
+    "dev:ex": "tsc-watch --onSuccess  "
+  },
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "@deepgram/sdk": "^3.11.2",
+    "axios": "^1.7.9",
+    "cors": "^2.8.5",
+    "dayjs": "^1.11.13",
+    "dotenv": "^16.4.7",
+    "express": "^4.21.1",
+    "fluent-ffmpeg": "^2.1.3",
+    "groq-sdk": "^0.17.0",
+    "mongoose": "^8.9.6",
+    "nanoid": "^5.0.9",
+    "node-vad": "^1.1.4",
+    "openai": "^4.87.3",
+    "plivo": "^4.69.0",
+    "uuid": "^11.1.0",
+    "wavefile": "^11.0.0",
+    "ws": "^8.18.0"
+  },
+  "devDependencies": {
+    "@types/cors": "^2.8.17",
+    "@types/express": "^5.0.0",
+    "@types/fluent-ffmpeg": "^2.1.27",
+    "@types/node": "^22.14.1",
+    "@types/uuid": "^10.0.0",
+    "@types/ws": "^8.5.12",
+    "prettier": "3.5.3",
+    "pretty-quick": "^4.1.1",
+    "simple-git-hooks": "^2.12.1",
+    "tsc-watch": "^6.2.1",
+    "typescript": "^5.7.3"
+  }
+}

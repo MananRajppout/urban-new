@@ -1,0 +1,23 @@
+name: Deploy Node.js App
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: self-hosted # Runs on your self-hosted runner
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Install Dependencies
+        run: pnpm install --no-frozen-lockfile
+
+      - name: Build Project
+        run: pnpm run build
+
+      - name: Restart Server
+        run: |
+          pm2 restart voice-ai || pm2 start npm --name "voice-ai" -- run start
