@@ -179,7 +179,7 @@ export async function fetchSingleCallHistory(id) {
 
 export async function saveCalBookingSettings(formData) {
   return await axios.post(
-    `https://voice-india.urbanchat.ai/save-cal-booking-settings`,
+    `${process.env.NEXT_PUBLIC_CALL_SERVER}/save-cal-booking-settings`,
     formData,
     header
   );
@@ -187,7 +187,7 @@ export async function saveCalBookingSettings(formData) {
 
 export async function saveCalAvailabilitySettings(formData) {
   return await axios.post(
-    `https://voice-india.urbanchat.ai/save-cal-availability-settings`,
+    `${process.env.NEXT_PUBLIC_CALL_SERVER}/save-cal-availability-settings`,
     formData,
     header
   );
