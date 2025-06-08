@@ -42,6 +42,7 @@ def generate_prompt(assistant: Assistant,call_ctx):
             - If you need to fetch available slots or you choose to fetch avaible slots, make sure to invoke the 'get_available_slots' function.
             - Don't user '*' in any response give response in normal text no need to give response in markdown.
             - This is extremely important - If the conversation is over or you're planning to disconnect the call, you must call the hang_up_call() function. Failing to do this may cause serious issues like stuck sessions, call leaks, or user confusion. So always double-check and ensure hang_up_call() is invoked. This is absolutely critical.
+            - When the user provides their email during slot booking, it might be in another language. You must ensure it is in English. If the user gives it in Hindi, translate it to English.
         """
     else: 
         prompt = f"""
@@ -55,6 +56,7 @@ def generate_prompt(assistant: Assistant,call_ctx):
           Critical Note:
             - Don't user '*' in any response give response in normal text no need to give response in markdown.
             - This is extremely important - If the conversation is over or you're planning to disconnect the call, you must call the hang_up_call() function. Failing to do this may cause serious issues like stuck sessions, call leaks, or user confusion. So always double-check and ensure hang_up_call() is invoked. This is absolutely critical.
+            - When the user provides their email during slot booking, it might be in another language. You must ensure it is in English. If the user gives it in Hindi, translate it to English.
         """
     
     return prompt
