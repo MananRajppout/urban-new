@@ -34,7 +34,7 @@ const TestAgentDialog = ({ open, onOpenChange, agentName, agentId }) => {
     if (isConnected) {
       interval = setInterval(() => {
         setCallDuration((prev) => prev + 1);
-      }, 2000);
+      }, 1000);
     }
     return () => {
       if (interval) clearInterval(interval);

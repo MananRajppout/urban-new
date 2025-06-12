@@ -26,37 +26,32 @@ def generate_prompt(assistant: Assistant,call_ctx):
       instructions = instructions.replace("{{phone_number}}", to_phone_number)
     
 
-    print(instructions,context,customer_name,to_phone_number)
     
     if calendar_tools:
         prompt = f"""
           Instructions:
             {instructions}
-          
-          The call should be ended when the following condition is fulfilled or matched:
+         The call should be ended when the following condition is fulfilled or matched:
             {hang_up_prompt}. 
-          This condition can include specific phrases, user actions, or silence that indicates the conversation has concluded. call 'hang_up_call' function for hangup the call.
-          
-          Critical Note:
-            - most importanly If you want to book appointment or you choose to book appoinment, make sure to invoke the 'book_appointment' function.
-            - If you need to fetch available slots or you choose to fetch avaible slots, make sure to invoke the 'get_available_slots' function.
-            - Don't user '*' in any response give response in normal text no need to give response in markdown.
-            - This is extremely important - If the conversation is over or you're planning to disconnect the call, you must call the hang_up_call() function. Failing to do this may cause serious issues like stuck sessions, call leaks, or user confusion. So always double-check and ensure hang_up_call() is invoked. This is absolutely critical.
-            - During slot booking, if the user provides their email in another language (e.g., Hindi), automatically translate it to English internally. Do not notify the user that it has been translated—handle it silently.
+        Call the 'hang_up_call' function when the user's response intent is to terminate the call or when the conversation sounds like it's coming to an end or user query intent is they no longer want to talk.
+        Critical Note:
+        - if you need to book an appointment strictly invoke the ‘book_appointment’ function.
+        - If you need to fetch available slots, strictly invoke the ‘get_available_slots’ function.
+        - Never use ‘*’ in your responses. Your responses must always be in plain text in paragraph style. Exactly the same way when a human is orally talking to another human.
+        - Most important if the conversation is concluded or comes to an end or very important if the intent is to terminate the call you must call the hang_up_call() function.
+        - Very important if you need ask for email always keep in mind user is orally speaking his information so you must carefully analyse. Users may say “at” or “at the rate” to mean “@”, and “dot”, “period”, or “d o t” to mean “.”. They may also say “underscore” for “_”, or “dash”/“hyphen” for “-”. For example, “prashantdotberichatgmaildotcom” should be understood as “prashant.berich@gmail.com”. People may speak their email in one go, with unclear pronunciation or in varied phrasing, so always normalize the spoken input, validate it, and repeat it back for confirmation. If the email sounds ambiguous or misheard, politely ask the user to spell it one letter at a time to ensure accuracy.
         """
     else: 
         prompt = f"""
-           Instructions:
+          Instructions:
             {instructions}
-          
           The call should be ended when the following condition is fulfilled or matched:
-            {hang_up_prompt}. 
-          This condition can include specific phrases, user actions, or silence that indicates the conversation has concluded. call 'hang_up_call' function for hangup the call.
-
+              {hang_up_prompt}. 
+          Call the 'hang_up_call' function when the user's response intent is to terminate the call or when the conversation sounds like it's coming to an end or user query intent is they no longer want to talk.
           Critical Note:
-            - Don't user '*' in any response give response in normal text no need to give response in markdown.
-            - This is extremely important - If the conversation is over or you're planning to disconnect the call, you must call the hang_up_call() function. Failing to do this may cause serious issues like stuck sessions, call leaks, or user confusion. So always double-check and ensure hang_up_call() is invoked. This is absolutely critical.
-            - During slot booking, if the user provides their email in another language (e.g., Hindi), automatically translate it to English internally. Do not notify the user that it has been translated—handle it silently.
+          - Never use ‘*’ in your responses. Your responses must always be in plain text in paragraph style. Exactly the same way when a human is orally talking to another human.
+          - Most important if the conversation is concluded or comes to an end or very important if the intent is to terminate the call you must call the hang_up_call() function.
+          - Very important if you need ask for email always keep in mind user is orally speaking his information so you must carefully analyse. Users may say “at” or “at the rate” to mean “@”, and “dot”, “period”, or “d o t” to mean “.”. They may also say “underscore” for “_”, or “dash”/“hyphen” for “-”. For example, “prashantdotberichatgmaildotcom” should be understood as “prashant.berich@gmail.com”. People may speak their email in one go, with unclear pronunciation or in varied phrasing, so always normalize the spoken input, validate it, and repeat it back for confirmation. If the email sounds ambiguous or misheard, politely ask the user to spell it one letter at a time to ensure accuracy.
         """
     
     return prompt
