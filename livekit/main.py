@@ -27,7 +27,7 @@ from livekit.agents import tokenize
 from time import time
 
 import json
-
+from livekit.plugins import groq
 logger = logging.getLogger("voice-assistant")
 load_dotenv()
 
@@ -179,7 +179,11 @@ async def entrypoint(ctx: JobContext):
     agent = VoicePipelineAgent(
         vad=ctx.proc.userdata["vad"],
         stt=deepgram.STT(language="hi", model=dg_model,smart_format=False,punctuate=False,filler_words=False),
-        llm=gpt_llm,
+        # llm=gpt_llm,
+        llm=groq.LLM(
+            # model="meta-llama/llama-4-maverick-17b-128e-instruct"
+            model="llama-3.1-8b-instant"
+        ),
         before_tts_cb=replace_words,
         tts=tts,
         chat_ctx=initial_ctx,
