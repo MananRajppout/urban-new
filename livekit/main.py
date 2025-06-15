@@ -36,12 +36,12 @@ def prewarm(proc: JobProcess):
     """Optimized prewarm with faster VAD settings and caching"""
     # Optimized VAD settings for lower latency
     proc.userdata["vad"] = silero.VAD.load(
-        min_speech_duration=0.02,  # Reduced from 0.05 for faster detection
-        min_silence_duration=0.15,  # Reduced from 0.25 for quicker cutoff
-        prefix_padding_duration=0.0,
-        activation_threshold=0.08,  # Reduced from 0.1 for more sensitive detection
-        sample_rate=16000,
-        force_cpu=True
+        # min_speech_duration=0.02,  # Reduced from 0.05 for faster detection
+        # min_silence_duration=0.15,  # Reduced from 0.25 for quicker cutoff
+        # prefix_padding_duration=0.0,
+        # activation_threshold=0.08,  # Reduced from 0.1 for more sensitive detection
+        # sample_rate=16000,
+        # force_cpu=True
     )
     
     # Initialize assistant cache for faster lookups
@@ -87,8 +87,24 @@ async def create_llm_engine(assistant_info: Assistant):
         return openai.LLM(model="gpt-4o-mini", **base_config)
     elif gpt_model == "gpt-4.1-nano-2025-04-14":
         return openai.LLM(model="gpt-4.1-nano-2025-04-14", **base_config)
+    
+    elif gpt_model == "meta-llama/llama-4-maverick-17b-128e-instruct":
+        return groq.LLM(model="meta-llama/llama-4-maverick-17b-128e-instruct", **base_config)
+    
+    elif gpt_model == "meta-llama/llama-4-scout-17b-16e-instruct":
+        return groq.LLM(model="meta-llama/llama-4-scout-17b-16e-instruct", **base_config)
+    
+    elif gpt_model == "llama-3.1-8b-instant":
+        return groq.LLM(model="llama-3.1-8b-instant", **base_config)
+    
+    elif gpt_model == "deepseek-r1-distill-llama-70b":
+        return groq.LLM(model="deepseek-r1-distill-llama-70b", **base_config)
+    
+    elif gpt_model == "qwen/qwen3-32b":
+        return groq.LLM(model="qwen/qwen3-32b", **base_config)
+    
     else:
-        return openai.LLM(model="gpt-4o-mini", **base_config)
+        return groq.LLM(model="llama-3.1-8b-instant", **base_config)
 
 
 async def get_assistant_info(proc_userdata: dict, agent_id: str) -> Assistant | None:
@@ -179,16 +195,13 @@ async def entrypoint(ctx: JobContext):
     agent = VoicePipelineAgent(
         vad=ctx.proc.userdata["vad"],
         stt=deepgram.STT(language="hi", model=dg_model,smart_format=False,punctuate=False,filler_words=False),
-        # llm=gpt_llm,
-        llm=groq.LLM(
-            # model="meta-llama/llama-4-maverick-17b-128e-instruct"
-            model="llama-3.1-8b-instant"
-        ),
+        llm=gpt_llm,
         before_tts_cb=replace_words,
         tts=tts,
         chat_ctx=initial_ctx,
         fnc_ctx=fnc_ctx,
     )
+
 
 
     # Start agent

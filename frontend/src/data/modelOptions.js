@@ -3,8 +3,13 @@ export const STTOptions = [
 ];
 
 export const LLMOptions = [
-  { name: "GPT-4o Mini", value: "gpt-4o-mini" },
-  { name: "gpt-4.1-nano", value: "gpt-4.1-nano-2025-04-14" },
+  { name: "meta-llama/llama-4-maverick-17b-128e-instruct", value: "meta-llama/llama-4-maverick-17b-128e-instruct" },
+  { name: "meta-llama/llama-4-scout-17b-16e-instruct", value: "meta-llama/llama-4-scout-17b-16e-instruct" },
+  { name: "llama-3.1-8b-instant", value: "llama-3.1-8b-instant" },
+  { name: "deepseek-r1-distill-llama-70b", value: "deepseek-r1-distill-llama-70b" },
+  // { name: "qwen/qwen3-32b", value: "qwen/qwen3-32b" }
+  // { name: "GPT-4o Mini", value: "gpt-4o-mini" },
+  // { name: "gpt-4.1-nano", value: "gpt-4.1-nano-2025-04-14" },
   // { name: "GPT-4.1", value: "gpt-4.1-2025-04-14" },
   // { name: "GPT 4o Realtime", value: "gpt-4o-realtime-preview-2024-12-17" },
   // {
