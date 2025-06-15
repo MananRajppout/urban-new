@@ -28,6 +28,9 @@ from time import time
 
 import json
 from livekit.plugins import groq
+from livekit.plugins import noise_cancellation
+
+
 logger = logging.getLogger("voice-assistant")
 load_dotenv()
 
@@ -200,6 +203,7 @@ async def entrypoint(ctx: JobContext):
         tts=tts,
         chat_ctx=initial_ctx,
         fnc_ctx=fnc_ctx,
+        noise_cancellation=noise_cancellation.BVC()
     )
 
 
