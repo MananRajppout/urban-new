@@ -81,6 +81,32 @@ const PricingPage = () => {
   const [selectedModelId, setselectedModelId] = useState(null);
   const [pricingData, setPricingData] = useState([]);
 
+  const [timeLeft, setTimeLeft] = useState({
+    hours: 4,
+    minutes: 0,
+    seconds: 0
+  });
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setTimeLeft(prevTime => {
+        let totalSeconds = prevTime.hours * 3600 + prevTime.minutes * 60 + prevTime.seconds - 1;
+        
+        if (totalSeconds < 0) {
+          totalSeconds = 4 * 3600; // Reset to 4 hours
+        }
+
+        const hours = Math.floor(totalSeconds / 3600);
+        const minutes = Math.floor((totalSeconds % 3600) / 60);
+        const seconds = totalSeconds % 60;
+
+        return { hours, minutes, seconds };
+      });
+    }, 1000);
+
+    return () => clearInterval(timer);
+  }, []);
+
   async function fetchPricingData() {
     try {
       const data = await getPricingModelVoiceAi();
@@ -157,6 +183,21 @@ const PricingPage = () => {
               </p>
             </div>
 
+            <div className="text-center mb-8">
+              <div className="inline-block glass-panel rounded-xl p-4 border border-brand-green/30">
+                <p className="text-lg font-medium text-brand-green">
+                  🎉 Special Offer Ends In:{" "}
+                  <span className="font-bold">
+                    {String(timeLeft.hours).padStart(2, '0')}:
+                    {String(timeLeft.minutes).padStart(2, '0')}:
+                    {String(timeLeft.seconds).padStart(2, '0')}
+                  </span>
+                </p>
+                <p className="text-sm text-foreground/70 mt-1">
+                  Get 20% off on annual plans
+                </p>
+              </div>
+            </div>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-8 max-w-6xl mx-auto">
               {pricingData.map((plan, index) => (

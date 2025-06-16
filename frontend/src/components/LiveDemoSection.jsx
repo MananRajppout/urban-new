@@ -5,6 +5,112 @@ import { Phone, Video, X, PhoneCall } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { makeOutboundCall2 } from "@/lib/api/ApiAiAssistant"; // Mock API function
 import VoiceCaller from "@/Utils/webCall";
+import useConnect from "@/hooks/use-connect";
+import {
+  LiveKitRoom,
+  useTracks,
+  useLocalParticipant,
+  VideoConference,
+  RoomAudioRenderer,
+  StartAudio,
+} from "@livekit/components-react";
+import { Track } from "livekit-client";
+import Playground from "./dashboard/VoiceAgents/UpdateAgents/Playground";
+
+
+const WebDemoCall = ({ isWebCallActive, setIsWebCallActive }) => {
+  const [isConnected, setIsConnected] = useState(false);
+  const [callDuration, setCallDuration] = useState(0);
+  const [isHangingUp, setIsHangingUp] = useState(false);
+  const voiceCallRef = useRef(null);
+  const { token, identity, wsUrl, loading } = useConnect(process.env.NEXT_PUBLIC_DEMO_AGENT_ID);
+
+  useEffect(() => {
+    let interval;
+
+    if (isConnected) {
+      interval = setInterval(() => {
+        setCallDuration((prev) => prev + 1);
+      }, 1500);
+    }
+    return () => {
+      if (interval) clearInterval(interval);
+    };
+  }, [isConnected]);
+
+
+
+  const formatDuration = (seconds) => {
+    const mins = Math.floor(seconds / 60);
+    const secs = seconds % 60;
+    return `${mins}:${secs < 10 ? "0" + secs : secs}`;
+  };
+
+
+  const handleHangUpCall = async () => {
+    try {
+      setIsHangingUp(true);
+      setIsConnected(false);
+      setIsWebCallActive(false);
+    } catch (error) {
+      console.error("Error hanging up call:", error);
+      setIsWebCallActive(false);
+    }
+  };
+
+  const handleCloseDialog = () => {
+    handleHangUpCall();
+  };
+
+  return (
+    <div className="text-center py-8">
+      <div className="glass-panel border border-brand-green/20 rounded-xl p-8 mb-8 relative bg-black/40">
+        <div className="aspect-video rounded-md bg-gray-900 flex items-center justify-center relative overflow-hidden">
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(29,209,110,0.1),transparent_70%)]"></div>
+          <div className="animate-pulse z-10">
+            <Video className="h-20 w-20 text-brand-green/80" />
+          </div>
+          <div className="absolute bottom-4 right-4 glass-panel p-2 rounded-full bg-black/60">
+            <div className="h-3 w-3 rounded-full bg-brand-green animate-pulse"></div>
+          </div>
+        </div>
+        <div className="mt-6 text-center">
+          <h3 className="text-xl font-semibold text-white mb-1">
+            Connected to Our AI Agent
+          </h3>
+          {
+            token ? (
+              <LiveKitRoom serverUrl={wsUrl} token={token} connect>
+                <Playground setIsConnected={setIsConnected} isConnected={isConnected} handleHangUpCall={handleHangUpCall} />
+                <RoomAudioRenderer />
+                <StartAudio label="Click to enable audio playback" />
+              </LiveKitRoom>
+            ) :
+              (
+                <p className="text-accent-teal mt-1">
+                  {isHangingUp
+                    ? "Disconnecting..."
+                    : isConnected
+                      ? "Connected"
+                      : "Connecting..."}
+                </p>
+              )
+          }
+          <p className="text-gray-400 mt-1">{formatDuration(callDuration)}</p>
+        </div>
+      </div>
+
+      <Button
+        onClick={handleHangUpCall}
+        variant="destructive"
+        className="w-full sm:w-auto px-8 py-6 rounded-full"
+        size="lg"
+      >
+        <X className="mr-2 h-5 w-5" /> End Call
+      </Button>
+    </div>
+  )
+}
 
 const LiveDemoSection = () => {
   const [phoneNumber, setPhoneNumber] = useState("");
@@ -78,23 +184,6 @@ const LiveDemoSection = () => {
 
   const startWebCall = () => {
     setIsWebCallActive(true);
-    const agentId = process.env.NEXT_PUBLIC_DEMO_AGENT_ID;
-    voiceCallRef.current = new VoiceCaller(agentId);
-    voiceCallRef.current.on("onCallStart", () => {
-      console.log("call started");
-      setIsCallStarted(true);
-    });
-    voiceCallRef.current.on("onCallEnd", () => {
-      endWebCall();
-    });
-    voiceCallRef.current.call();
-  };
-
-  const endWebCall = () => {
-    setIsWebCallActive(false);
-    console.log("close");
-    voiceCallRef.current?.stop();
-    setIsCallStarted(false);
   };
 
   return (
@@ -118,39 +207,7 @@ const LiveDemoSection = () => {
         <div className="max-w-4xl mx-auto">
           <div className="glass-panel rounded-2xl p-8 md:p-10 shadow-[0_10px_50px_-12px_rgba(29,209,110,0.15)]">
             {isWebCallActive ? (
-              <div className="text-center py-8">
-                <div className="glass-panel border border-brand-green/20 rounded-xl p-8 mb-8 relative bg-black/40">
-                  <div className="aspect-video rounded-md bg-gray-900 flex items-center justify-center relative overflow-hidden">
-                    <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(29,209,110,0.1),transparent_70%)]"></div>
-                    <div className="animate-pulse z-10">
-                      <Video className="h-20 w-20 text-brand-green/80" />
-                    </div>
-                    <div className="absolute bottom-4 right-4 glass-panel p-2 rounded-full bg-black/60">
-                      <div className="h-3 w-3 rounded-full bg-brand-green animate-pulse"></div>
-                    </div>
-                  </div>
-                  <div className="mt-6 text-center">
-                    <h3 className="text-xl font-semibold text-white mb-1">
-                      Connected to AI Hotel Receptionist
-                    </h3>
-                    <p className="text-foreground/70">
-                      Call duration:{" "}
-                      <span className="text-brand-green font-medium">
-                        {formatDuration(callDuration)}
-                      </span>
-                    </p>
-                  </div>
-                </div>
-
-                <Button
-                  onClick={endWebCall}
-                  variant="destructive"
-                  className="w-full sm:w-auto px-8 py-6 rounded-full"
-                  size="lg"
-                >
-                  <X className="mr-2 h-5 w-5" /> End Call
-                </Button>
-              </div>
+              <WebDemoCall isWebCallActive={isWebCallActive} setIsWebCallActive={setIsWebCallActive} />
             ) : callRequested ? (
               <div className="text-center py-12">
                 <div className="w-24 h-24 rounded-full bg-brand-green/20 mx-auto flex items-center justify-center mb-6">
@@ -189,7 +246,7 @@ const LiveDemoSection = () => {
                         value={phoneNumber}
                         onChange={(e) => setPhoneNumber(e.target.value)}
                         className="w-full bg-white/5 border border-white/10 py-6 px-4 rounded-lg focus:border-brand-green focus:ring-brand-green/20"
-                        placeholder="+91 97830 00060"
+                        placeholder="+91 80357 39217"
                         required
                       />
                     </div>
