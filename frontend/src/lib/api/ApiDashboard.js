@@ -4,6 +4,40 @@ export async function getDashboardStats() {
   return await AxiosInstance.get("/api/dashboard-stats");
 }
 
+
+export async function getSuperAdminAllCustomer(startDate,endDate,searchQuery,page=1,limit=10) {
+  const params = new URLSearchParams();
+  if(startDate) params.set("startDate",startDate)
+  if(endDate) params.set("endDate",endDate)
+  if(page) params.set("page",page)
+  if(limit) params.set("limit",limit)
+  if(searchQuery) params.set("search",searchQuery)
+  return await AxiosInstance.get(`/api/fetch-all-customer?${params.toString()}`);
+}
+
+
+export async function getSuperAdminDashboardStats(startDate,endDate) {
+  const params = new URLSearchParams();
+  if(startDate) params.set("startDate",startDate)
+  if(endDate) params.set("endDate",endDate)
+  return await AxiosInstance.get(`/api/fetch-super-admin-dashboard-data?${params.toString()}`);
+}
+
+export async function getSuperAdminUserDashboardStats(startDate,endDate,user_id) {
+  const params = new URLSearchParams();
+  if(startDate) params.set("startDate",startDate)
+  if(endDate) params.set("endDate",endDate)
+  if(user_id) params.set("user_id",user_id)
+  return await AxiosInstance.get(`/api/fetch-super-admin-user-dashboard-data?${params.toString()}`);
+}
+
+
+export async function superAdminUserassignminutes(user_id,minutes) {
+  return await AxiosInstance.post(`/api/fetch-super-admin-user-assisgn-minutes`,{user_id,minutes},{headers: {
+    "Content-Type": "application/json"
+  }});
+}
+
 export async function getCallActivityChart(period = "daily") {
   return await AxiosInstance.get(`/api/call-activity-chart?period=${period}`);
 }
@@ -38,6 +72,21 @@ export async function getRecentMessages(limit = 10, page = 1) {
 
 export const dashboardStatsFetcher = async () => {
   const response = await getDashboardStats();
+  return response.data;
+};
+
+export const superAdmindashboardStatsFetcher = async (startDate,endDate) => {
+  const response = await getSuperAdminDashboardStats(startDate,endDate);
+  return response.data;
+};
+
+export const superAdminUserdashboardStatsFetcher = async (startDate,endDate,user_id) => {
+  const response = await getSuperAdminUserDashboardStats(startDate,endDate,user_id);
+  return response.data;
+};
+
+export const superAdmindashboardcustomerfetcher = async (startDate,endDate,searchQuery,page=1,limit=10) => {
+  const response = await getSuperAdminAllCustomer(startDate,endDate,searchQuery,page,limit);
   return response.data;
 };
 

@@ -912,6 +912,296 @@ exports.fetchCallHistory = catchAsyncError(async (req, res) => {
   });
 });
 
+exports.getSuperAdminDashboardData = catchAsyncError(async (req, res) => {
+  const { startDate, endDate } = req.query;
+
+  let dateFilter;
+  if (startDate && endDate) {
+    dateFilter = {$gte:new Date(startDate),$lt:new Date(endDate)}
+  } else {
+    dateFilter = {$gte: new Date(), $lte: new Date()};
+  }
+
+
+  
+
+    const callStats = await CallHistory.aggregate([
+      {
+        $match: {
+          start_time: dateFilter
+        },
+      },
+      {
+        $group: {
+          _id: null,
+          totalCalls: { $sum: 1 },
+          totalDuration: {
+            $sum: {
+              $cond: [
+                {
+                  $and: [
+                    { $ne: [{ $type: "$start_time" }, "missing"] },
+                    { $ne: [{ $type: "$end_time" }, "missing"] },
+                  ],
+                },
+                {
+                  $divide: [
+                    { $subtract: ["$end_time", "$start_time"] },
+                    60000, // Convert ms to minutes
+                  ],
+                },
+                0,
+              ],
+            },
+          },
+          inboundCalls: {
+            $sum: {
+              $cond: [{ $eq: ["$direction", "inbound"] }, 1, 0],
+            },
+          },
+          outboundCalls: {
+            $sum: {
+              $cond: [{ $eq: ["$direction", "outbound"] }, 1, 0],
+            },
+          },
+        },
+      },
+      {
+        $addFields: {
+          averageDuration: {
+            $cond: [
+              { $eq: ["$totalCalls", 0] },
+              0,
+              { $divide: ["$totalDuration", "$totalCalls"] },
+            ],
+          },
+        },
+      },
+    ]);
+
+    const userStats = await User.aggregate([
+      {
+        $match: {
+          created_time: dateFilter,
+        },
+      },
+      {
+        $group: {
+          _id: null,
+          totalSignUps: { $sum: 1 },
+          paidCustomers: {
+            $sum: {
+              $cond: [
+                {
+                  $or: [
+                    { $ne: ["$pricing_plan", null] },
+                    { $gt: [{ $size: "$subscriptions" }, 0] },
+                  ],
+                },
+                1,
+                0,
+              ],
+            },
+          },
+          activeAccounts: {
+            $sum: {
+              $cond: [{ $eq: ["$is_active", true] }, 1, 0],
+            },
+          },
+        },
+      },
+    ]);
+    
+    
+
+    res.status(200).json({
+      success: true,
+      data: {...callStats[0],...userStats[0]},
+
+    });
+});
+
+
+
+
+exports.getSuperAdminUserDashboardData = catchAsyncError(async (req, res) => {
+  const { startDate, endDate,user_id } = req.query;
+
+  let dateFilter;
+  if (startDate && endDate) {
+    dateFilter = {$gte:new Date(startDate),$lt:new Date(endDate)}
+  } else {
+    dateFilter = {$gte: new Date(), $lte: new Date()};
+  }
+
+
+  
+
+    const callStats = await CallHistory.aggregate([
+      {
+        $match: {
+          user_id: user_id,
+          start_time: dateFilter
+        },
+      },
+      {
+        $group: {
+          _id: null,
+          totalCalls: { $sum: 1 },
+          totalDuration: {
+            $sum: {
+              $cond: [
+                {
+                  $and: [
+                    { $ne: [{ $type: "$start_time" }, "missing"] },
+                    { $ne: [{ $type: "$end_time" }, "missing"] },
+                  ],
+                },
+                {
+                  $divide: [
+                    { $subtract: ["$end_time", "$start_time"] },
+                    60000, // Convert ms to minutes
+                  ],
+                },
+                0,
+              ],
+            },
+          },
+          inboundCalls: {
+            $sum: {
+              $cond: [{ $eq: ["$direction", "inbound"] }, 1, 0],
+            },
+          },
+          outboundCalls: {
+            $sum: {
+              $cond: [{ $eq: ["$direction", "outbound"] }, 1, 0],
+            },
+          },
+        },
+      },
+      {
+        $addFields: {
+          averageDuration: {
+            $cond: [
+              { $eq: ["$totalCalls", 0] },
+              0,
+              { $divide: ["$totalDuration", "$totalCalls"] },
+            ],
+          },
+        },
+      },
+    ]);
+
+    const user = await User.findById(user_id);
+
+    const restriction = await Restriction.findOne({ user_id: user._id });
+
+    const minuteUsage = restriction?.voice_trial_minutes_used || 0;
+    const minuteLimit = restriction?.voice_trial_minutes_limit || 0;
+
+
+ 
+    
+    
+
+    res.status(200).json({
+      success: true,
+      data: {...callStats[0],user,voiceMinutes: {
+        used: minuteUsage,
+        remaining: minuteLimit - minuteUsage,
+      }},
+    });
+});
+
+
+
+
+exports.getAllCustomers = catchAsyncError(async (req, res) => {
+  const { startDate, endDate,search='', page = 1, limit = 10 } = req.query;
+
+  const query = {};
+
+  if (startDate && endDate) {
+    query.created_time = {
+      $gte: new Date(startDate),
+      $lte: new Date(endDate),
+    };
+  }
+
+  if (search.trim() !== '') {
+    const searchRegex = new RegExp(search, 'i'); // case-insensitive
+
+    query.$or = [
+      { email: searchRegex },
+      { full_name: searchRegex },
+      { phone_number: isNaN(search) ? -1 : Number(search) }, // handle numeric input
+    ];
+  }
+  
+  const skip = (parseInt(page) - 1) * parseInt(limit);
+
+  const [customers, total] = await Promise.all([
+    User.find(query)
+      .sort({ created_time: -1 })
+      .skip(skip)
+      .limit(parseInt(limit)),
+    User.countDocuments(query),
+  ]);
+
+  // Fetch voiceMinutes for each user
+  const customersWithStats = await Promise.all(
+    customers.map(async (user) => {
+      const restriction = await Restriction.findOne({ user_id: user._id });
+
+      const minuteUsage = restriction?.voice_trial_minutes_used || 0;
+      const minuteLimit = restriction?.voice_trial_minutes_limit || 0;
+
+      return {
+        ...user.toObject(),
+        voiceMinutes: {
+          used: minuteUsage,
+          remaining: minuteLimit - minuteUsage,
+        },
+      };
+    })
+  );
+
+  res.status(200).json({
+    success: true,
+    data: customersWithStats,
+    total,
+    page: parseInt(page),
+    limit: parseInt(limit),
+    totalPages: Math.ceil(total / limit),
+  });
+});
+
+
+exports.superAdminAssisgNumber = catchAsyncError(async (req, res) => {
+  const { user_id,minutes } = req.body;
+  const restriction = await Restriction.findOne({ id: user_id });
+  
+  if (typeof restriction.voice_trial_minutes_limit !== 'number') {
+    restriction.voice_trial_minutes_limit = 0;
+  }
+
+
+  restriction.voice_trial_minutes_limit += Number(minutes);
+
+
+  await restriction.save()
+
+
+  res.status(200).json({
+    success: true,
+    message: "Minutes Assisg Successfully"
+  });
+});
+
+
+
+
+
 exports.fetchSingleCallHistory = catchAsyncError(async (req, res) => {
   const { id } = req.params;
   const callHistory = await CallHistory.findById(id);

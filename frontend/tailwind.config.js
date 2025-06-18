@@ -79,6 +79,18 @@ module.exports = {
           border: "hsl(var(--sidebar-border))",
           ring: "hsl(var(--sidebar-ring))",
         },
+        dark: {
+          '100': '#1E1E1E',
+          '200': '#171717',
+          '300': '#121212',
+          '400': '#0F0F0F',
+          '500': '#080808',
+        },
+        'blue-accent': '#3B82F6',
+        'green-accent': '#10B981',
+        'red-accent': '#EF4444',
+        'yellow-accent': '#F59E0B',
+        'purple-accent': '#8B5CF6',
       },
       borderRadius: {
         lg: "var(--radius)",
@@ -125,6 +137,7 @@ module.exports = {
         "spin-slow": "spin-slow 20s linear infinite",
         "gradient-move": "gradient-move 15s ease infinite",
       },
+      
     },
   },
   corePlugins: {

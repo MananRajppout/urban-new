@@ -23,6 +23,10 @@ const {
   deleteAiAgent,
   getCallsBySource,
   generateLivekitToken,
+  getSuperAdminDashboardData,
+  getAllCustomers,
+  getSuperAdminUserDashboardData,
+  superAdminAssisgNumber,
 } = require("../voice_ai/controller");
 const {
   handleTelnyxCallRequest,
@@ -55,6 +59,28 @@ router
 router
   .route("/fetch-call-history")
   .get(checkSessionExpiration(["customer"]), fetchCallHistory);
+  
+
+// super admin 
+router
+  .route("/fetch-super-admin-dashboard-data")
+  .get(checkSessionExpiration(["customer"]), getSuperAdminDashboardData);
+
+router
+  .route("/fetch-super-admin-user-dashboard-data")
+  .get(checkSessionExpiration(["customer"]), getSuperAdminUserDashboardData);
+
+router
+  .route("/fetch-super-admin-user-assisgn-minutes")
+  .post(checkSessionExpiration(["customer"]), superAdminAssisgNumber);
+
+router
+  .route("/fetch-all-customer")
+  .get(checkSessionExpiration(["customer"]), getAllCustomers);
+
+
+
+
 router
   .route("/fetch-call-history/:id")
   .get(checkSessionExpiration(["customer"]), fetchSingleCallHistory);
