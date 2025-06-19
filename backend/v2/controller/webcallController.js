@@ -62,7 +62,10 @@ exports.hangupWebhook = catchAsyncError(async (req, res) => {
     summary,
     call_status,
     user_sentiment,
-    disconnection_reason
+    disconnection_reason,
+    direction,
+    from,
+    to
   } = req.body;
   end_time = new Date(end_time);
   // console.log(
@@ -101,6 +104,11 @@ exports.hangupWebhook = catchAsyncError(async (req, res) => {
   callHistory.call_status = call_status;
   callHistory.user_sentiment = user_sentiment;
   callHistory.disconnection_reason = disconnection_reason;
+  callHistory.direction = direction;
+  callHistory.calltype = callType;
+  if(from) callHistory.from_phone_number = from
+  if(to) callHistory.plivo_phone_number = to
+
   const durationInMinutes = getMinutesDiff(
     callHistory.start_time,
     callHistory.end_time
@@ -112,7 +120,7 @@ exports.hangupWebhook = catchAsyncError(async (req, res) => {
   console.log("voice call time in min ", durationInMinutes);
   const restriction = await getRestriction(agent.user_id);
   if (restriction && user) {
-    if (user.voice_ai_status === "free_trial") {
+    // if (user.voice_ai_status === "free_trial") {
       restriction.voice_trial_minutes_used += durationInMinutes;
       if (
         restriction.voice_trial_minutes_used >
@@ -122,7 +130,7 @@ exports.hangupWebhook = catchAsyncError(async (req, res) => {
         await user.save();
       }
       await restriction.save();
-    }
+    // }
   }
 
   // Find the active sheet configuration for this agent

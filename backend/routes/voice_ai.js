@@ -27,6 +27,7 @@ const {
   getAllCustomers,
   getSuperAdminUserDashboardData,
   superAdminAssisgNumber,
+  fetchSingleAiAgentForLivekit,
 } = require("../voice_ai/controller");
 const {
   handleTelnyxCallRequest,
@@ -109,7 +110,7 @@ router
 router
   .route("/fetch-ai-agent/:agent_id")
   .post(checkSessionExpiration(["customer"]), fetchSingleAiAgent)
-  .get(fetchSingleAiAgent);
+  .get(fetchSingleAiAgentForLivekit);
 router
   .route("/update-ai-agent/:agent_id")
   .post(checkSessionExpiration(["customer"]), updateAIAgent);

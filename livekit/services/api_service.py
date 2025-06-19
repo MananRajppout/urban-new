@@ -72,7 +72,10 @@ def call_webhook_hangup(call_ctx: CallContext,assistant: Assistant,chat_ctx: Cha
             "call_status": "Successful",
             "user_sentiment": analysis.get('user_sentiment'),
             "voice_engine_id": "meera",
-            "disconnection_reason": analysis.get('disconnection_reason')
+            "disconnection_reason": analysis.get('disconnection_reason'),
+            "direction": "outbound" if call_ctx.get('callId') == 'web' else call_ctx.get('dir'),
+            "from": None if call_ctx.get('phone_number') == '' else call_ctx.get('phone_number'),
+            "to": None if call_ctx.get('to_phone_number') == '' else call_ctx.get('to_phone_number')
         }
         response = requests.post(url,json=data)
         response = response.json()

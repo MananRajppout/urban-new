@@ -162,15 +162,18 @@ const AiVoiceAgentDashboard = () => {
     return `${minutes}:${seconds.toString().padStart(2, "0")}`;
   };
 
-
   return (
     <Layout>
       <div className="space-y-6 overflow-hidden">
         {/* metrics cards */}
+        {
+          callHistoryData?.stats?.voiceMinutes?.remaining <= 0 &&
+          <p className="text-red-500">Notification: You have no minutes left. Please recharge.</p>
+        }
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
           <MetricsCard
             title="Total Calls"
-            value={callHistoryData.stats.totalCalls || 0}
+            value={callHistoryData.stats?.totalCalls || 0}
             trend={stats.totalCalls?.change || 0}
             isPositiveTrend={stats.totalCalls?.change > 0}
             icon={<PhoneCall className="w-6 h-6 mt-2" />}

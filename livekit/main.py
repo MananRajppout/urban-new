@@ -112,15 +112,15 @@ async def create_llm_engine(assistant_info: Assistant):
 
 async def get_assistant_info(proc_userdata: dict, agent_id: str) -> Assistant | None:
     """Get assistant info with caching for faster retrieval"""
-    cache = proc_userdata["assistant_cache"]
+    # cache = proc_userdata["assistant_cache"]
     
-    if agent_id in cache:
-        logger.info(f"Using cached assistant info for {agent_id}")
-        return cache[agent_id]
+    # if agent_id in cache:
+    #     logger.info(f"Using cached assistant info for {agent_id}")
+    #     return cache[agent_id]
     
     assistant_info = fetch_assistant_id(agent_id)
     if assistant_info:
-        cache[agent_id] = assistant_info
+        # cache[agent_id] = assistant_info
         logger.info(f"Cached assistant info for {agent_id}")
     
     return assistant_info
@@ -284,9 +284,12 @@ async def entrypoint(ctx: JobContext):
     if call_ctx.get("callType") == "web":
         logger.info("Web call detected")
         # Call webhook in background to avoid blocking
-        asyncio.create_task(
-            asyncio.to_thread(call_webhook_pickup, call_ctx, assistant_info)
-        )
+
+    asyncio.create_task(
+        asyncio.to_thread(call_webhook_pickup, call_ctx, assistant_info)
+    )
+    
+
 
     # Register shutdown callback
     ctx.add_shutdown_callback(log_usage)

@@ -474,6 +474,45 @@ exports.fetchSingleAiAgent = catchAsyncError(async (req, res, next) => {
   });
 });
 
+
+
+exports.fetchSingleAiAgentForLivekit = catchAsyncError(async (req, res, next) => {
+  const agentId = req.params.agent_id;
+
+  let aiAgent = await AiAgent.findOne({ _id: agentId });
+  
+
+  if (!aiAgent) {
+    return res.status(404).json({
+      success: false,
+      message: "No AI Agent found",
+    });
+  }
+
+  const user = await User.findById(aiAgent.user_id);
+  aiAgent = JSON.parse(JSON.stringify(aiAgent))
+  if(user.elevenlabs_api_key){
+    aiAgent["elevenlabs_api_key"] = user.elevenlabs_api_key
+  }
+
+  const restriction = await Restriction.findOne({id: user._id});
+
+  const remainingMinutes = Math.max(0,restriction.voice_trial_minutes_limit - restriction.voice_trial_minutes_used);
+  
+  if(remainingMinutes <= 0){
+    res.status(401).json({
+      success: false,
+      message: "No Minutes left",
+    });
+  }
+  
+  res.status(200).json({
+    success: true,
+    message: "AI agent fetched successfully",
+    ai_agents: aiAgent,
+  });
+});
+
 // Update an existing AI agent
 exports.updateAIAgent = catchAsyncError(async (req, res, next) => {
   const { agent_id } = req.params;
