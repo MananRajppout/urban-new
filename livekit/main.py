@@ -300,6 +300,6 @@ if __name__ == "__main__":
         WorkerOptions(
             entrypoint_fnc=entrypoint, 
             prewarm_fnc=prewarm, 
-            shutdown_process_timeout=2
+            shutdown_process_timeout=10
         ),
     )
