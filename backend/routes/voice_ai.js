@@ -28,6 +28,7 @@ const {
   getSuperAdminUserDashboardData,
   superAdminAssisgNumber,
   fetchSingleAiAgentForLivekit,
+  getSuperAdminDeleteUser,
 } = require("../voice_ai/controller");
 const {
   handleTelnyxCallRequest,
@@ -66,6 +67,10 @@ router
 router
   .route("/fetch-super-admin-dashboard-data")
   .get(checkSessionExpiration(["customer"]), getSuperAdminDashboardData);
+
+router
+  .route("/fetch-super-delete-user/:id")
+  .delete(checkSessionExpiration(["customer"]), getSuperAdminDeleteUser);
 
 router
   .route("/fetch-super-admin-user-dashboard-data")

@@ -6,12 +6,13 @@ import DashboardHeader from '@/components/admin/dashboard/DashboardHeader';
 import StatCardsGrid from '@/components/admin/dashboard/StatCardsGrid';
 import { dateRangeOptions } from '@/data/dateRangeOption';
 import { superAdmindashboardStatsFetcher, superAdminUserassignminutes, superAdminUserdashboardStatsFetcher } from '@/lib/api/ApiDashboard';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import useSWR,{ mutate } from 'swr';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { toast } from 'sonner';
+import { Loader2 } from 'lucide-react';
 
 
 
@@ -23,19 +24,35 @@ export default function DashboardPage({params}) {
   const [assisgnMinutesOpen,setAssignMinutesOpen] = useState(false);
   const [assignMinutesValue, setAssignMinutesValue] = useState('');
   const [assignLoading, setAssignLoading] = useState(false);
-  
-  const {
-    data: dashboardStats,
-    isLoading: statsLoading,
-  } = useSWR("/api/fetch-super-admin-user-dashboard-data", () => superAdminUserdashboardStatsFetcher(startDate,endDate,id));
+  const [dashboardStats,setData] = useState(null);
+  const [isLoading,setIsLoading] = useState(false);
 
+  // const {
+  //   data: dashboardStats,
+  //   isLoading: statsLoading,
+  // } = useSWR("/api/fetch-super-admin-user-dashboard-data", () => superAdminUserdashboardStatsFetcher(startDate,endDate,id));
+
+  const fetchUsers = async (startDate, endDate) => {
+    setIsLoading(true)
+    try {
+      const res = await superAdminUserdashboardStatsFetcher(startDate, endDate,id);
+      setData(res);
+    } catch (error) {
+      console.log(error.message)
+    } finally {
+      setIsLoading(false)
+    }
+  }
+
+  useEffect(() => {
+    fetchUsers(startDate, endDate);
+  }, [startDate, endDate])
 
   const handleDateRangeChange = (range) => {
     const start = range[0];
     const end = range[1];
     setStartDate(start);
     setEndDate(end)
-    mutate("/api/fetch-super-admin-user-dashboard-data");
   };
 
   const handleAssignMinutes = () => {
@@ -60,7 +77,7 @@ export default function DashboardPage({params}) {
       toast.success(res.data?.message);
       handleAssignDialogClose();
       // Optionally refresh dashboard data here
-      mutate("/api/fetch-super-admin-user-dashboard-data");
+      fetchUsers(startDate, endDate);
     } catch (e) {
       toast.error('Failed to assign minutes.');
     } finally {
@@ -71,7 +88,18 @@ export default function DashboardPage({params}) {
   return (
     <div className="space-y-6">
       <CustomerDashbaordHeader heading={`${dashboardStats?.data?.user?.full_name} Dashaboard`} handleAssignMinutes={handleAssignMinutes} text="View your business metrics and performance." showDateRange showDownload showDocs onDateRangeChange={handleDateRangeChange}/>
-      <CustomerStatCardsGrid dashboardStats={dashboardStats}/>
+      
+      {
+        isLoading &&
+        <div className="w-full flex items-center justify-center h-[30rem]">
+          <Loader2 className="text-green-500 animate-spin" size={45} />
+        </div>
+      }
+      {
+        !isLoading &&
+        <CustomerStatCardsGrid dashboardStats={dashboardStats}/>
+      }
+     
 
       <Dialog open={assisgnMinutesOpen} onOpenChange={setAssignMinutesOpen}>
         <DialogContent>

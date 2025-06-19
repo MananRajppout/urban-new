@@ -17,6 +17,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import { Trash2 } from "lucide-react";
 
 // Mock data for customers
 const customers = [
@@ -112,7 +113,8 @@ export default function CustomersTable({
   sortOrder,
   setSortField,
   setSortOrder,
-  data
+  data,
+  handleDeleteUser
 }) {
   const router = useRouter();
 
@@ -185,6 +187,9 @@ export default function CustomersTable({
       }
       return 0;
     });
+  
+
+  
 
   return (
     <div className="rounded-md border border-dark-100 bg-dark-200">
@@ -283,7 +288,6 @@ export default function CustomersTable({
             <TableRow
               key={customer.id}
               className="hover:bg-dark-100 border-dark-100 cursor-pointer"
-              onClick={() => router.push(`/admin/customers/${customer._id}`)}
             >
               <TableCell className="font-medium">
                 <div>
@@ -292,7 +296,7 @@ export default function CustomersTable({
                 </div>
               </TableCell>
               <TableCell>
-                {customer.plan === "No Plan" ? (
+                {customer.voice_ai_status === "inactive" ? (
                   <span className="text-gray-400">No Plan</span>
                 ) : (
                   <Badge
@@ -305,7 +309,7 @@ export default function CustomersTable({
                           : "bg-green-accent/10 text-green-accent border-green-accent/20"
                     }
                   >
-                    {customer.plan}
+                    {customer.voice_ai_status}
                   </Badge>
                 )}
               </TableCell>
@@ -341,7 +345,17 @@ export default function CustomersTable({
                 </div>
 
               </TableCell>
-              <TableCell className="text-right">
+              <TableCell className="text-right flex items-center">
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  onClick={() => handleDeleteUser(customer._id)}
+                  className="bg-transparent text-red-500 mr-2 border-none cursor-pointer"
+                >
+                  <Trash2 className="h-4 w-4" />
+                </Button>
+
+                
                 <Button
                   variant="ghost"
                   size="icon"

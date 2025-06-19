@@ -28,16 +28,16 @@ const navItems = [
     label: 'Customers',
     href: '/super-admin/customers',
   },
-  {
-    icon: CreditCard,
-    label: 'Payments',
-    href: '/super-admin/payments',
-  },
-  {
-    icon: Settings,
-    label: 'Settings',
-    href: '/super-admin/settings',
-  },
+  // {
+  //   icon: CreditCard,
+  //   label: 'Payments',
+  //   href: '/super-admin/payments',
+  // },
+  // {
+  //   icon: Settings,
+  //   label: 'Settings',
+  //   href: '/super-admin/settings',
+  // },
 ];
 
 export default function Sidebar() {

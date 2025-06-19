@@ -5,6 +5,10 @@ export async function getDashboardStats() {
 }
 
 
+export async function getSuperAdminDelete(id) {
+  return await AxiosInstance.delete(`/api/fetch-super-delete-user/${id}`);
+}
+
 export async function getSuperAdminAllCustomer(startDate,endDate,searchQuery,page=1,limit=10) {
   const params = new URLSearchParams();
   if(startDate) params.set("startDate",startDate)
