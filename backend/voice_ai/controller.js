@@ -48,6 +48,7 @@ const { destryFromCloudinary } = require("../services/cloudinary.service.js");
 const {
   generatePrereordedAudioSarvamAI,
 } = require("../services/sarmavai.service.js");
+const { PlivoPhoneRecord } = require("../v2/model/plivoModel.js");
 
 const phoneUtil = PhoneNumberUtil.getInstance();
 
@@ -956,109 +957,153 @@ exports.getSuperAdminDashboardData = catchAsyncError(async (req, res) => {
 
   let dateFilter;
   if (startDate && endDate) {
-    dateFilter = {$gte:new Date(startDate),$lt:new Date(endDate)}
+    dateFilter = { $gte: new Date(startDate), $lt: new Date(endDate) };
   } else {
-    dateFilter = {$gte: new Date(), $lte: new Date()};
+    const today = new Date();
+    const start = new Date(today.setHours(0, 0, 0, 0));
+    const end = new Date(today.setHours(23, 59, 59, 999));
+    dateFilter = { $gte: start, $lte: end };
   }
 
-
-  
-
-    const callStats = await CallHistory.aggregate([
-      {
-        $match: {
-          start_time: dateFilter
-        },
+  const callStats = await CallHistory.aggregate([
+    {
+      $match: {
+        start_time: dateFilter
       },
-      {
-        $group: {
-          _id: null,
-          totalCalls: { $sum: 1 },
-          totalDuration: {
-            $sum: {
-              $cond: [
-                {
-                  $and: [
-                    { $ne: [{ $type: "$start_time" }, "missing"] },
-                    { $ne: [{ $type: "$end_time" }, "missing"] },
-                  ],
-                },
-                {
-                  $divide: [
-                    { $subtract: ["$end_time", "$start_time"] },
-                    60000, // Convert ms to minutes
-                  ],
-                },
-                0,
-              ],
-            },
-          },
-          inboundCalls: {
-            $sum: {
-              $cond: [{ $eq: ["$direction", "inbound"] }, 1, 0],
-            },
-          },
-          outboundCalls: {
-            $sum: {
-              $cond: [{ $eq: ["$direction", "outbound"] }, 1, 0],
-            },
-          },
-        },
-      },
-      {
-        $addFields: {
-          averageDuration: {
+    },
+    {
+      $group: {
+        _id: null,
+        totalCalls: { $sum: 1 },
+        totalDuration: {
+          $sum: {
             $cond: [
-              { $eq: ["$totalCalls", 0] },
+              {
+                $and: [
+                  { $ne: [{ $type: "$start_time" }, "missing"] },
+                  { $ne: [{ $type: "$end_time" }, "missing"] },
+                ],
+              },
+              {
+                $divide: [
+                  { $subtract: ["$end_time", "$start_time"] },
+                  60000, // Convert ms to minutes
+                ],
+              },
               0,
-              { $divide: ["$totalDuration", "$totalCalls"] },
             ],
           },
         },
-      },
-    ]);
-
-    const userStats = await User.aggregate([
-      {
-        $match: {
-          created_time: dateFilter,
-        },
-      },
-      {
-        $group: {
-          _id: null,
-          totalSignUps: { $sum: 1 },
-          paidCustomers: {
-            $sum: {
-              $cond: [
-                {
-                  $or: [
-                    { $ne: ["$pricing_plan", null] },
-                    { $gt: [{ $size: "$subscriptions" }, 0] },
-                  ],
-                },
-                1,
-                0,
-              ],
-            },
+        inboundCalls: {
+          $sum: {
+            $cond: [{ $eq: ["$direction", "inbound"] }, 1, 0],
           },
-          activeAccounts: {
-            $sum: {
-              $cond: [{ $eq: ["$is_active", true] }, 1, 0],
-            },
+        },
+        outboundCalls: {
+          $sum: {
+            $cond: [{ $eq: ["$direction", "outbound"] }, 1, 0],
           },
         },
       },
-    ]);
-    
-    
+    },
+    {
+      $addFields: {
+        averageDuration: {
+          $cond: [
+            { $eq: ["$totalCalls", 0] },
+            0,
+            { $divide: ["$totalDuration", "$totalCalls"] },
+          ],
+        },
+      },
+    },
+  ]);
 
-    res.status(200).json({
-      success: true,
-      data: {...callStats[0],...userStats[0]},
+  const userStats = await User.aggregate([
+    {
+      $match: {
+        created_time: dateFilter,
+      },
+    },
+    {
+      $group: {
+        _id: null,
+        totalSignUps: { $sum: 1 },
+        paidCustomers: {
+          $sum: {
+            $cond: [
+              {
+                $or: [
+                  { $ne: ["$pricing_plan", null] },
+                  { $gt: [{ $size: "$subscriptions" }, 0] },
+                ],
+              },
+              1,
+              0,
+            ],
+          },
+        },
+        activeAccounts: {
+          $sum: {
+            $cond: [{ $eq: ["$is_active", true] }, 1, 0],
+          },
+        },
+      },
+    },
+  ]);
 
-    });
+  const call = callStats[0] || {
+    totalCalls: 0,
+    totalDuration: 0,
+    averageDuration: 0,
+    inboundCalls: 0,
+    outboundCalls: 0,
+  };
+
+  const user = userStats[0] || {
+    totalSignUps: 0,
+    paidCustomers: 0,
+    activeAccounts: 0,
+  };
+
+  const combined = { ...call, ...user };
+
+  const chartData = {
+    callsBreakdown: {
+      labels: ['Inbound', 'Outbound'],
+      values: [call.inboundCalls, call.outboundCalls]
+    },
+    userConversion: {
+      labels: ['Signups', 'Paid Customers'],
+      values: [user.totalSignUps, user.paidCustomers]
+    },
+    generalStats: {
+      labels: [
+        'Total Calls',
+        'Total Minutes',
+        'Avg Call Duration',
+        'Signups',
+        'Paid Customers',
+        'Active Accounts'
+      ],
+      values: [
+        call.totalCalls,
+        parseFloat(call.totalDuration.toFixed(2)),
+        parseFloat(call.averageDuration.toFixed(2)),
+        user.totalSignUps,
+        user.paidCustomers,
+        user.activeAccounts
+      ]
+    }
+  };
+
+  res.status(200).json({
+    success: true,
+    data: combined,
+    chartData
+  });
 });
+
 
 exports.getSuperAdminDeleteUser = catchAsyncError(async (req, res) => {
     const { id} = req.params;
@@ -1073,95 +1118,224 @@ exports.getSuperAdminDeleteUser = catchAsyncError(async (req, res) => {
 });
 
 
-exports.getSuperAdminUserDashboardData = catchAsyncError(async (req, res) => {
-  const { startDate, endDate,user_id } = req.query;
+// exports.getSuperAdminUserDashboardData = catchAsyncError(async (req, res) => {
+//   const { startDate, endDate,user_id } = req.query;
 
-  let dateFilter;
-  if (startDate && endDate) {
-    dateFilter = {$gte:new Date(startDate),$lt:new Date(endDate)}
-  } else {
-    dateFilter = {$gte: new Date(), $lte: new Date()};
-  }
+//   let dateFilter;
+//   if (startDate && endDate) {
+//     dateFilter = {$gte:new Date(startDate),$lt:new Date(endDate)}
+//   } else {
+//     dateFilter = {$gte: new Date(), $lte: new Date()};
+//   }
 
 
   
 
-    const callStats = await CallHistory.aggregate([
-      {
-        $match: {
-          user_id: user_id,
-          start_time: dateFilter
-        },
-      },
-      {
-        $group: {
-          _id: null,
-          totalCalls: { $sum: 1 },
-          totalDuration: {
-            $sum: {
-              $cond: [
-                {
-                  $and: [
-                    { $ne: [{ $type: "$start_time" }, "missing"] },
-                    { $ne: [{ $type: "$end_time" }, "missing"] },
-                  ],
-                },
-                {
-                  $divide: [
-                    { $subtract: ["$end_time", "$start_time"] },
-                    60000, // Convert ms to minutes
-                  ],
-                },
-                0,
-              ],
-            },
-          },
-          inboundCalls: {
-            $sum: {
-              $cond: [{ $eq: ["$direction", "inbound"] }, 1, 0],
-            },
-          },
-          outboundCalls: {
-            $sum: {
-              $cond: [{ $eq: ["$direction", "outbound"] }, 1, 0],
-            },
-          },
-        },
-      },
-      {
-        $addFields: {
-          averageDuration: {
-            $cond: [
-              { $eq: ["$totalCalls", 0] },
-              0,
-              { $divide: ["$totalDuration", "$totalCalls"] },
-            ],
-          },
-        },
-      },
-    ]);
+//     const callStats = await CallHistory.aggregate([
+//       {
+//         $match: {
+//           user_id: user_id,
+//           start_time: dateFilter
+//         },
+//       },
+//       {
+//         $group: {
+//           _id: null,
+//           totalCalls: { $sum: 1 },
+//           totalDuration: {
+//             $sum: {
+//               $cond: [
+//                 {
+//                   $and: [
+//                     { $ne: [{ $type: "$start_time" }, "missing"] },
+//                     { $ne: [{ $type: "$end_time" }, "missing"] },
+//                   ],
+//                 },
+//                 {
+//                   $divide: [
+//                     { $subtract: ["$end_time", "$start_time"] },
+//                     60000, // Convert ms to minutes
+//                   ],
+//                 },
+//                 0,
+//               ],
+//             },
+//           },
+//           inboundCalls: {
+//             $sum: {
+//               $cond: [{ $eq: ["$direction", "inbound"] }, 1, 0],
+//             },
+//           },
+//           outboundCalls: {
+//             $sum: {
+//               $cond: [{ $eq: ["$direction", "outbound"] }, 1, 0],
+//             },
+//           },
+//         },
+//       },
+//       {
+//         $addFields: {
+//           averageDuration: {
+//             $cond: [
+//               { $eq: ["$totalCalls", 0] },
+//               0,
+//               { $divide: ["$totalDuration", "$totalCalls"] },
+//             ],
+//           },
+//         },
+//       },
+//     ]);
 
-    const user = await User.findById(user_id);
+//     const user = await User.findById(user_id);
 
-    const restriction = await Restriction.findOne({ user_id: user._id });
+//     const restriction = await Restriction.findOne({ user_id: user._id });
 
-    const minuteUsage = restriction?.voice_trial_minutes_used || 0;
-    const minuteLimit = restriction?.voice_trial_minutes_limit || 0;
+//     const minuteUsage = restriction?.voice_trial_minutes_used || 0;
+//     const minuteLimit = restriction?.voice_trial_minutes_limit || 0;
 
 
+//     const phoneNumbers = await PlivoPhoneRecord.find({user_id});
  
     
     
 
-    res.status(200).json({
-      success: true,
-      data: {...callStats[0],user,voiceMinutes: {
-        used: minuteUsage,
-        remaining: minuteLimit - minuteUsage,
-      }},
-    });
-});
+//     res.status(200).json({
+//       success: true,
+//       data: {...callStats[0],user,voiceMinutes: {
+//         used: minuteUsage,
+//         remaining: minuteLimit - minuteUsage
+//       },
+//       phoneNumbers
+//     },
+//     });
+// });
 
+exports.getSuperAdminUserDashboardData = catchAsyncError(async (req, res) => {
+  const { startDate, endDate, user_id } = req.query;
+
+  let dateFilter;
+  if (startDate && endDate) {
+    dateFilter = { $gte: new Date(startDate), $lt: new Date(endDate) };
+  } else {
+    const today = new Date();
+    const start = new Date(today.setHours(0, 0, 0, 0));
+    const end = new Date(today.setHours(23, 59, 59, 999));
+    dateFilter = { $gte: start, $lte: end };
+  }
+
+  const callStats = await CallHistory.aggregate([
+    {
+      $match: {
+        user_id: user_id,
+        start_time: dateFilter
+      },
+    },
+    {
+      $group: {
+        _id: null,
+        totalCalls: { $sum: 1 },
+        totalDuration: {
+          $sum: {
+            $cond: [
+              {
+                $and: [
+                  { $ne: [{ $type: "$start_time" }, "missing"] },
+                  { $ne: [{ $type: "$end_time" }, "missing"] },
+                ],
+              },
+              {
+                $divide: [
+                  { $subtract: ["$end_time", "$start_time"] },
+                  60000, // Convert ms to minutes
+                ],
+              },
+              0,
+            ],
+          },
+        },
+        inboundCalls: {
+          $sum: {
+            $cond: [{ $eq: ["$direction", "inbound"] }, 1, 0],
+          },
+        },
+        outboundCalls: {
+          $sum: {
+            $cond: [{ $eq: ["$direction", "outbound"] }, 1, 0],
+          },
+        },
+      },
+    },
+    {
+      $addFields: {
+        averageDuration: {
+          $cond: [
+            { $eq: ["$totalCalls", 0] },
+            0,
+            { $divide: ["$totalDuration", "$totalCalls"] },
+          ],
+        },
+      },
+    },
+  ]);
+
+  const call = callStats[0] || {
+    totalCalls: 0,
+    totalDuration: 0,
+    averageDuration: 0,
+    inboundCalls: 0,
+    outboundCalls: 0,
+  };
+
+  const user = await User.findById(user_id);
+  const restriction = await Restriction.findOne({ user_id: user._id });
+  const phoneNumbers = await PlivoPhoneRecord.find({ user_id });
+
+  const minuteUsage = restriction?.voice_trial_minutes_used || 0;
+  const minuteLimit = restriction?.voice_trial_minutes_limit || 0;
+  const minuteRemaining = minuteLimit - minuteUsage;
+
+  // Phone status chart: calculate active/expired
+  let activePhones = 0;
+  let expiredPhones = 0;
+  phoneNumbers.forEach(p => {
+    if (p.status === 'active') activePhones++;
+    else expiredPhones++;
+  });
+
+  const chartData = {
+    callStats: {
+      labels: ["Total Calls", "Used Minutes", "Remaining Minutes", "Avg Call Duration"],
+      values: [
+        call.totalCalls,
+        parseFloat(call.totalDuration.toFixed(2)),
+        parseFloat(minuteRemaining.toFixed(2)),
+        parseFloat(call.averageDuration.toFixed(2))
+      ]
+    },
+    callTypeBreakdown: {
+      labels: ["Inbound", "Outbound"],
+      values: [call.inboundCalls, call.outboundCalls]
+    },
+    phoneStatus: {
+      labels: ["Active", "Expired"],
+      values: [activePhones, expiredPhones]
+    }
+  };
+
+  res.status(200).json({
+    success: true,
+    data: {
+      ...call,
+      user,
+      voiceMinutes: {
+        used: minuteUsage,
+        remaining: minuteRemaining
+      },
+      phoneNumbers,
+      chartData
+    }
+  });
+});
 
 
 

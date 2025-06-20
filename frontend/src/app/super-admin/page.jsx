@@ -1,5 +1,6 @@
 'use client';
 
+import ChartsSection from '@/components/admin/dashboard/ChartSection';
 import DashboardHeader from '@/components/admin/dashboard/DashboardHeader';
 import StatCardsGrid from '@/components/admin/dashboard/StatCardsGrid';
 import { dateRangeOptions } from '@/data/dateRangeOption';
@@ -56,6 +57,12 @@ export default function DashboardPage() {
           <Loader2 className="text-green-500 animate-spin" size={45} />
         </div>
       }
+
+      {
+        !isLoading && data?.chartData &&
+        <ChartsSection chartData={data.chartData} />
+      }
+
 
       {
         !isLoading &&

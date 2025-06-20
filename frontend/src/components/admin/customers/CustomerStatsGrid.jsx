@@ -25,6 +25,16 @@ export default function CustomerStatCardsGrid({dashboardStats}) {
       tooltip:
         'The sum of all calls made through the platform (inbound and outbound). Updated hourly and reflects calls across all customers.',
     },
+
+    {
+      title: 'Total Call Ducation',
+      value: formatNumber(dashboardStats?.data?.totalDuration),
+      icon: <Clock size={24} />,
+      trend: { value: 8.3, isPositive: true },
+      accentColor: 'green-accent',
+      tooltip:
+        'The total duration of all calls in minutes. This metric is calculated by summing the duration of all completed calls. It is a key billing metric as customers are charged based on minutes used.',
+    },
     {
       title: 'Total Minutes Used',
       value: formatNumber(dashboardStats?.data?.voiceMinutes?.used),
@@ -64,6 +74,15 @@ export default function CustomerStatCardsGrid({dashboardStats}) {
     {
       title: 'Total Outbound Calls',
       value: formatNumber(dashboardStats?.data?.outboundCalls),
+      icon: <Phone size={24} />,
+      trend: { value: 9.7, isPositive: true },
+      accentColor: 'blue-accent',
+      tooltip:
+        'Total number of calls initiated by your system. Calculated by counting all calls your system made to external phone numbers. Useful for tracking outbound campaigns and follow-ups.',
+    },
+    {
+      title: 'Total Phone Number',
+      value: formatNumber(dashboardStats?.data?.phoneNumbers?.length),
       icon: <Phone size={24} />,
       trend: { value: 9.7, isPositive: true },
       accentColor: 'blue-accent',
