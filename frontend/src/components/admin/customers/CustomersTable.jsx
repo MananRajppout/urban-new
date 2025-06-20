@@ -329,7 +329,7 @@ export default function CustomersTable({
               <TableCell>
                 <div>
                   <div className="text-sm">
-                    {customer.voiceMinutes?.used} / {customer.voiceMinutes?.used + customer.voiceMinutes?.remaining} mins
+                    {customer.voiceMinutes?.used?.toFixed(2)} / {(customer.voiceMinutes?.used + customer.voiceMinutes?.remaining)?.toFixed(2)} mins
                   </div>
                   <div className="w-full bg-dark-100 rounded-full h-2 mt-1">
                     <div

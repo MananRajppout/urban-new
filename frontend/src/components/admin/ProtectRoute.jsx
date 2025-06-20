@@ -11,9 +11,9 @@ const ProtectRoute = ({children}) => {
         setLoading(true)
         try {
             const res = await getUserDetail();
-            if(res.data.user?.email != "urbanchatai@gmail.com"){
-                router.push("/")
-            }
+            // if(res.data.user?.email != "urbanchatai@gmail.com"){
+            //     router.push("/")
+            // }
         } catch (error) {
             router.push("/")
         }finally{

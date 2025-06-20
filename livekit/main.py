@@ -100,11 +100,8 @@ async def create_llm_engine(assistant_info: Assistant):
     elif gpt_model == "llama-3.1-8b-instant":
         return groq.LLM(model="llama-3.1-8b-instant", **base_config)
     
-    elif gpt_model == "deepseek-r1-distill-llama-70b":
-        return groq.LLM(model="deepseek-r1-distill-llama-70b", **base_config)
-    
-    elif gpt_model == "qwen/qwen3-32b":
-        return groq.LLM(model="qwen/qwen3-32b", **base_config)
+    elif gpt_model == "llama3-8b-8192":
+        return groq.LLM(model="llama3-8b-8192", **base_config)
     
     else:
         return groq.LLM(model="llama-3.1-8b-instant", **base_config)

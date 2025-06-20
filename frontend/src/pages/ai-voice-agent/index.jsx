@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import MetricsCard from "@/components/dashboard/AiAgent/components/MetricsCard/MetricsCard";
 import { tooltips } from "@/components/dashboard/AiAgent/utils";
 import { PhoneCall, Clock, BarChart4, Target } from "lucide-react";
@@ -9,12 +9,6 @@ import { Headphones } from "lucide-react";
 import { Users } from "lucide-react";
 import RecentCalls from "@/components/dashboard/AiAgent/Table/RecentCalls";
 import Layout from "@/components/layout/Layout";
-import useSWR, { mutate } from "swr";
-import {
-  dashboardStatsFetcher,
-  callActivityChartFetcher,
-} from "@/lib/api/ApiDashboard";
-import { fetchCallHistory } from "@/lib/api/ApiAiAssistant";
 import { LoaderIcon } from "lucide-react";
 import useVoiceInfo from "@/hooks/useVoice";
 
@@ -23,70 +17,92 @@ const AiVoiceAgentDashboard = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const limit = 10;
 
+  // Dashboard stats state
+  const [dashboardStats, setDashboardStats] = useState(null);
+  const [statsLoading, setStatsLoading] = useState(true);
+  const [statsError, setStatsError] = useState(null);
+
+  // Call activity chart state
+  const [callHistoryData, setCallHistoryData] = useState(null);
+  const [chartLoading, setChartLoading] = useState(true);
+  const [chartError, setChartError] = useState(null);
+
+  // Recent calls state
+  const [recentCallsData, setRecentCallsData] = useState(null);
+  const [callsLoading, setCallsLoading] = useState(true);
+  const [callsError, setCallsError] = useState(null);
+
   // Helper function to calculate duration - moved up before it's used
   const calculateDuration = (startTime, endTime) => {
     if (!startTime || !endTime) return "N/A";
-
     const start = new Date(startTime);
     const end = new Date(endTime);
     const durationMs = end - start;
-
     if (isNaN(durationMs) || durationMs < 0) return "N/A";
-
     const minutes = Math.floor(durationMs / 60000);
     const seconds = Math.floor((durationMs % 60000) / 1000);
-
     return `${minutes}:${seconds.toString().padStart(2, "0")}`;
   };
 
   // Fetch dashboard stats
-  const {
-    data: dashboardStats,
-    error: statsError,
-    isLoading: statsLoading,
-  } = useSWR("/api/dashboard-stats", dashboardStatsFetcher);
+  useEffect(() => {
+    setStatsLoading(true);
+    setStatsError(null);
+    import("@/lib/api/ApiDashboard").then(({ dashboardStatsFetcher }) => {
+      dashboardStatsFetcher("/api/dashboard-stats")
+        .then((data) => {
+          setDashboardStats(data);
+          setStatsLoading(false);
+        })
+        .catch((err) => {
+          setStatsError(err);
+          setStatsLoading(false);
+        });
+    });
+  }, []);
 
   // Fetch call activity chart data
-  const {
-    data: callHistoryData = {},
-    error: chartError,
-    isLoading: chartLoading,
-  } = useSWR(
-    `/api/call-activity-chart?period=${chartPeriod}`,
-    callActivityChartFetcher
-  );
+  useEffect(() => {
+    setChartLoading(true);
+    setChartError(null);
+    import("@/lib/api/ApiDashboard").then(({ callActivityChartFetcher }) => {
+      callActivityChartFetcher(`/api/call-activity-chart?period=${chartPeriod}`)
+        .then((data) => {
+          setCallHistoryData(data);
+          setChartLoading(false);
+        })
+        .catch((err) => {
+          setChartError(err);
+          setChartLoading(false);
+        });
+    });
+  }, [chartPeriod]);
 
-  // Use the same API endpoint as call history
-  const recentCallsKey = `/api/call-history?page=${currentPage}&limit=${limit}`;
-
-  const {
-    data: recentCallsData,
-    error: callsError,
-    isLoading: callsLoading,
-  } = useSWR(
-    recentCallsKey,
-    async () => {
-      const response = await fetchCallHistory(currentPage, limit);
-      return response;
-    },
-    {
-      revalidateOnFocus: false,
-      dedupingInterval: 5000,
-    }
-  );
+  // Fetch recent calls
+  useEffect(() => {
+    setCallsLoading(true);
+    setCallsError(null);
+    import("@/lib/api/ApiAiAssistant").then(({ fetchCallHistory }) => {
+      fetchCallHistory(currentPage, limit)
+        .then((response) => {
+          setRecentCallsData(response);
+          setCallsLoading(false);
+        })
+        .catch((err) => {
+          setCallsError(err);
+          setCallsLoading(false);
+        });
+    });
+  }, [currentPage]);
 
   const handleRecentCallsPageChange = (page) => {
     if (page !== currentPage) {
       setCurrentPage(page);
-      // Mutate the SWR cache to trigger a refetch with the new page
-      mutate(recentCallsKey);
     }
   };
 
   // Check if any data is loading
-  const isLoading =
-    statsLoading || chartLoading || callsLoading 
-
+  const isLoading = statsLoading || chartLoading || callsLoading;
   // Handle errors
   const hasError = statsError || chartError || callsError;
 
@@ -116,13 +132,9 @@ const AiVoiceAgentDashboard = () => {
     );
   }
 
- 
-
   const stats = dashboardStats?.data || {};
-
   // Transform the call history data to match the expected format
   const rawCalls = recentCallsData?.data?.recordings || [];
-
   const calls = rawCalls.map((call) => ({
     id: call?._id || call?.id,
     date: new Date(call?.created_time || call?.timestamp),
@@ -137,7 +149,6 @@ const AiVoiceAgentDashboard = () => {
     status: call?.call_status?.toLowerCase() || "unknown",
     originalData: call,
   }));
-
   // Create pagination object from the response
   const pagination = {
     total: recentCallsData?.data?.total || calls.length,
@@ -147,18 +158,15 @@ const AiVoiceAgentDashboard = () => {
   };
   const formatDuration = (durationInMinutes) => {
     if (!durationInMinutes || durationInMinutes <= 0) return "0:00";
-
     const totalSeconds = Math.floor(durationInMinutes * 60);
     const hours = Math.floor(totalSeconds / 3600);
     const minutes = Math.floor((totalSeconds % 3600) / 60);
     const seconds = totalSeconds % 60;
-
     if (hours > 0) {
       return `${hours}:${minutes.toString().padStart(2, "0")}:${seconds
         .toString()
         .padStart(2, "0")}`;
     }
-
     return `${minutes}:${seconds.toString().padStart(2, "0")}`;
   };
 
@@ -216,7 +224,7 @@ const AiVoiceAgentDashboard = () => {
             ]}
           />
 
-{/* remove format function and direclty show minutes */}
+          {/* remove format function and direclty show minutes */}
           <MetricsCard
             title="Minutes Used"
             value={callHistoryData.stats.voiceMinutes.used.toFixed(2) || 0}
@@ -226,8 +234,7 @@ const AiVoiceAgentDashboard = () => {
             infoTooltip={tooltips.minutesUsed}
           />
 
-
-{/* remove format function and direclty show minutes */}
+          {/* remove format function and direclty show minutes */}
           <MetricsCard
             title="Minutes Remaining"
             value={
