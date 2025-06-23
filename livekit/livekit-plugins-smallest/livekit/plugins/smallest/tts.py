@@ -26,6 +26,7 @@ class _TTSOptions:
     language: TTSLanguages
     add_wav_header: bool
     transliterate: Optional[bool]
+    speed: Optional[float]
 
 
 class TTS(tts.TTS):
@@ -40,6 +41,7 @@ class TTS(tts.TTS):
         transliterate: Optional[bool] = False,
         encoding: TTSEncoding = "pcm_s16le",
         http_session: aiohttp.ClientSession | None = None,
+        speed: float = 1.0
     ) -> None:
         """
         Create a new instance of smallest.ai Waves TTS.
@@ -73,6 +75,7 @@ class TTS(tts.TTS):
             api_key=api_key,
             transliterate=transliterate,
             add_wav_header=False,
+            speed=speed
         )
         self._session = http_session
 
@@ -163,6 +166,7 @@ def _to_smallest_options(opts: _TTSOptions) -> dict[str, Any]:
         "voice_id": opts.voice,
         "sample_rate": opts.sample_rate,
         "add_wav_header": opts.add_wav_header,
+        "speed": opts.speed
     }
 
 

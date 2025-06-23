@@ -501,7 +501,10 @@ exports.fetchSingleAiAgentForLivekit = catchAsyncError(async (req, res, next) =>
   const remainingMinutes = Math.max(0,restriction.voice_trial_minutes_limit - restriction.voice_trial_minutes_used);
   
   if(remainingMinutes <= 0){
-    res.status(401).json({
+    user.voice_ai_status = "inactive";
+    user.is_active = false;
+    await user.save();
+    return res.status(401).json({
       success: false,
       message: "No Minutes left",
     });
@@ -1410,6 +1413,12 @@ exports.superAdminAssisgNumber = catchAsyncError(async (req, res) => {
 
 
   restriction.voice_trial_minutes_limit += Number(minutes);
+  const user = await User.findById(user_id);
+
+  user.voice_ai_status = "active";
+  user.is_active = true;
+
+  await user.save();
 
 
   await restriction.save()

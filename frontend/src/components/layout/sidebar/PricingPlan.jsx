@@ -7,6 +7,7 @@ import useVoiceInfo from "@/hooks/useVoice";
 const PricingPlan = ({ activeService }) => {
   const [currentPlan, setCurrentPlan] = useState(null);
   const [currentAiPlan, setCurrentAiPlan] = useState(null);
+  const [minutesRemaining,setminutesRemaining] = useState();
 
   useEffect(() => {
     const fetchCurrentPlan = async () => {
@@ -15,6 +16,7 @@ const PricingPlan = ({ activeService }) => {
         if (response && response?.data) {
           setCurrentPlan(response?.data?.pricingPlan);
           setCurrentAiPlan(response?.data?.aiPricingPlan);
+          setminutesRemaining(response?.data?.minutesRemaining?.toFixed(2));
         } else {
           console.log("No valid data in response:", response);
         }
@@ -27,6 +29,7 @@ const PricingPlan = ({ activeService }) => {
   }, []);
 
   const voiceInfo = useVoiceInfo();
+
 
   return (
     <Link
@@ -68,7 +71,8 @@ const PricingPlan = ({ activeService }) => {
             <div className="flex justify-between text-xs">
               <span className="text-gray-400">Remaining</span>
               <span className="font-medium text-white">
-                {currentAiPlan?.total_minutes_balance || "0"}
+                {/* {currentAiPlan?.total_minutes_balance || "0"} */}
+                {minutesRemaining || "0"}
                 <span className="text-gray-400"> min</span>
               </span>
             </div>

@@ -1,7 +1,7 @@
 const catchAsyncError = require("../middleware/catchAsyncError");
 const { PricePlan, PaymentHistory, CreditCard, VoiceBilling, VoiceAIPricePlan } = require("../pricing/model");
 const { updatePricingPlan, getPricingPlan, updateUser, getPricingPlanAiVoice, getCurrentPlan, getPlanDetails, deletePricingPlan } = require("../user/impl");
-const { User } = require("../user/model");
+const { User, Restriction } = require("../user/model");
 const { sendMailFun } = require("../utils/infra");
 const { PlivoPhoneRecord } = require("../v2/model/plivoModel");
 const { buyNumberFunction, deletePhoneNumberPlan, makePlivoNumberActive, deletePlivoNumberPaymentFailed } = require("../v2/utils");
@@ -712,6 +712,13 @@ exports.currentPlan = catchAsyncError(async (req, res, next) => {
     pricingPlan = await PricePlan.findOne({ _id: user.pricing_plan.toString() });
   }
 
+  const restriction = await Restriction.findOne({user_id: user._id});
+  const minutesRemaining = Math.max(
+    0,
+    restriction.voice_trial_minutes_limit -
+      restriction.voice_trial_minutes_used
+  );
+
   let aiPricingPlan = null;
   let phoneNUmberPlan=null;
   if (user.ai_price_plan_id) {
@@ -729,7 +736,7 @@ exports.currentPlan = catchAsyncError(async (req, res, next) => {
 
 
 
-  return res.status(200).json({ success: true, pricingPlan, aiPricingPlan,phoneNUmberPlan });
+  return res.status(200).json({ success: true, pricingPlan, aiPricingPlan,phoneNUmberPlan,minutesRemaining });
 });
 
 

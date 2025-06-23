@@ -25,7 +25,7 @@ from services.api_service import (
 from utils.generate_prompt import generate_prompt
 from livekit.agents import tokenize
 from time import time
-
+from dataclasses import dataclass
 import json
 from livekit.plugins import groq
 from livekit.plugins import noise_cancellation
@@ -34,6 +34,21 @@ from livekit.plugins import noise_cancellation
 logger = logging.getLogger("voice-assistant")
 load_dotenv()
 
+@dataclass
+class VoiceSettings:
+    stability: float  # [0.0 - 1.0]
+    similarity_boost: float  # [0.0 - 1.0]
+    style: float | None = None  # [0.0 - 1.0]
+    speed: float | None = 1.0  # [0.8 - 1.2]
+    use_speaker_boost: bool | None = False
+
+
+@dataclass
+class Voice:
+    id: str
+    name: str
+    category: str
+    settings: VoiceSettings | None = None
 
 def prewarm(proc: JobProcess):
     """Optimized prewarm with faster VAD settings and caching"""
@@ -64,12 +79,25 @@ async def create_tts_engine(assistant_info: Assistant):
         return sarvam.TTS(
             speaker=voice_id, 
             target_language_code="en-IN", 
-            model="bulbul:v1"
+            model="bulbul:v1",
+            pace=assistant_info.get("voice_speed")
         )
     elif tts_engine_name == "smallest":
-        return smallest.TTS(voice=voice_id)
+        return smallest.TTS(voice=voice_id,speed=assistant_info.get("voice_speed"))
     elif tts_engine_name == "elevenlabs":
-        return elevenlabs.TTS(api_key=assistant_info.get("elevenlabs_api_key"))
+        DEFAULT_VOICE = Voice(
+            id="EXAVITQu4vr4xnSDxMaL",
+            name="Bella",
+            category="premade",
+            settings=VoiceSettings(
+                stability=0.71,
+                speed=assistant_info.get("voice_speed"),
+                similarity_boost=0.5,
+                style=0.0,
+                use_speaker_boost=True,
+            ),
+        )
+        return elevenlabs.TTS(api_key=assistant_info.get("elevenlabs_api_key"),voice=DEFAULT_VOICE)
     else:
         # Default to fastest option
         return deepgram.TTS(model="aura-asteria-en")
@@ -163,6 +191,7 @@ async def entrypoint(ctx: JobContext):
     # Get assistant info (with caching)
     timing["assistant_fetch_start"] = time()
     assistant_info = await get_assistant_info(ctx.proc.userdata, call_ctx.get("agentId"))
+    print(assistant_info.get("voice_speed"))
     if assistant_info is None:
         logger.error(f"assistant info not found for {call_ctx.get('agentId')}")
         await ctx.api.room.delete_room(api.DeleteRoomRequest(room=ctx.room.name))
