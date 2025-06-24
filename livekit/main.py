@@ -29,7 +29,7 @@ from dataclasses import dataclass
 import json
 from livekit.plugins import groq
 from livekit.plugins import noise_cancellation
-
+import uuid
 
 logger = logging.getLogger("voice-assistant")
 load_dotenv()
@@ -181,6 +181,8 @@ async def entrypoint(ctx: JobContext):
         call_ctx = json.loads(
             participant.metadata if participant.metadata else participant.name
         )
+
+        call_ctx["callId"] = str(uuid.uuid4())
     except Exception as e:
         logger.error(f"error parsing metadata: {e}")
         await ctx.api.room.delete_room(api.DeleteRoomRequest(room=ctx.room.name))
