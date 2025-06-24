@@ -40,7 +40,7 @@ exports.pickupWebhook = catchAsyncError(async (req, res) => {
     voice_engine_id: "-",
     chatgpt_model: agent.chatgpt_model,
     voice_id: agent.voice_id,
-    start_time,
+    start_time: new Date(),
     sheet_row: config ? config.current_row : null,
     call_state: "active",
   });

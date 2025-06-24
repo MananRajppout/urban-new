@@ -31,7 +31,12 @@ export const dateRangeOptions = [
       value: 'yesterday',
       getRange: () => {
         const yesterday = subDays(new Date(), 1);
-        return [yesterday, yesterday];
+        const start = new Date(yesterday);
+        start.setHours(0, 0, 0, 0);
+      
+        const end = new Date(yesterday);
+        end.setHours(23, 59, 59, 999);
+        return [start, end];
       },
     },
     {
