@@ -152,6 +152,8 @@ const VoiceSelector = ({
         return voicesData?.data?.smallest || [];
       case "deepgram":
         return voicesData?.data?.deepgram || [];
+      case "rime":
+        return voicesData?.data?.rime || [];
       default:
         return [];
     }

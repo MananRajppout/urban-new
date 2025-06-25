@@ -335,9 +335,16 @@ const AgentDetail = () => {
               handleFieldChange("who_speaks_first", value)
             }
             elevenlabs_api_key={userData.elevenlabs_api_key}
+            rime_api_key={userData.rime_api_key}
             setElevenLabsApiKey={async (value) => {
               await AxiosInstance.post("/api/edit-user", {
                 elevenlabs_api_key: value,
+              });
+              await userSwr.mutate();
+            }}
+            setRimeApiKey={async (value) => {
+              await AxiosInstance.post("/api/edit-user", {
+                rime_api_key: value,
               });
               await userSwr.mutate();
             }}

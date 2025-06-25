@@ -45,6 +45,8 @@ const ModelSelection = ({
   mutate,
   elevenlabs_api_key,
   setElevenLabsApiKey,
+  rime_api_key,
+  setRimeApiKey
 }) => {
   const form = useForm({
     resolver: zodResolver(modelSelectionSchema),
@@ -92,6 +94,10 @@ const ModelSelection = ({
       voice.voice_name = "Luna";
       voice.voice_id = "aura-luna-en";
       voice.voice_engine_name = "deepgram";
+    }else if (value == "rime"){
+      voice.voice_name = "abbie";
+      voice.voice_id = "abbie";
+      voice.voice_engine_name = "rime";
     }
 
     setVoice(voice);
@@ -228,6 +234,12 @@ const ModelSelection = ({
           onSave={setElevenLabsApiKey}
         />
       )}
+      {ttsModel === "rime" && (
+        <RimeKey
+          apiKey={rime_api_key}
+          onSave={setRimeApiKey}
+        />
+      )}
     </div>
   );
 };
@@ -274,6 +286,71 @@ const ElevenLabKey = ({ apiKey, onSave }) => {
                 <input
                   {...field}
                   placeholder="Provide your ElevenLab API Key."
+                  className="!m-0 w-full glass-panel border border-subtle-border rounded-md px-4 py-2 text-sm text-white focus:border-accent-teal focus:outline-none"
+                />
+                {form.formState.errors.apiKey && (
+                  <FormMessage className="text-red-400 text-xs ">
+                    {form.formState.errors.apiKey.message}
+                  </FormMessage>
+                )}
+              </FormItem>
+            )}
+          />
+          {isChanged && (
+            <button
+              disabled={isLoading}
+              type="submit"
+              className=" bg-accent-teal text-white px-4 py-2 rounded-md text-sm hover:bg-accent-teal-dark transition"
+            >
+              {isLoading ? "Saving..." : "Save"}
+            </button>
+          )}
+        </form>
+      </Form>
+    </div>
+  );
+};
+
+
+
+
+
+const RimeKey = ({ apiKey, onSave }) => {
+  const form = useForm({
+    resolver: zodResolver(elevenLabKeySchema),
+    values: {
+      apiKey: apiKey || "",
+    },
+  });
+
+  const watchedApiKey = form.watch("apiKey");
+  const isLoading = form.formState.isSubmitting;
+  const isChanged = watchedApiKey !== apiKey;
+
+  const handleSave = async (data) => {
+    await onSave?.(data.apiKey);
+    form.reset({ apiKey: data.apiKey }); // Reset form to reflect the saved state
+  };
+
+  return (
+    <div className="my-3">
+      <Form {...form}>
+        <form
+          onSubmit={form.handleSubmit(handleSave)}
+          className="flex-1 flex gap-3 items-center"
+        >
+          <FormField
+            control={form.control}
+            name="apiKey"
+            className="flex-1"
+            render={({ field }) => (
+              <FormItem className="flex-1 flex items-center gap-3">
+                <FormLabel className="shrink-0 block text-sm font-medium text-gray-400 ">
+                  Rime API Key
+                </FormLabel>
+                <input
+                  {...field}
+                  placeholder="Provide your Rime API Key."
                   className="!m-0 w-full glass-panel border border-subtle-border rounded-md px-4 py-2 text-sm text-white focus:border-accent-teal focus:outline-none"
                 />
                 {form.formState.errors.apiKey && (

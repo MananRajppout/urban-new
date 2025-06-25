@@ -20,7 +20,7 @@ const BookingHandler = require("./booking_handler");
 const { getPricingForCall } = require("../pricing/voice_ai_cost_cal");
 const ElevenLabsVoiceHelper = require("./elevenlabs");
 const DeepGramVoiceHelper = require("./deepgram");
-const { getSarvamVoices, getSmallestVoices } = require("../v2/utils");
+const { getSarvamVoices, getSmallestVoices, getRimeVoice } = require("../v2/utils");
 const dayjs = require("dayjs");
 const AccessToken = twilio.jwt.AccessToken;
 const VoiceGrant = AccessToken.VoiceGrant;
@@ -495,6 +495,9 @@ exports.fetchSingleAiAgentForLivekit = catchAsyncError(async (req, res, next) =>
   if(user.elevenlabs_api_key){
     aiAgent["elevenlabs_api_key"] = user.elevenlabs_api_key
   }
+  if(user.rime_api_key){
+    aiAgent["rime_api_key"] = user.rime_api_key
+  }
 
   const restriction = await Restriction.findOne({id: user._id});
 
@@ -927,12 +930,14 @@ exports.fetchVoices = catchAsyncError(async (req, res) => {
   // sarvam voices
   const sarvamVoices = await getSarvamVoices();
   const smallestVoices = await getSmallestVoices();
+  const rimeVoice = await getRimeVoice();
 
   return res.status(200).send({
     elevenlabs: elevenLabsVoices,
     deepgram: deepgramVoices,
     sarvam: sarvamVoices,
     smallest: smallestVoices,
+    rime: rimeVoice
   }); // add later deepgram: deepGramVoices
 });
 

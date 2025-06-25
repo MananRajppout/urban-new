@@ -34,7 +34,7 @@ export default function SelectVoiceDialog({
           //   })),
           // ];
           
-
+     
           if (voice_engine_name == "elevenlabs") {
             voices = [
               ...response.data.elevenlabs.map((voice) => ({
@@ -55,6 +55,14 @@ export default function SelectVoiceDialog({
               ...response.data.smallest.map((voice) => ({
                 ...voice,
                 service: "smallest",
+              })),
+            ];
+          }else if(voice_engine_name=="rime"){
+          
+            voices = [
+              ...response.data.rime.map((voice) => ({
+                ...voice,
+                service: "rime",
               })),
             ];
           }

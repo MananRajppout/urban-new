@@ -59,3 +59,4 @@ class Assistant:
     silence_2_speech: str
     silence_2_timeout: int
     elevenlabs_api_key: str
+    rime_api_key: str

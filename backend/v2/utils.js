@@ -183,6 +183,596 @@ exports.getSarvamVoices = async () => {
   return voices;
 };
 
+exports.getRimeVoice = async () => {
+  const voices = [
+    {
+      'name': 'abbie',
+      'accent': 'ENG',
+      'gender': 'Female',
+      'voice_id': 'abbie',
+      'voice_url': '',
+      'age': null
+    },
+    {
+      'name': 'allison',
+      'accent': 'ENG',
+      'gender': 'Female',
+      'voice_id': 'allison',
+      'voice_url': '',
+      'age': null
+    },
+    {
+      'name': 'ally',
+      'accent': 'ENG',
+      'gender': 'Female',
+      'voice_id': 'ally',
+      'voice_url': '',
+      'age': null
+    },
+    {
+      'name': 'alona',
+      'accent': 'ENG',
+      'gender': 'Female',
+      'voice_id': 'alona',
+      'voice_url': '',
+      'age': null
+    },
+    {
+      'name': 'amber',
+      'accent': 'ENG',
+      'gender': 'Female',
+      'voice_id': 'amber',
+      'voice_url': '',
+      'age': null
+    },
+    {
+      'name': 'ana',
+      'accent': 'ENG',
+      'gender': 'Female',
+      'voice_id': 'ana',
+      'voice_url': '',
+      'age': null
+    },
+    {
+      'name': 'antoine',
+      'accent': 'ENG',
+      'gender': 'Male',
+      'voice_id': 'antoine',
+      'voice_url': '',
+      'age': null
+    },
+    {
+      'name': 'armon',
+      'accent': 'ENG',
+      'gender': 'Male',
+      'voice_id': 'armon',
+      'voice_url': '',
+      'age': null
+    },
+    {
+      'name': 'brenda',
+      'accent': 'ENG',
+      'gender': 'Female',
+      'voice_id': 'brenda',
+      'voice_url': '',
+      'age': null
+    },
+    {
+      'name': 'brittany',
+      'accent': 'ENG',
+      'gender': 'Female',
+      'voice_id': 'brittany',
+      'voice_url': '',
+      'age': null
+    },
+    {
+      'name': 'carol',
+      'accent': 'ENG',
+      'gender': 'Female',
+      'voice_id': 'carol',
+      'voice_url': '',
+      'age': null
+    },
+    {
+      'name': 'colin',
+      'accent': 'ENG',
+      'gender': 'Male',
+      'voice_id': 'colin',
+      'voice_url': '',
+      'age': null
+    },
+    {
+      'name': 'courtney',
+      'accent': 'ENG',
+      'gender': 'Female',
+      'voice_id': 'courtney',
+      'voice_url': '',
+      'age': null
+    },
+    {
+      'name': 'elena',
+      'accent': 'ENG',
+      'gender': 'Female',
+      'voice_id': 'elena',
+      'voice_url': '',
+      'age': null
+    },
+    {
+      'name': 'elliot',
+      'accent': 'ENG',
+      'gender': 'Male',
+      'voice_id': 'elliot',
+      'voice_url': '',
+      'age': null
+    },
+    {
+      'name': 'eva',
+      'accent': 'ENG',
+      'gender': 'Female',
+      'voice_id': 'eva',
+      'voice_url': '',
+      'age': null
+    },
+    {
+      'name': 'geoff',
+      'accent': 'ENG',
+      'gender': 'Male',
+      'voice_id': 'geoff',
+      'voice_url': '',
+      'age': null
+    },
+    {
+      'name': 'gerald',
+      'accent': 'ENG',
+      'gender': 'Male',
+      'voice_id': 'gerald',
+      'voice_url': '',
+      'age': null
+    },
+    {
+      'name': 'gypsum',
+      'accent': 'ENG',
+      'gender': 'Unknown',
+      'voice_id': 'gypsum',
+      'voice_url': '',
+      'age': null
+    },
+    {
+      'name': 'hank',
+      'accent': 'ENG',
+      'gender': 'Male',
+      'voice_id': 'hank',
+      'voice_url': '',
+      'age': null
+    },
+    {
+      'name': 'helen',
+      'accent': 'ENG',
+      'gender': 'Female',
+      'voice_id': 'helen',
+      'voice_url': '',
+      'age': null
+    },
+    {
+      'name': 'hera',
+      'accent': 'ENG',
+      'gender': 'Female',
+      'voice_id': 'hera',
+      'voice_url': '',
+      'age': null
+    },
+    {
+      'name': 'jen',
+      'accent': 'ENG',
+      'gender': 'Female',
+      'voice_id': 'jen',
+      'voice_url': '',
+      'age': null
+    },
+    {
+      'name': 'joe',
+      'accent': 'ENG',
+      'gender': 'Male',
+      'voice_id': 'joe',
+      'voice_url': '',
+      'age': null
+    },
+    {
+      'name': 'joy',
+      'accent': 'ENG',
+      'gender': 'Female',
+      'voice_id': 'joy',
+      'voice_url': '',
+      'age': null
+    },
+    {
+      'name': 'juan',
+      'accent': 'ENG',
+      'gender': 'Male',
+      'voice_id': 'juan',
+      'voice_url': '',
+      'age': null
+    },
+    {
+      'name': 'kendra',
+      'accent': 'ENG',
+      'gender': 'Female',
+      'voice_id': 'kendra',
+      'voice_url': '',
+      'age': null
+    },
+    {
+      'name': 'kendrick',
+      'accent': 'ENG',
+      'gender': 'Male',
+      'voice_id': 'kendrick',
+      'voice_url': '',
+      'age': null
+    },
+    {
+      'name': 'kenneth',
+      'accent': 'ENG',
+      'gender': 'Male',
+      'voice_id': 'kenneth',
+      'voice_url': '',
+      'age': null
+    },
+    {
+      'name': 'kevin',
+      'accent': 'ENG',
+      'gender': 'Male',
+      'voice_id': 'kevin',
+      'voice_url': '',
+      'age': null
+    },
+    {
+      'name': 'kris',
+      'accent': 'ENG',
+      'gender': 'Male',
+      'voice_id': 'kris',
+      'voice_url': '',
+      'age': null
+    },
+    {
+      'name': 'linda',
+      'accent': 'ENG',
+      'gender': 'Female',
+      'voice_id': 'linda',
+      'voice_url': '',
+      'age': null
+    },
+    {
+      'name': 'madison',
+      'accent': 'ENG',
+      'gender': 'Female',
+      'voice_id': 'madison',
+      'voice_url': '',
+      'age': null
+    },
+    {
+      'name': 'marge',
+      'accent': 'ENG',
+      'gender': 'Female',
+      'voice_id': 'marge',
+      'voice_url': '',
+      'age': null
+    },
+    {
+      'name': 'marina',
+      'accent': 'ENG',
+      'gender': 'Female',
+      'voice_id': 'marina',
+      'voice_url': '',
+      'age': null
+    },
+    {
+      'name': 'marissa',
+      'accent': 'ENG',
+      'gender': 'Female',
+      'voice_id': 'marissa',
+      'voice_url': '',
+      'age': null
+    },
+    {
+      'name': 'marta',
+      'accent': 'ENG',
+      'gender': 'Female',
+      'voice_id': 'marta',
+      'voice_url': '',
+      'age': null
+    },
+    {
+      'name': 'maya',
+      'accent': 'ENG',
+      'gender': 'Female',
+      'voice_id': 'maya',
+      'voice_url': '',
+      'age': null
+    },
+    {
+      'name': 'nicholas',
+      'accent': 'ENG',
+      'gender': 'Male',
+      'voice_id': 'nicholas',
+      'voice_url': '',
+      'age': null
+    },
+    {
+      'name': 'nyles',
+      'accent': 'ENG',
+      'gender': 'Male',
+      'voice_id': 'nyles',
+      'voice_url': '',
+      'age': null
+    },
+    {
+      'name': 'phil',
+      'accent': 'ENG',
+      'gender': 'Male',
+      'voice_id': 'phil',
+      'voice_url': '',
+      'age': null
+    },
+    {
+      'name': 'reba',
+      'accent': 'ENG',
+      'gender': 'Female',
+      'voice_id': 'reba',
+      'voice_url': '',
+      'age': null
+    },
+    {
+      'name': 'rex',
+      'accent': 'ENG',
+      'gender': 'Male',
+      'voice_id': 'rex',
+      'voice_url': '',
+      'age': null
+    },
+    {
+      'name': 'rick',
+      'accent': 'ENG',
+      'gender': 'Male',
+      'voice_id': 'rick',
+      'voice_url': '',
+      'age': null
+    },
+    {
+      'name': 'ritu',
+      'accent': 'ENG',
+      'gender': 'Female',
+      'voice_id': 'ritu',
+      'voice_url': '',
+      'age': null
+    },
+    {
+      'name': 'rob',
+      'accent': 'ENG',
+      'gender': 'Male',
+      'voice_id': 'rob',
+      'voice_url': '',
+      'age': null
+    },
+    {
+      'name': 'rodney',
+      'accent': 'ENG',
+      'gender': 'Male',
+      'voice_id': 'rodney',
+      'voice_url': '',
+      'age': null
+    },
+    {
+      'name': 'rohan',
+      'accent': 'ENG',
+      'gender': 'Male',
+      'voice_id': 'rohan',
+      'voice_url': '',
+      'age': null
+    },
+    {
+      'name': 'rosco',
+      'accent': 'ENG',
+      'gender': 'Male',
+      'voice_id': 'rosco',
+      'voice_url': '',
+      'age': null
+    },
+    {
+      'name': 'samantha',
+      'accent': 'ENG',
+      'gender': 'Female',
+      'voice_id': 'samantha',
+      'voice_url': '',
+      'age': null
+    },
+    {
+      'name': 'sandy',
+      'accent': 'ENG',
+      'gender': 'Female',
+      'voice_id': 'sandy',
+      'voice_url': '',
+      'age': null
+    },
+    {
+      'name': 'selena',
+      'accent': 'ENG',
+      'gender': 'Female',
+      'voice_id': 'selena',
+      'voice_url': '',
+      'age': null
+    },
+    {
+      'name': 'seth',
+      'accent': 'ENG',
+      'gender': 'Male',
+      'voice_id': 'seth',
+      'voice_url': '',
+      'age': null
+    },
+    {
+      'name': 'sharon',
+      'accent': 'ENG',
+      'gender': 'Female',
+      'voice_id': 'sharon',
+      'voice_url': '',
+      'age': null
+    },
+    {
+      'name': 'stan',
+      'accent': 'ENG',
+      'gender': 'Male',
+      'voice_id': 'stan',
+      'voice_url': '',
+      'age': null
+    },
+    {
+      'name': 'tamra',
+      'accent': 'ENG',
+      'gender': 'Female',
+      'voice_id': 'tamra',
+      'voice_url': '',
+      'age': null
+    },
+    {
+      'name': 'tanya',
+      'accent': 'ENG',
+      'gender': 'Female',
+      'voice_id': 'tanya',
+      'voice_url': '',
+      'age': null
+    },
+    {
+      'name': 'tibur',
+      'accent': 'ENG',
+      'gender': 'Male',
+      'voice_id': 'tibur',
+      'voice_url': '',
+      'age': null
+    },
+    {
+      'name': 'tj',
+      'accent': 'ENG',
+      'gender': 'Male',
+      'voice_id': 'tj',
+      'voice_url': '',
+      'age': null
+    },
+    {
+      'name': 'tyler',
+      'accent': 'ENG',
+      'gender': 'Male',
+      'voice_id': 'tyler',
+      'voice_url': '',
+      'age': null
+    },
+    {
+      'name': 'viv',
+      'accent': 'ENG',
+      'gender': 'Female',
+      'voice_id': 'viv',
+      'voice_url': '',
+      'age': null
+    },
+    {
+      'name': 'yadira',
+      'accent': 'ENG',
+      'gender': 'Female',
+      'voice_id': 'yadira',
+      'voice_url': '',
+      'age': null
+    },
+    {
+      'name': 'zest',
+      'accent': 'ENG',
+      'gender': 'Female',
+      'voice_id': 'zest',
+      'voice_url': '',
+      'age': null
+    },
+    {
+      'name': 'isa',
+      'accent': 'SPA',
+      'gender': 'Female',
+      'voice_id': 'isa',
+      'voice_url': '',
+      'age': null
+    },
+    {
+      'name': 'mari',
+      'accent': 'SPA',
+      'gender': 'Female',
+      'voice_id': 'mari',
+      'voice_url': '',
+      'age': null
+    },
+    {
+      'name': 'pablo',
+      'accent': 'SPA',
+      'gender': 'Male',
+      'voice_id': 'pablo',
+      'voice_url': '',
+      'age': null
+    },
+    {
+      'name': 'alois',
+      'accent': 'FRA',
+      'gender': 'Male',
+      'voice_id': 'alois',
+      'voice_url': '',
+      'age': null
+    },
+    {
+      'name': 'juliette',
+      'accent': 'FRA',
+      'gender': 'Female',
+      'voice_id': 'juliette',
+      'voice_url': '',
+      'age': null
+    },
+    {
+      'name': 'marguerite',
+      'accent': 'FRA',
+      'gender': 'Female',
+      'voice_id': 'marguerite',
+      'voice_url': '',
+      'age': null
+    },
+    {
+      'name': 'amalia',
+      'accent': 'GER',
+      'gender': 'Female',
+      'voice_id': 'amalia',
+      'voice_url': '',
+      'age': null
+    },
+    {
+      'name': 'frieda',
+      'accent': 'GER',
+      'gender': 'Female',
+      'voice_id': 'frieda',
+      'voice_url': '',
+      'age': null
+    },
+    {
+      'name': 'karolina',
+      'accent': 'GER',
+      'gender': 'Female',
+      'voice_id': 'karolina',
+      'voice_url': '',
+      'age': null
+    },
+    {
+      'name': 'klaus',
+      'accent': 'GER',
+      'gender': 'Male',
+      'voice_id': 'klaus',
+      'voice_url': '',
+      'age': null
+    }
+  ]
+  return voices;
+};
+
 exports.buyNumberFunction = async (user_id, countryISO,plan_id,session_id,type='checkout') => {
   if (!countryISO) {
     return { success: false, message: "countryISO is required" };

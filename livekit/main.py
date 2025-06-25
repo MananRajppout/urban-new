@@ -9,7 +9,7 @@ from livekit.agents import (
     WorkerOptions,
     cli,
     llm,
-    metrics,
+    metrics
 )
 from livekit.agents.pipeline import VoicePipelineAgent
 from livekit.plugins import deepgram, openai, silero, smallest, elevenlabs, sarvam
@@ -30,6 +30,8 @@ import json
 from livekit.plugins import groq
 from livekit.plugins import noise_cancellation
 import uuid
+from livekit.plugins import rime
+import os
 
 logger = logging.getLogger("voice-assistant")
 load_dotenv()
@@ -98,6 +100,14 @@ async def create_tts_engine(assistant_info: Assistant):
             ),
         )
         return elevenlabs.TTS(api_key=assistant_info.get("elevenlabs_api_key"),voice=DEFAULT_VOICE)
+    elif tts_engine_name == "rime":
+        return rime.TTS(
+            model="mistv2",
+            speaker=voice_id,
+            speed_alpha=0.9,
+            reduce_latency=True,
+            api_key=assistant_info.get("rime_api_key")
+        )
     else:
         # Default to fastest option
         return deepgram.TTS(model="aura-asteria-en")

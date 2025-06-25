@@ -40,6 +40,11 @@ const userSchema = new mongoose.Schema({
     required: false,
     default: "",
   },
+  rime_api_key: {
+    type: String,
+    required: false,
+    default: "",
+  },
 
   subscriptions: [
     {
