@@ -76,7 +76,7 @@ async def create_tts_engine(assistant_info: Assistant):
 
     if tts_engine_name == "deepgram":
         # Deepgram is typically fastest
-        return deepgram.TTS(model=voice_id, encoding="linear16")
+        return deepgram.TTS(model=voice_id)
     elif tts_engine_name == "sarvam":
         return sarvam.TTS(
             speaker=voice_id, 
@@ -101,10 +101,13 @@ async def create_tts_engine(assistant_info: Assistant):
         )
         return elevenlabs.TTS(api_key=assistant_info.get("elevenlabs_api_key"),voice=DEFAULT_VOICE)
     elif tts_engine_name == "rime":
+        def transform(x):
+            return 2.0 - x if x > 1.0 else x
+        speed = transform(assistant_info.get("voice_speed", 1.0))
         return rime.TTS(
             model="mistv2",
             speaker=voice_id,
-            speed_alpha=0.9,
+            speed_alpha=speed,  # Adjust speed to match Rime's expected range
             reduce_latency=True,
             api_key=assistant_info.get("rime_api_key")
         )
@@ -229,15 +232,15 @@ async def entrypoint(ctx: JobContext):
     # Use faster STT model
     dg_model = "nova-2-general"  # Faster than nova-3
 
-    def replace_words(assistant: VoicePipelineAgent, text: str):
-        return tokenize.utils.replace_words(text=text, replacements={r"\*": " "})
+    # def replace_words(assistant: VoicePipelineAgent, text: str):
+    #     return tokenize.utils.replace_words(text=text, replacements={r"\*": " "})
 
     # Create voice pipeline agent
     agent = VoicePipelineAgent(
         vad=ctx.proc.userdata["vad"],
         stt=deepgram.STT(language="hi", model=dg_model,smart_format=False,punctuate=False,filler_words=False),
         llm=gpt_llm,
-        before_tts_cb=replace_words,
+        # before_tts_cb=replace_words,
         tts=tts,
         chat_ctx=initial_ctx,
         fnc_ctx=fnc_ctx,
