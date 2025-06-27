@@ -76,7 +76,7 @@ async def create_tts_engine(assistant_info: Assistant):
 
     if tts_engine_name == "deepgram":
         # Deepgram is typically fastest
-        return deepgram.TTS(model=voice_id)
+        return deepgram.TTS(model="aura-2-asteria-en")
     elif tts_engine_name == "sarvam":
         return sarvam.TTS(
             speaker=voice_id, 
@@ -123,7 +123,7 @@ async def create_llm_engine(assistant_info: Assistant):
     # Optimized LLM settings for speed
     base_config = {
         "parallel_tool_calls": True,
-        "max_tokens": 150,  # Limit response length for faster generation
+        "max_tokens": 100,  # Limit response length for faster generation
         "temperature": 0.7,  # Slightly lower for faster, more focused responses
     }
     
