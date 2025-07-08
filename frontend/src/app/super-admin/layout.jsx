@@ -1,7 +1,8 @@
 import "@/styles/tailwind.css";
 import AdminLayout from '@/components/admin/AdminLayout';
+import ProtectRoute from "@/components/admin/ProtectRoute";
 
 
 export default function AdminRootLayout({ children }) {
-  return <AdminLayout>{children}</AdminLayout>;
+  return   <ProtectRoute><AdminLayout>{children}</AdminLayout></ProtectRoute>;
 }

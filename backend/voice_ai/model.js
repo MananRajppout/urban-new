@@ -185,7 +185,9 @@ const aiAgentSchema = new mongoose.Schema({
   silence_1_timeout: {type: Number,default: 15},
   silence_2_timeout: {type: Number,default: 15},
   silence_1_speech: {type: String,default: "You are here."},
-  silence_2_speech: {type: String,default: "Thank's you for calling."}
+  silence_2_speech: {type: String,default: "Thank's you for calling."},
+  language: {type: String, default: "en"},
+  stt_engine: {type: String, default: "nova-2-general"},
 });
 
 const twilioPhoneRecord = new mongoose.Schema({

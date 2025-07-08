@@ -10,6 +10,7 @@ require("dotenv").config();
 const passport = require("passport");
 require("./passport");
 const ExpressWs = require("express-ws");
+const tenantMiddleware = require("./middlewares/tanentMiddleware");
 ExpressWs(app);
 app.use(cookieParser());
 
@@ -45,6 +46,9 @@ app.use(
     credentials: true, // Allow cookies/auth headers
   })
 );
+
+
+app.use(tenantMiddleware)
 
 app.options("*", cors());
 
@@ -98,6 +102,8 @@ const user_management = require("./routes/user_management");
 const plivoRoute = require("./v2/routes/plivoRoute");
 const webcallRoute = require("./v2/routes/webcallRoute");
 const voiceSettingRoute = require("./v2/routes/voiceSettingRoute");
+
+
 app.use("/api", users);
 app.use("/api", chatbot);
 app.use("/api", blogs);

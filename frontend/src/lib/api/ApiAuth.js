@@ -25,13 +25,20 @@ export async function logIn(email, password) {
   return await AxiosInstance.post("/api/login", data, header);
 }
 
+export async function checkSlug(slug) {
+  let data = {
+    slug
+  };
+  return await AxiosInstance.post("/api/check-slug-avaible", data, header);
+}
 
 
-
-export async function signUp(email, password) {
+export async function signUp(email, password,name,slug) {
   let data = {
     email,
-    password
+    password,
+    full_name: name,
+    slug
   };
   return await AxiosInstance.post("/api/register-user", data, header);
 }

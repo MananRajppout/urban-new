@@ -20,7 +20,9 @@ import {
   LLMOptions,
   TTSOptions,
   whoSpeaksFirstOptions,
+  LanguageOptions
 } from "@/data/modelOptions";
+import LanguageSelector from "./LanguageSelector";
 
 const modelSelectionSchema = z.object({
   sttModel: z.string().min(1, "Speech-to-Text model is required"),
@@ -46,7 +48,9 @@ const ModelSelection = ({
   elevenlabs_api_key,
   setElevenLabsApiKey,
   rime_api_key,
-  setRimeApiKey
+  setRimeApiKey,
+  language,
+  setLanguage
 }) => {
   const form = useForm({
     resolver: zodResolver(modelSelectionSchema),
@@ -56,6 +60,7 @@ const ModelSelection = ({
       ttsModel,
       voice,
       whoSpeaksFirst,
+      language,
     },
   });
 
@@ -90,11 +95,11 @@ const ModelSelection = ({
       voice.voice_name = "Raman";
       voice.voice_id = "raman";
       voice.voice_engine_name = "smallest";
-    }else if (value == "deepgram"){
+    } else if (value == "deepgram") {
       voice.voice_name = "Luna";
       voice.voice_id = "aura-luna-en";
       voice.voice_engine_name = "deepgram";
-    }else if (value == "rime"){
+    } else if (value == "rime") {
       voice.voice_name = "abbie";
       voice.voice_id = "abbie";
       voice.voice_engine_name = "rime";
@@ -106,6 +111,11 @@ const ModelSelection = ({
   const handleWhoSpeaksFirstChange = (value) => {
     setWhoSpeaksFirst(value);
     form.setValue("whoSpeaksFirst", value, { shouldValidate: true });
+  };
+
+  const handleLanguageChange = (value) => {
+    setLanguage(value);
+    form.setValue("language", value, { shouldValidate: true });
   };
 
   return (
@@ -175,6 +185,24 @@ const ModelSelection = ({
               </FormItem>
             )}
           />
+          <FormField
+            control={form.control}
+            name="sttModel"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel className="text-sm font-medium text-gray-400">
+                  Speech-to-Text Model
+                </FormLabel>
+                <STTModelSelector
+                  sttModel={sttModel}
+                  setSTTModel={handleSTTChange}
+                  options={STTOptions}
+                />
+                <FormMessage className="text-red-400 text-xs mt-1" />
+              </FormItem>
+            )}
+          />
+
 
           <FormField
             control={form.control}
@@ -209,7 +237,26 @@ const ModelSelection = ({
             )}
           />
 
+
           <FormField
+            control={form.control}
+            name="language"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel className="text-sm font-medium text-gray-400">
+                  Language
+                </FormLabel>
+                <LanguageSelector
+                  language={language}
+                  setLanguage={handleLanguageChange}
+                  options={LanguageOptions}
+                />
+                <FormMessage className="text-red-400 text-xs mt-1" />
+              </FormItem>
+            )}
+          />
+
+          {/* <FormField
             control={form.control}
             name="whoSpeaksFirst"
             render={({ field }) => (
@@ -225,7 +272,7 @@ const ModelSelection = ({
                 <FormMessage className="text-red-400 text-xs mt-1" />
               </FormItem>
             )}
-          />
+          /> */}
         </div>
       </Form>
       {ttsModel === "elevenlabs" && (

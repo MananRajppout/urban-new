@@ -3,7 +3,8 @@ const checkSessionExpiration = require("../middleware/auth");
 const { createUser, login, editUser, getUserDetails, verifyUserHash, getUserCount, deleteAccount, fetchRestriction,
     forgetPassword, resetPassword, emailSubscribe, chatbotContext,
     fetchWebsiteNotification,
-    seenWebsiteNotification} = require("../user/controller");
+    seenWebsiteNotification,
+    checkSlugAvaible} = require("../user/controller");
 const { googleCallback } = require("../user/oauth_google");
 const { facebookCallback } = require("../user/oauth_facebook");
 const { appleLogin, handleIosGoogleLogin } = require("../user/ouath_apple");
@@ -31,6 +32,7 @@ router.route("/fetch-website-notification").get(checkSessionExpiration(["custome
 
 // METHOD : POST
 router.route("/register-user").post(createUser);
+router.route("/check-slug-avaible").post(checkSlugAvaible);
 router.route("/login").post(login);
 router.route("/edit-user").post(checkSessionExpiration(["customer"]), editUser);
 router.route("/delete-user").post(checkSessionExpiration(["customer", "admin"]), deleteAccount);

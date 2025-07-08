@@ -32,6 +32,7 @@ from livekit.plugins import noise_cancellation
 import uuid
 from livekit.plugins import rime
 import os
+from livekit.plugins import groq
 
 logger = logging.getLogger("voice-assistant")
 load_dotenv()
@@ -148,6 +149,40 @@ async def create_llm_engine(assistant_info: Assistant):
         return groq.LLM(model="llama-3.1-8b-instant", **base_config)
 
 
+async def create_stt_engine(assistant_info: Assistant):
+    stt_engine = assistant_info.get("stt_engine", "nova-2-general")
+    language = assistant_info.get("language", "en")
+    print(f"stt_engine: {stt_engine}, language: {language}")
+
+    if stt_engine == "nova-2-general":
+        return deepgram.STT(language=language, model="nova-2-general",smart_format=False,punctuate=False,filler_words=False)
+    elif stt_engine == "nova-2-phonecall":
+        return deepgram.STT(language=language, model="nova-2-phonecall",smart_format=False,punctuate=False,filler_words=False)
+    elif stt_engine == "nova-2-meeting":
+        return deepgram.STT(language=language, model="nova-2-meeting",smart_format=False,punctuate=False,filler_words=False)
+    elif stt_engine == "nova-2-finance":
+        return deepgram.STT(language=language, model="nova-2-finance",smart_format=False,punctuate=False,filler_words=False)
+    elif stt_engine == "nova-2-conversationalai":
+        return deepgram.STT(language=language, model="nova-2-conversationalai",smart_format=False,punctuate=False,filler_words=False)
+    elif stt_engine == "nova-2-medical":
+        return deepgram.STT(language=language, model="nova-2-medical",smart_format=False,punctuate=False,filler_words=False)
+    elif stt_engine == "nova-2-drivethru":
+        return deepgram.STT(language=language, model="nova-2-drivethru",smart_format=False,punctuate=False,filler_words=False)
+    elif stt_engine == "nova-2-automotive":
+        return deepgram.STT(language=language, model="nova-2-automotive",smart_format=False,punctuate=False,filler_words=False)
+    elif stt_engine == "nova-2-atc":
+        return deepgram.STT(language=language, model="nova-2-atc",smart_format=False,punctuate=False,filler_words=False)
+    elif stt_engine == "distil-whisper-large-v3-en":
+        return groq.STT(language=language, model="distil-whisper-large-v3-en")
+    elif stt_engine == "whisper-large-v3-turbo":
+        return groq.STT(language=language, model="whisper-large-v3-turbo")
+    elif stt_engine == "nova-3":
+        return deepgram.STT(language=language, model="nova-3",smart_format=False,punctuate=False,filler_words=False)
+    elif stt_engine == "nova-3-medical":
+        return deepgram.STT(language=language, model="nova-3-medical",smart_format=False,punctuate=False,filler_words=False)
+    else:
+        return deepgram.STT(language=language, model="nova-2-general",smart_format=False,punctuate=False,filler_words=False)
+
 async def get_assistant_info(proc_userdata: dict, agent_id: str) -> Assistant | None:
     """Get assistant info with caching for faster retrieval"""
     # cache = proc_userdata["assistant_cache"]
@@ -224,25 +259,18 @@ async def entrypoint(ctx: JobContext):
     timing["engines_start"] = time()
     tts_task = asyncio.create_task(create_tts_engine(assistant_info))
     llm_task = asyncio.create_task(create_llm_engine(assistant_info))
+    stt_task = asyncio.create_task(create_stt_engine(assistant_info))
     
-    tts, gpt_llm = await asyncio.gather(tts_task, llm_task)
+    tts, gpt_llm, stt = await asyncio.gather(tts_task, llm_task, stt_task)
     timing["engines_ready"] = time()
     logger.info(f"Engines initialized in {timing['engines_ready'] - timing['engines_start']:.3f}s")
-
-    # Use faster STT model
-    dg_model = "nova-2-general"  # Faster than nova-3
-
-    # def replace_words(assistant: VoicePipelineAgent, text: str):
-    #     return tokenize.utils.replace_words(text=text, replacements={r"\*": " "})
 
     # Create voice pipeline agent
     agent = VoicePipelineAgent(
         vad=ctx.proc.userdata["vad"],
-        stt=deepgram.STT(language="hi", model=dg_model,smart_format=False,punctuate=False,filler_words=False),
+        stt=stt,
         llm=gpt_llm,
-        # before_tts_cb=replace_words,
         tts=tts,
-        chat_ctx=initial_ctx,
         fnc_ctx=fnc_ctx,
         noise_cancellation=noise_cancellation.BVC()
     )

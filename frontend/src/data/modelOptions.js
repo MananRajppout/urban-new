@@ -1,5 +1,25 @@
+export const LanguageOptions = [
+  { name: "English", value: "en" },
+  { name: "Hindi", value: "hi" },
+];
+
+
 export const STTOptions = [
-  { name: "Deepgram Nova 3", value: "deepgram-nova-3" },
+  { name: "nova-3", value: "nova-3" },
+  { name: "nova-3-general", value: "nova-3-general" },
+  { name: "nova-3-medical", value: "nova-3-medical" },
+  { name: "nova-2", value: "nova-2" },
+  { name: "nova-2-phonecall", value: "nova-2-phonecall" },
+  { name: "nova-2-general", value: "nova-2-general" },
+  { name: "nova-2-meeting", value: "nova-2-meeting" },
+  { name: "nova-2-finance", value: "nova-2-finance" },
+  { name: "nova-2-conversationalai", value: "nova-2-conversationalai" },
+  { name: "nova-2-medical", value: "nova-2-medical" },
+  { name: "nova-2-drivethru", value: "nova-2-drivethru" },
+  { name: "nova-2-automotive", value: "nova-2-automotive" },
+  { name: "nova-2-atc", value: "nova-2-atc" },
+  { name: "distil-whisper-large-v3-en", value: "distil-whisper-large-v3-en" },
+  { name: "whisper-large-v3-turbo", value: "whisper-large-v3-turbo" },
 ];
 
 export const LLMOptions = [

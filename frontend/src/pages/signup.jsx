@@ -1,3 +1,4 @@
+"use client"
 import React, { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import ParticleBackground from "@/components/ParticleBackground";
@@ -11,13 +12,13 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { UserPlus, Mail, Lock, User, ArrowLeft } from "lucide-react";
+import { UserPlus, Mail, Lock, User, ArrowLeft, Loader2 } from "lucide-react";
 import { isIOS, isMacOs, browserName } from 'react-device-detect';
 import { GoogleLogin, useGoogleLogin } from "@react-oauth/google";
 
 
 
-import { iosLogIn, signUp } from "@/lib/api/ApiAuth";
+import { checkSlug, iosLogIn, signUp } from "@/lib/api/ApiAuth";
 import toast from "react-hot-toast";
 import { useRouter } from "next/router";
 
@@ -28,10 +29,25 @@ const SignUpPage = () => {
   const [emailError, setEmailError] = useState("");
   const [passwordError, setPasswordError] = useState("");
   const [confirmPasswordError, setConfirmPasswordError] = useState("");
+  const [slugError, setSlugError] = useState("");
+  const [slugMessage, setSlugMessage] = useState("");
   const [generalError, setGeneralError] = useState("");
   const [activePage, setActivePage] = useState("sign-up"); // sign-up, confirm-email
   const [isLoading, setIsLoading] = useState(false);
+  const [whitelabel, setWhiteLabel] = useState(false);
+  const [slug, setSlug] = useState("");
   const router = useRouter();
+  const timeoutRef = useRef(null);
+  const [slugLoading, setSlugLoading] = useState(false);
+  const [isSlugUnique, setIsSlugUnique] = useState(false);
+  const [showWhiteLabelOpntion, setWhiteLabelOption] = useState(false);
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const isOriginSame = window.location.hostname == process.env.NEXT_PUBLIC_MAIN_DOMAIN;
+      setWhiteLabelOption(isOriginSame);
+    }
+  }, [])
 
 
   //check for device and browser for login
@@ -43,13 +59,48 @@ const SignUpPage = () => {
     email: "",
     password: "",
     confirmPassword: "",
+    slug: ""
   });
+
+  useEffect(() => {
+    timeoutRef.current = setTimeout(async () => {
+      if (!slug) {
+        setSlugError("")
+        setSlugMessage("")
+        return
+      }
+      setSlugLoading(true);
+      try {
+        const res = await checkSlug(slug);
+        setSlugError("")
+        setSlugMessage("")
+        if (res.data.success) {
+          setIsSlugUnique(true)
+          setSlugMessage(res.data.message)
+        } else {
+          setIsSlugUnique(false);
+          setSlugError(res.data.message)
+        }
+      } catch (error) {
+        setSlugError(error?.response?.data?.message)
+      } finally {
+        setSlugLoading(false);
+      }
+    }, 1000);
+
+
+    return () => {
+      clearTimeout(timeoutRef.current);
+    }
+  }, [slug])
+
+
 
   useEffect(() => {
     document.title = "Sign Up | UrbanChat.ai";
   }, []);
 
-    //use for signup with google signupGoogle function  remove the passport js 
+  //use for signup with google signupGoogle function  remove the passport js 
   const handleGoogleSignUp = () => {
     window.location.href = "https://backend.urbanchat.ai/api/auth/google";
   };
@@ -72,7 +123,7 @@ const SignUpPage = () => {
         window.dispatchEvent(event);
         setTimeout(() => {
           router.push("/ai-voice-agent");
-        },500);
+        }, 500);
 
       } catch (err) {
         console.log(' Error calling backend:', err);
@@ -118,11 +169,23 @@ const SignUpPage = () => {
       return;
     }
 
+    if (whitelabel && !slug) {
+      setSlug("Slug is required.");
+      return
+    }
+
+    if (whitelabel && !isSlugUnique) {
+      setSlug("Slug must be unique.");
+      return
+    }
+
     try {
       setIsSubmit(true);
       const res = await signUp(
         formData.current.email,
-        formData.current.password
+        formData.current.password,
+        formData.current.name,
+        formData.current.slug
       );
 
       if (res.data && res.data.success) {
@@ -167,10 +230,22 @@ const SignUpPage = () => {
             </p>
           </div>
 
+
+
           <Card className="glass-panel border-white/10">
             <CardHeader>
               <CardTitle className="text-2xl font-bold mb-0">Sign Up</CardTitle>
+              {
+                showWhiteLabelOpntion &&
+                <div className="flex items-center justify-center gap-4 pt-4 pb-1">
+                  <button className={`cursor-pointer px-4 py-2 text-white ${!whitelabel ? "bg-green-500" : "bg-gray-700"} border-none flex-1`} onClick={() => setWhiteLabel(false)}>Customer</button>
+                  <button className={`cursor-pointer px-4 py-2 text-white ${whitelabel ? "bg-green-500" : "bg-gray-700"} border-none flex-1`} onClick={() => setWhiteLabel(true)}>White Label</button>
+                </div>
+              }
               <CardDescription>
+                {
+                  whitelabel ? "SignUp to access your AI voice agents" : "Join as an end to access our AI voice platform"
+                }
                 Enter your details to create an account
               </CardDescription>
             </CardHeader>
@@ -313,6 +388,52 @@ const SignUpPage = () => {
                   </span>
                 )}
               </div>
+
+              {
+                whitelabel &&
+                <div className="space-y-2">
+                  <label
+                    htmlFor="slug"
+                    className="text-sm font-medium"
+                  >
+                    Slug Name
+                  </label>
+                  <div className="relative flex items-center gap-1">
+
+                    <input
+                      id="slug"
+                      type="text"
+                      placeholder="example"
+                      className="border-0  outline-none bg-transparent border-b-2 border-gray-200 py-2 px-2 flex-1"
+                      onChange={(e) => {
+                        (formData.current.slug = e.target.value)
+                        setSlug(e.target.value)
+                      }
+                      }
+                    />
+
+                    <p className="text-white">.{process.env.NEXT_PUBLIC_MAIN_DOMAIN}</p>
+                  </div>
+
+                  <div className="flex items-center gap-2">
+                    {
+                      slugLoading && <Loader2 className="text-green-500 animate-spin" />
+                    }
+                    {slugError && (
+                      <span className="text-red-500 text-xs">
+                        {slugError}
+                      </span>
+                    )}
+
+                    {slugMessage && (
+                      <span className="text-green-500 text-xs">
+                        {slugMessage}
+                      </span>
+                    )}
+                  </div>
+                </div>
+              }
+
 
               {/* General error message */}
               {generalError && (

@@ -14,7 +14,8 @@ export default function CustomerDashbaordHeader({
   showDownload = false,
   showDocs = false,
   onDateRangeChange,
-  handleAssignMinutes
+  handleAssignMinutes,
+  showWhiteLabelOpntion
 }) {
   const router = useRouter();
 
@@ -40,7 +41,7 @@ export default function CustomerDashbaordHeader({
               Download
             </Button>
           )}
-          {showDownload && (
+          {true && (
             <Button variant="outline" onClick={handleAssignMinutes} className="text-white border-none cursor-pointer bg-dark-200">
               <Clock className="mr-2 h-4 w-4" />
               Assign Minutes

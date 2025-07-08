@@ -106,8 +106,8 @@ exports.hangupWebhook = catchAsyncError(async (req, res) => {
   callHistory.disconnection_reason = disconnection_reason;
   callHistory.direction = direction;
   callHistory.calltype = callType;
-  if(from) callHistory.from_phone_number = from
-  if(to) callHistory.plivo_phone_number = to
+  if (from) callHistory.from_phone_number = from
+  if (to) callHistory.plivo_phone_number = to
 
   const durationInMinutes = getMinutesDiff(
     callHistory.start_time,
@@ -121,17 +121,34 @@ exports.hangupWebhook = catchAsyncError(async (req, res) => {
   const restriction = await getRestriction(agent.user_id);
   if (restriction && user) {
     // if (user.voice_ai_status === "free_trial") {
-      restriction.voice_trial_minutes_used += durationInMinutes;
-      if (
-        restriction.voice_trial_minutes_used >
-        restriction.voice_trial_minutes_limit
-      ) {
-        user.voice_ai_status = "inactive";
-        await user.save();
-      }
-      await restriction.save();
+    restriction.voice_trial_minutes_used += durationInMinutes;
+    if (
+      restriction.voice_trial_minutes_used >
+      restriction.voice_trial_minutes_limit
+    ) {
+      user.voice_ai_status = "inactive";
+      await user.save();
+    }
+    await restriction.save();
     // }
   }
+
+  //cut tenant minutes too
+  const tenantProvider = await User.findOne({ slug_name: user.tenant });
+  if (user.tenant !== "main" && tenantProvider._id.toString() !== user._id.toString()) {
+    const restriction = await getRestriction(tenantProvider._id);
+    restriction.voice_trial_minutes_used += durationInMinutes;
+
+    if (
+      restriction.voice_trial_minutes_used >
+      restriction.voice_trial_minutes_limit
+    ) {
+      tenantProvider.voice_ai_status = "inactive";
+      await tenantProvider.save();
+    }
+    await restriction.save();
+  }
+
 
   // Find the active sheet configuration for this agent
   const config = await SheetConfig.findOne({
@@ -139,7 +156,7 @@ exports.hangupWebhook = catchAsyncError(async (req, res) => {
     is_active: true,
   });
 
-  console.log("callHistory.sheet_call", callHistory.sheet_call); 
+  console.log("callHistory.sheet_call", callHistory.sheet_call);
   if (config && callHistory.sheet_call) {
     try {
       // Update the row in the sheet with call status and summary separately

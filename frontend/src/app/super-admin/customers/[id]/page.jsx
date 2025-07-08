@@ -35,6 +35,15 @@ export default function DashboardPage({ params }) {
   const [dashboardStats, setData] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
 
+  const [showWhiteLabelOpntion, setWhiteLabelOption] = useState(false);
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const isOriginSame = window.location.hostname == process.env.NEXT_PUBLIC_MAIN_DOMAIN;
+      setWhiteLabelOption(isOriginSame);
+    }
+  }, [id]);
+
   // const {
   //   data: dashboardStats,
   //   isLoading: statsLoading,
@@ -96,7 +105,7 @@ export default function DashboardPage({ params }) {
 
   return (
     <div className="space-y-6">
-      <CustomerDashbaordHeader heading={`${dashboardStats?.data?.user?.full_name} Dashaboard`} handleAssignMinutes={handleAssignMinutes} text="View your business metrics and performance." showDateRange showDownload showDocs onDateRangeChange={handleDateRangeChange} />
+      <CustomerDashbaordHeader showWhiteLabelOpntion={showWhiteLabelOpntion} heading={`${dashboardStats?.data?.user?.full_name} Dashaboard`} handleAssignMinutes={handleAssignMinutes} text="View your business metrics and performance." showDateRange showDownload showDocs onDateRangeChange={handleDateRangeChange} />
 
       {
         isLoading &&

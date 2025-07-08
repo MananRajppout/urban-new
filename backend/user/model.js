@@ -56,6 +56,32 @@ const userSchema = new mongoose.Schema({
       unique_id: { type: String, required: true },
     },
   ],
+
+  role: {
+    type: String,
+    default: "user",
+    enum: ["user","admin","super-admin"]
+  },
+
+  custom_domain: {
+    type: String,
+    default: undefined,
+    unique: true,
+    sparse: true
+  },
+
+  slug_name: {
+    type: String,
+    default: undefined,
+    unique: true
+  },
+
+  tenant: {
+    type: String,
+    default: "main",
+    ref: "User"
+  }
+  
 });
 
 const verificationTokenSchema = new mongoose.Schema({

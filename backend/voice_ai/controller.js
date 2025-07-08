@@ -962,7 +962,7 @@ exports.fetchCallHistory = catchAsyncError(async (req, res) => {
 
 exports.getSuperAdminDashboardData = catchAsyncError(async (req, res) => {
   const { startDate, endDate } = req.query;
-
+  const tenant = req.tenant;
   let dateFilter;
   if (startDate && endDate) {
     dateFilter = { $gte: new Date(startDate), $lt: new Date(endDate) };
@@ -973,11 +973,15 @@ exports.getSuperAdminDashboardData = catchAsyncError(async (req, res) => {
     dateFilter = { $gte: start, $lte: end };
   }
 
+  const users = await User.find({tenant });
+  const userIds = users.map((user) => user._id.toString());
+
   const callStats = await CallHistory.aggregate([
     {
       $match: {
-        start_time: dateFilter
-      },
+        start_time: dateFilter,
+        user_id: { $in: userIds }
+      }
     },
     {
       $group: {
@@ -1031,6 +1035,7 @@ exports.getSuperAdminDashboardData = catchAsyncError(async (req, res) => {
     {
       $match: {
         created_time: dateFilter,
+        tenant
       },
     },
     {
@@ -1349,7 +1354,7 @@ exports.getSuperAdminUserDashboardData = catchAsyncError(async (req, res) => {
 
 exports.getAllCustomers = catchAsyncError(async (req, res) => {
   const { startDate, endDate,search='', page = 1, limit = 10 } = req.query;
-
+  const tenant = req.tenant;
   const query = {};
 
   if (startDate && endDate) {
@@ -1368,6 +1373,8 @@ exports.getAllCustomers = catchAsyncError(async (req, res) => {
       { phone_number: isNaN(search) ? -1 : Number(search) }, // handle numeric input
     ];
   }
+
+  query.tenant = tenant;
   
   const skip = (parseInt(page) - 1) * parseInt(limit);
 
@@ -1410,15 +1417,30 @@ exports.getAllCustomers = catchAsyncError(async (req, res) => {
 
 exports.superAdminAssisgNumber = catchAsyncError(async (req, res) => {
   const { user_id,minutes } = req.body;
+  const tenant = req.tenant;
   const restriction = await Restriction.findOne({ id: user_id });
   
   if (typeof restriction.voice_trial_minutes_limit !== 'number') {
     restriction.voice_trial_minutes_limit = 0;
   }
 
+  const user = await User.findById(user_id);
+  if(tenant !== "main"){
+    const TenantProvider = await User.findOne({slug_name: user.tenant});
+    const restriction = await Restriction.findOne({ id: TenantProvider._id });
+    const remaining = restriction.voice_trial_minutes_limit - restriction.voice_trial_minutes_used;
+    if((remaining - Number(minutes)) <= 0){
+      return res.status(401).json({
+        success: false,
+        message: "You don't have enough minutes."
+      });
+    }
+
+    restriction.voice_trial_minutes_used += Number(minutes);
+    await restriction.save();
+  }
 
   restriction.voice_trial_minutes_limit += Number(minutes);
-  const user = await User.findById(user_id);
 
   user.voice_ai_status = "active";
   user.is_active = true;

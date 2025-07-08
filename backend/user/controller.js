@@ -24,8 +24,10 @@ const { ChatModel } = require("../chatbot/model");
 exports.login = catchAsyncError(async (req, res, next) => {
   const { email, password } = req.body;
 
+  const tenant = req.tenant;
+
   if (email && password) {
-    const user = await User.findOne({ email }).select("+password");
+    const user = await User.findOne({ email, tenant }).select("+password");
     if (user) {
       if (!user.password) {
         return res.status(400).json({
@@ -58,13 +60,26 @@ exports.login = catchAsyncError(async (req, res, next) => {
 });
 
 exports.createUser = catchAsyncError(async (req, res, next) => {
-  const { email, password } = req.body;
-  
+  const { email, password, slug, full_name } = req.body;
+  const tenant = req.tenant;
+
+  if (slug){
+    let user = await User.findOne({
+      $or: [{ slug_name: slug }],
+    });
+
+    if (user) {
+      return res
+        .status(400)
+        .json({ success: false, message: `${slug} is already taken.` });
+    }
+  }
+
   if (!email || !password) {
     return res.status(400).json({ message: "All fields are required" });
   }
   let user = await User.findOne({
-    $or: [{ email: email }],
+    $or: [{ email: email,tenant }],
   });
 
   if (user) {
@@ -82,12 +97,45 @@ exports.createUser = catchAsyncError(async (req, res, next) => {
   const salt = await bcrypt.genSalt(10);
   const hashPassword = await bcrypt.hash(trimmedpassword, salt);
   req.body.password = hashPassword;
-  user = await User.create(req.body);
+
+  const data = {
+    email,
+    password: hashPassword,
+    full_name,
+    tenant
+  }
+  if(slug){
+    data["slug_name"] = slug;
+    data["tenant"] = slug;
+    data["role"] = "admin";
+  }
   
+  user = await User.create(data);
+
   sendVerificationEmail(email);
- 
+
   await updatePricingPlan(user._id, await getPricingPlan(user._id));
   res.status(200).send({ success: true, message: "Please verify your email" });
+});
+
+
+
+
+exports.checkSlugAvaible = catchAsyncError(async (req, res, next) => {
+  const { slug } = req.body;
+
+
+  let user = await User.findOne({
+    $or: [{ slug_name: slug }],
+  });
+
+  if (user) {
+    return res
+      .status(400)
+      .json({ success: false, message: `${slug} is already taken.` });
+  }
+
+  res.status(200).send({ success: true, message: `${slug} is avaible.` });
 });
 
 exports.editUser = catchAsyncError(async (req, res, next) => {
@@ -178,11 +226,13 @@ exports.verifyUserHash = catchAsyncError(async (req, res, next) => {
   user.is_active = true;
   await user.save();
 
+  const TanentProvider = await User.findOne({slug_name: user.tenant});
+  const url = TanentProvider.custom_domain ? `https://${TanentProvider.custom_domain}/signin` : `https://${TanentProvider.slug_name}.${process.env.MAIN_DOMAIN}/signin`
   await VerificationToken.deleteOne({ token });
-  ctx = { login_link: "https://urbanchat.ai/login" };
+  ctx = { login_link: url };
   sendMailFun("signup_confirmation", ctx, user.email);
-
-  res.redirect("https://urbanchat.ai/login?verified=true");
+  console.log(`${url}?verified=true`)
+  res.redirect(`${url}?verified=true`);
 });
 
 const sendVerificationEmail = async (user_email) => {
@@ -198,6 +248,7 @@ const sendVerificationEmail = async (user_email) => {
 
     // Send a verification email to the user
     const verification_link = `https://backend.urbanchat.ai/api/verify-user?token=${token}`;
+    console.log(verification_link)
     ctx = { verification_link: verification_link }; //user_email
     const result = await sendMailFun("account_verification", ctx, user_email);
 
@@ -293,7 +344,7 @@ exports.forgetPassword = catchAsyncError(async (req, res, next) => {
       otp: otp,
     });
 
-    console.log(exisiting_otp,'check for existing otp here>>')
+    console.log(exisiting_otp, 'check for existing otp here>>')
 
     if (!exisiting_otp) {
       return res

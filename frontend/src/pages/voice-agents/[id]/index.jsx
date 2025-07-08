@@ -42,7 +42,7 @@ const AgentDetail = () => {
     _id: "",
     voice_name: "",
     voice_id: "",
-    STT_name: "",
+    stt_engine: "",
     chatgpt_model: "",
     voice_engine_name: "",
     voice_speed: 1.0,
@@ -52,7 +52,7 @@ const AgentDetail = () => {
     ambient_sound_volume: 0.3,
     who_speaks_first: "ai",
     elevenlabs_api_key: "",
-
+    language: "en",
     // cal
     isCalConnected: false,
     isBookingConnected: false,
@@ -99,7 +99,7 @@ const AgentDetail = () => {
         _id: agent._id || "",
         voice_name: agent.voice_name || "Devi",
         voice_id: agent.voice_id || "",
-        STT_name: agent.STT_name || "",
+        stt_engine: agent.stt_engine || "",
         chatgpt_model: agent.chatgpt_model || "",
         voice_engine_name: agent.voice_engine_name || "",
         voice_speed: agent.voice_speed || 1.0,
@@ -126,7 +126,7 @@ const AgentDetail = () => {
         silence_2_timeout: agent.silence_2_timeout || 15,
         silence_1_speech: agent.silence_1_speech || "You are here.",
         silence_2_speech: agent.silence_2_speech || "Thank's you for calling.",
-   
+        language: agent.language || "en", 
       });
       setPrompt({
         old: agent.base_prompt || "",
@@ -313,8 +313,10 @@ const AgentDetail = () => {
         />
         <div className="space-y-6">
           <ModelSelection
-            sttModel={agent.STT_name}
-            setSTTModel={(value) => handleFieldChange("STT_name", value)}
+            language={agent.language}
+            setLanguage={(value) => handleFieldChange("language", value)}
+            sttModel={agent.stt_engine}
+            setSTTModel={(value) => handleFieldChange("stt_engine", value)}
             llmModel={agent.chatgpt_model}
             setLLMModel={(value) => handleFieldChange("chatgpt_model", value)}
             ttsModel={agent.voice_engine_name}
