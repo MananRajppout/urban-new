@@ -4,7 +4,7 @@ const { minimatch } = require("minimatch");
 
 
 config()
-const ignoreRoutes = ["/api/fetch-ai-agent/*","/api/webcall/webhook/pickup","/api/webcall/webhook/hangup","/api/verify-user?*"]
+const ignoreRoutes = ["/api/fetch-ai-agent/*","/api/webcall/webhook/pickup","/api/webcall/webhook/hangup","/api/verify-user?*","/api/stripe-success-callback?*","/api/stripe-failure-callback?*"]
 
 function isIgnoredRoute(uri) {
   return ignoreRoutes.some((pattern) => minimatch(uri, pattern));
@@ -55,7 +55,7 @@ const tenantMiddleware = async (req, res, next) => {
     const url = req.headers.origin;
     const tenant = await extractTenantFromUrl(url);
     const uri = req.url;
-   console.log(uri)
+  //  console.log(uri,isIgnoredRoute(uri))
     if(!tenant && !isIgnoredRoute(uri)){
         return res.status(401).json({
             success: false,
