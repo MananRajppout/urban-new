@@ -421,7 +421,8 @@ async function processNextCall(config, agent) {
           phone_number: agent.plivo_phone_number,
         })
         
-        const sipCallId = await createSIPParticipant(phoneNumber, agent.plivo_phone_number, phoneRecord.sip_outbound_trunk_id, agent._id, customerName,context);
+        const callId = uuid.v4();
+        const sipCallId = await createSIPParticipant(phoneNumber, agent.plivo_phone_number, phoneRecord.sip_outbound_trunk_id, agent._id, customerName,context,callId,true);
         // Create a new CallHistory record with all required fields
         const callHistory = new CallHistory({
           caller_id: sipCallId,

@@ -1091,9 +1091,9 @@ exports.createOutboundTrunk = async (phoneNumber) => {
 }
 
 
-exports.createSIPParticipant = async (toNumber,fromNumber, trunkId,agentId,customer_name=undefined, context=undefined ) => {
+exports.createSIPParticipant = async (toNumber,fromNumber, trunkId,agentId,customer_name=undefined, context=undefined,callId=undefined,isGoogleSheet=false ) => {
   try {
-    const caller_id = uuid.v4();
+    const caller_id = callId || uuid.v4();
     const metadata = {
       agentId: agentId,
       callType: "telephone",
@@ -1103,7 +1103,8 @@ exports.createSIPParticipant = async (toNumber,fromNumber, trunkId,agentId,custo
       context: context,
       phone_number: `+${fromNumber}`,
       isWebCall: false,
-      to_phone_number: toNumber
+      to_phone_number: toNumber,
+      isGoogleSheet: isGoogleSheet
     }
 
     // Name of the room to attach the call to

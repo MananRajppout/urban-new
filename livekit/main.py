@@ -230,7 +230,8 @@ async def entrypoint(ctx: JobContext):
             participant.metadata if participant.metadata else participant.name
         )
 
-        call_ctx["callId"] = str(uuid.uuid4())
+        if(call_ctx["callId"] == "test-call-id"):
+            call_ctx["callId"] = str(uuid.uuid4())
     except Exception as e:
         logger.error(f"error parsing metadata: {e}")
         await ctx.api.room.delete_room(api.DeleteRoomRequest(room=ctx.room.name))
@@ -355,9 +356,12 @@ async def entrypoint(ctx: JobContext):
         logger.info("Web call detected")
         # Call webhook in background to avoid blocking
 
-    asyncio.create_task(
-        asyncio.to_thread(call_webhook_pickup, call_ctx, assistant_info)
-    )
+    if(call_ctx.get("isGoogleSheet") == True):
+        print("Google sheet call detected")
+    else:
+        asyncio.create_task(
+            asyncio.to_thread(call_webhook_pickup, call_ctx, assistant_info)
+        )
     
 
 
