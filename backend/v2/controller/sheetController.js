@@ -6,7 +6,7 @@ const plivoClient = require("../configs/plivoClient");
 const { createSIPParticipant } = require("../utils.js");
 const { PlivoPhoneRecord } = require("../model/plivoModel.js");
 const CallHistory = require("../../voice_ai/model.js").CallHistory;
-
+const uuid = require("uuid")
 exports.configureSheet = catchAsyncError(async (req, res) => {
   const { agent_id, spreadsheet_id, sheet_name, column_mappings,mapped } = req.body;
   const user_id = req.user.id;
