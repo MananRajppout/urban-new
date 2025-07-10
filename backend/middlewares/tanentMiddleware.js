@@ -55,7 +55,7 @@ const tenantMiddleware = async (req, res, next) => {
     const url = req.headers.origin;
     const tenant = await extractTenantFromUrl(url);
     const uri = req.url;
-  //  console.log(uri,isIgnoredRoute(uri))
+   console.log(uri,isIgnoredRoute(uri))
     if(!tenant && !isIgnoredRoute(uri)){
         return res.status(401).json({
             success: false,

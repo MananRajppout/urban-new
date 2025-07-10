@@ -272,7 +272,8 @@ async def entrypoint(ctx: JobContext):
         llm=gpt_llm,
         tts=tts,
         fnc_ctx=fnc_ctx,
-        noise_cancellation=noise_cancellation.BVC()
+        noise_cancellation=noise_cancellation.BVC(),
+        chat_ctx=initial_ctx
     )
 
 
