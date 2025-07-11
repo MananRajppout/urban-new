@@ -246,7 +246,7 @@ const LiveDemoSection = () => {
                         value={phoneNumber}
                         onChange={(e) => setPhoneNumber(e.target.value)}
                         className="w-full bg-white/5 border border-white/10 py-6 px-4 rounded-lg focus:border-brand-green focus:ring-brand-green/20"
-                        placeholder="+91 80357 39217"
+                        placeholder="+918035743488"
                         required
                       />
                     </div>
