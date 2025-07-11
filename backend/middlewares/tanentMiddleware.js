@@ -13,7 +13,8 @@ function isIgnoredRoute(uri) {
 async function extractTenantFromUrl(url) {
   try {
     const parsedUrl = new URL(url);
-    const hostname = parsedUrl.hostname;
+    let hostname = parsedUrl.hostname;
+    hostname = hostname.replace("www.","");
     const parts = hostname.split('.');
     
 
@@ -53,6 +54,7 @@ async function extractTenantFromUrl(url) {
 
 const tenantMiddleware = async (req, res, next) => {
     const url = req.headers.origin;
+    console.log(url,"heeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee")
     const tenant = await extractTenantFromUrl(url);
     const uri = req.url;
    console.log(uri,isIgnoredRoute(uri))
