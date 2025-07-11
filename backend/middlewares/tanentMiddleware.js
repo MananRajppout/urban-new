@@ -4,7 +4,7 @@ const { minimatch } = require("minimatch");
 
 
 config()
-const ignoreRoutes = ["/api/fetch-ai-agent/*","/api/webcall/webhook/pickup","/api/webcall/webhook/hangup","/api/verify-user?*","/api/stripe-success-callback?*","/api/stripe-failure-callback?*"]
+const ignoreRoutes = ["/api/fetch-ai-agent/*","/api/webcall/webhook/pickup","/api/webcall/webhook/hangup","/api/verify-user?*","/api/stripe-success-callback?*","/api/stripe-failure-callback?*","/api/auth/google-ios-login"]
 
 function isIgnoredRoute(uri) {
   return ignoreRoutes.some((pattern) => minimatch(uri, pattern));
@@ -16,6 +16,7 @@ async function extractTenantFromUrl(url) {
     let hostname = parsedUrl.hostname;
     hostname = hostname.replace("www.","");
     const parts = hostname.split('.');
+    console.log(parts,"parts",hostname)
     
 
    const length = process.env.NODE_ENV == "development" ? 1 : 2;
