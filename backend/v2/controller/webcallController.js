@@ -4,6 +4,7 @@ const { Restriction, User } = require("../../user/model");
 const { AiAgent, CallHistory, SheetConfig } = require("../../voice_ai/model");
 const { getMinutesDiff } = require("../utils");
 const googleSheetsService = require("../../services/googlesheets.service");
+const { triggerCallSummaryIfEnabled } = require("../../user/job");
 
 // for now no need to use this
 exports.pickupWebhook = catchAsyncError(async (req, res) => {
@@ -99,6 +100,8 @@ exports.hangupWebhook = catchAsyncError(async (req, res) => {
     });
   }
 
+  triggerCallSummaryIfEnabled(callHistory._id);
+
   callHistory.end_time = end_time;
   callHistory.chat_history = chat_history;
   callHistory.summary = summary;
@@ -118,6 +121,14 @@ exports.hangupWebhook = catchAsyncError(async (req, res) => {
   callHistory.call_state = "completed";
   await callHistory.save();
 
+  // Trigger individual call summary if enabled
+  try {
+    await triggerCallSummaryIfEnabled(callHistory._id);
+  } catch (error) {
+    console.error("Error triggering call summary:", error);
+    // Don't fail the request if summary email fails
+  }
+
   console.log("voice call time in min ", durationInMinutes);
   const restriction = await getRestriction(agent.user_id);
   if (restriction && user) {
@@ -135,20 +146,20 @@ exports.hangupWebhook = catchAsyncError(async (req, res) => {
   }
 
   //cut tenant minutes too
-  const tenantProvider = await User.findOne({ slug_name: user.tenant });
-  if (user.tenant !== "main" && tenantProvider._id.toString() !== user._id.toString()) {
-    const restriction = await getRestriction(tenantProvider._id);
-    restriction.voice_trial_minutes_used += durationInMinutes;
+  // const tenantProvider = await User.findOne({ slug_name: user.tenant });
+  // if (user.tenant !== "main" && tenantProvider._id.toString() !== user._id.toString()) {
+  //   const restriction = await getRestriction(tenantProvider._id);
+  //   restriction.voice_trial_minutes_used += durationInMinutes;
 
-    if (
-      restriction.voice_trial_minutes_used >
-      restriction.voice_trial_minutes_limit
-    ) {
-      tenantProvider.voice_ai_status = "inactive";
-      await tenantProvider.save();
-    }
-    await restriction.save();
-  }
+  //   if (
+  //     restriction.voice_trial_minutes_used >
+  //     restriction.voice_trial_minutes_limit
+  //   ) {
+  //     tenantProvider.voice_ai_status = "inactive";
+  //     await tenantProvider.save();
+  //   }
+  //   await restriction.save();
+  // }
 
 
   // Find the active sheet configuration for this agent

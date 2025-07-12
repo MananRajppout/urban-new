@@ -33,6 +33,7 @@ const {
 //   });
 // });
 const googleSheetsService = require("../../services/googlesheets.service");
+const { triggerCallSummaryIfEnabled } = require("../../user/job");
 
 exports.getAllNumbers = catchAsyncError(async (req, res) => {
   try {
@@ -567,6 +568,14 @@ exports.hangupWebhook = catchAsyncError(async (req, res) => {
     .join("\n");
 
   await callHistory.save();
+
+  // Trigger individual call summary if enabled
+  try {
+    await triggerCallSummaryIfEnabled(callHistory._id);
+  } catch (error) {
+    console.error("Error triggering call summary:", error);
+    // Don't fail the request if summary email fails
+  }
 
   // Find the active sheet configuration for this agent
   const config = await SheetConfig.findOne({

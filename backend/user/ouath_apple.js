@@ -65,7 +65,7 @@ exports.handleIosGoogleLogin=catchAsyncError(async(req,res,next)=>{
         
     
     const token = jwt.sign( { userID:user._id }, process.env.JWT_SECRET_KEY, { expiresIn: "5d" });
-    res.status(200).json({ token });
+    res.status(200).json({ token,role:user.role });
       } catch (error) {
         console.log("Google login error", error);
         res.status(500).json({ message: "Login failed" });

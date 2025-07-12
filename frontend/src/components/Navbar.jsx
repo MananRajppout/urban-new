@@ -9,6 +9,7 @@ import {
 } from "@/Utils/webCallHandler";
 import { ProfileContext } from "@/pages/_app";
 import { useRole } from "@/hooks/useRole";
+import { useApp } from "@/context/AppContext";
 
 const Navbar = () => {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -19,7 +20,7 @@ const Navbar = () => {
   const router = useRouter();
   const { globalProfileData } = useContext(ProfileContext);
   const agentId = globalProfileData?.agentId;
-
+  const { websiteSettings } = useApp();
 
 
   const checkForToken = () => {
@@ -103,7 +104,7 @@ const Navbar = () => {
       <div className="container mx-auto flex items-center justify-between py-4">
         {/* Logo */}
         <Link href="/" className="text-2xl font-bold text-gradient">
-          UrbanChat.ai
+          {websiteSettings?.website_name || "UrbanChat.ai"}
         </Link>
 
         {/* Desktop Navigation */}

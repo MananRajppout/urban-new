@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Call Summary - UrbanChat.ai</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            width: 100%;
+            max-width: 700px;
+            margin: 0 auto;
+            background-color: #ffffff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .header {
+            text-align: center;
+            padding: 20px 0;
+            border-bottom: 2px solid #007BFF;
+        }
+        .header h1 {
+            margin: 0;
+            font-size: 24px;
+            color: #333;
+        }
+        .header .call-time {
+            color: #666;
+            font-size: 14px;
+            margin-top: 10px;
+        }
+        .call-info {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin: 30px 0;
+        }
+        .info-card {
+            background-color: #f8f9fa;
+            border-left: 4px solid #007BFF;
+            padding: 15px;
+            border-radius: 5px;
+        }
+        .info-card h3 {
+            margin: 0 0 8px 0;
+            color: #333;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        .info-card .value {
+            font-size: 18px;
+            font-weight: bold;
+            color: #007BFF;
+            margin: 0;
+        }
+        .sentiment-positive {
+            color: #28a745;
+        }
+        .sentiment-neutral {
+            color: #ffc107;
+        }
+        .sentiment-negative {
+            color: #dc3545;
+        }
+        .status-successful {
+            color: #28a745;
+        }
+        .status-unsuccessful {
+            color: #dc3545;
+        }
+        .summary-section {
+            margin: 30px 0;
+            padding: 20px;
+            background-color: #f8f9fa;
+            border-radius: 8px;
+            border-left: 4px solid #17a2b8;
+        }
+        .summary-section h2 {
+            color: #333;
+            margin: 0 0 15px 0;
+            font-size: 18px;
+        }
+        .summary-text {
+            line-height: 1.6;
+            color: #555;
+            font-size: 14px;
+        }
+        .chat-section {
+            margin: 30px 0;
+        }
+        .chat-section h2 {
+            color: #333;
+            margin-bottom: 20px;
+            font-size: 18px;
+        }
+        .chat-message {
+            margin-bottom: 15px;
+            padding: 12px;
+            border-radius: 8px;
+            position: relative;
+        }
+        .chat-caller {
+            background-color: #e3f2fd;
+            border-left: 4px solid #2196f3;
+        }
+        .chat-agent {
+            background-color: #f3e5f5;
+            border-left: 4px solid #9c27b0;
+        }
+        .chat-role {
+            font-weight: bold;
+            font-size: 12px;
+            text-transform: uppercase;
+            margin-bottom: 5px;
+        }
+        .chat-caller .chat-role {
+            color: #1976d2;
+        }
+        .chat-agent .chat-role {
+            color: #7b1fa2;
+        }
+        .chat-content {
+            color: #333;
+            line-height: 1.5;
+            font-size: 14px;
+        }
+        .chat-timestamp {
+            font-size: 11px;
+            color: #999;
+            position: absolute;
+            top: 8px;
+            right: 12px;
+        }
+        .recording-section {
+            margin: 30px 0;
+            padding: 15px;
+            background-color: #fff3cd;
+            border-left: 4px solid #ffc107;
+            border-radius: 5px;
+        }
+        .recording-section h3 {
+            margin: 0 0 10px 0;
+            color: #856404;
+        }
+        .recording-link {
+            color: #007BFF;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        .recording-link:hover {
+            text-decoration: underline;
+        }
+        .no-chat {
+            text-align: center;
+            padding: 30px;
+            color: #666;
+            font-style: italic;
+            background-color: #f8f9fa;
+            border-radius: 8px;
+        }
+        .footer {
+            text-align: center;
+            padding: 20px 0;
+            border-top: 1px solid #ddd;
+            margin-top: 30px;
+            font-size: 14px;
+            color: #666;
+        }
+        @media (max-width: 600px) {
+            .call-info {
+                grid-template-columns: 1fr;
+            }
+            .container {
+                padding: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>📞 Call Summary</h1>
+            <div class="call-time">{{call_time}}</div>
+            <p>Hello {{user_name}}, here's the summary of your recent call</p>
+        </div>
+
+        <!-- Call Information -->
+        <div class="call-info">
+            <div class="info-card">
+                <h3>Caller Number</h3>
+                <div class="value">{{caller_number}}</div>
+            </div>
+            <div class="info-card">
+                <h3>Duration</h3>
+                <div class="value">{{call_duration}} min</div>
+            </div>
+            <div class="info-card">
+                <h3>Status</h3>
+                <div class="value {{#if (eq call_status 'Successful')}}status-successful{{else}}status-unsuccessful{{/if}}">
+                    {{call_status}}
+                </div>
+            </div>
+            <div class="info-card">
+                <h3>Sentiment</h3>
+                <div class="value sentiment-{{user_sentiment}}">
+                    {{#if (eq user_sentiment 'Positive')}}😊 Positive{{/if}}
+                    {{#if (eq user_sentiment 'Neutral')}}😐 Neutral{{/if}}
+                    {{#if (eq user_sentiment 'Negative')}}😞 Negative{{/if}}
+                </div>
+            </div>
+        </div>
+
+        <!-- Call Summary -->
+        <div class="summary-section">
+            <h2>📋 Call Summary</h2>
+            <div class="summary-text">{{call_summary}}</div>
+        </div>
+
+        <!-- Recording Section -->
+        {{#if recording_url}}
+        <div class="recording-section">
+            <h3>🎵 Call Recording</h3>
+            <p>You can listen to the complete call recording using the link below:</p>
+            <a href="{{recording_url}}" class="recording-link" target="_blank">Listen to Recording</a>
+        </div>
+        {{/if}}
+
+        <!-- Chat History -->
+        {{#if has_chat_history}}
+        <div class="chat-section">
+            <h2>💬 Conversation History</h2>
+            {{#each chat_messages}}
+            <div class="chat-message {{#if (eq this.role 'Caller')}}chat-caller{{else}}chat-agent{{/if}}">
+                <div class="chat-role">{{this.role}}</div>
+                {{#if this.timestamp}}
+                <div class="chat-timestamp">{{this.timestamp}}</div>
+                {{/if}}
+                <div class="chat-content">{{this.content}}</div>
+            </div>
+            {{/each}}
+        </div>
+        {{else}}
+        <div class="no-chat">
+            <h3>💬 No Conversation History</h3>
+            <p>No detailed conversation history is available for this call.</p>
+        </div>
+        {{/if}}
+
+        <!-- Additional Information -->
+        {{#if disconnection_reason}}
+        <div class="info-card" style="margin-top: 20px;">
+            <h3>Disconnection Reason</h3>
+            <div class="value">{{disconnection_reason}}</div>
+        </div>
+        {{/if}}
+
+        <div class="footer">
+            <p>This summary was generated automatically by your UrbanChat.ai system.</p>
+            <p>To modify your summary preferences, please visit your <a href="#" style="color: #007BFF;">account settings</a>.</p>
+            <p><strong>UrbanChat.ai Team</strong></p>
+        </div>
+    </div>
+</body>
+</html> 

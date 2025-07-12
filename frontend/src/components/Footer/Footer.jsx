@@ -1,7 +1,9 @@
 import React from "react";
 import Link from "next/link";
+import { useApp } from "@/context/AppContext";
 
 const Footer = () => {
+  const { websiteSettings } = useApp();
   const footerLinks = [
     { label: "Features", href: "/features" },
     { label: "Integrations", href: "/integrations" },
@@ -67,7 +69,7 @@ const Footer = () => {
             href="/"
             className="text-4xl md:text-6xl font-bold text-primary no-underline inline-block mb-6"
           >
-            UrbanChat.ai
+            {websiteSettings?.website_name || "UrbanChat.ai"}
           </Link>
         </div>
 

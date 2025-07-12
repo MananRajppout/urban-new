@@ -1,6 +1,6 @@
 const express = require("express");
 const checkSessionExpiration = require("../middleware/auth");
-const { callHistoryEndTimeCron, callPriceCalCron, phPriceCalCron, renewChatCredits, voiceAICredit } = require("../crons/controller");
+const { callHistoryEndTimeCron, callPriceCalCron, phPriceCalCron, renewChatCredits, voiceAICredit, dailyCallSummaries } = require("../crons/controller");
 
 
 // Crons are just a notification to trigger some async process

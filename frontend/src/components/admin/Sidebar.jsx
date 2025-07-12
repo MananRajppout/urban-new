@@ -33,11 +33,11 @@ const navItems = [
   //   label: 'Payments',
   //   href: '/super-admin/payments',
   // },
-  // {
-  //   icon: Settings,
-  //   label: 'Settings',
-  //   href: '/super-admin/settings',
-  // },
+    {
+      icon: Settings,
+      label: 'Settings',
+      href: '/super-admin/settings',
+    },
 ];
 
 export default function Sidebar() {

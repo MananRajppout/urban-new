@@ -4,7 +4,12 @@ const { createUser, login, editUser, getUserDetails, verifyUserHash, getUserCoun
     forgetPassword, resetPassword, emailSubscribe, chatbotContext,
     fetchWebsiteNotification,
     seenWebsiteNotification,
-    checkSlugAvaible} = require("../user/controller");
+    checkSlugAvaible,
+    getSettings,
+    updateSettings,
+    getWebsiteNameAndLogo,
+    updateWebsiteNameAndLogo
+} = require("../user/controller");
 const { googleCallback } = require("../user/oauth_google");
 const { facebookCallback } = require("../user/oauth_facebook");
 const { appleLogin, handleIosGoogleLogin } = require("../user/ouath_apple");
@@ -40,6 +45,12 @@ router.route("/delete-user").post(checkSessionExpiration(["customer", "admin"]),
 router.route("/forget-profile").post(forgetPassword);
 router.route("/reset-password").post(checkSessionExpiration(["customer", "admin"]), resetPassword);
 router.route("/seen-website-notification").post(checkSessionExpiration(["customer"]), seenWebsiteNotification)
+router.route("/get-settings").get(checkSessionExpiration(["customer"]), getSettings);
+router.route("/update-settings").post(checkSessionExpiration(["customer"]), updateSettings);
+router.route("/get-website-name-and-logo").get(getWebsiteNameAndLogo);
+router.route("/update-website-name-and-logo").post(checkSessionExpiration(["customer"]), updateWebsiteNameAndLogo);
+
+
 
 
 

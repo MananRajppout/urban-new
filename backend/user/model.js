@@ -80,6 +80,31 @@ const userSchema = new mongoose.Schema({
     type: String,
     default: "main",
     ref: "User"
+  },
+
+  daily_summary: {
+    type: Boolean,
+    default: false
+  },
+
+  call_summary: {
+    type: Boolean,
+    default: false
+  },
+
+  summary_email: {
+    type: String,
+    default: ""
+  },
+
+  logo: {
+    type: String,
+    default: undefined
+  },
+
+  website_name: {
+    type: String,
+    default: undefined
   }
   
 });

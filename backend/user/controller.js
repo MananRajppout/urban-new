@@ -20,6 +20,9 @@ const { getRestriction, updatePricingPlan } = require("../user/impl");
 const { Integrate } = require("../integrates/model");
 const { getPricingPlan } = require("./impl");
 const { ChatModel } = require("../chatbot/model");
+const { uploadToCloudinary } = require("../utils/cloudinary");
+const { config } = require("dotenv");
+config();
 
 exports.login = catchAsyncError(async (req, res, next) => {
   const { email, password } = req.body;
@@ -46,6 +49,7 @@ exports.login = catchAsyncError(async (req, res, next) => {
           message: "Login Successful",
           token: token,
           profile_image: user.profile_image,
+          role: user.role,
           // user: user,
         });
       } else {
@@ -449,4 +453,60 @@ exports.seenWebsiteNotification = catchAsyncError(async (req, res, next) => {
   return res
     .status(200)
     .json({ success: true, message: "Website notifications deleted" });
+});
+
+
+// api/settings
+exports.getSettings = catchAsyncError(async (req, res, next) => {
+  const settings = await User.findById(req.user.id);
+  return res.status(200).json({
+    success: true,
+    message: "Settings fetched",
+    settings,
+  });
+});
+
+exports.updateSettings = catchAsyncError(async (req, res, next) => {
+  const { daily_summary, call_summary, summary_email } = req.body;
+  const settings = await User.findByIdAndUpdate(req.user.id, { daily_summary, call_summary, summary_email }, { new: true });
+  return res.status(200).json({
+    success: true,
+    message: "Settings updated",
+    settings,
+  });
+});
+
+
+// get website name and logo
+exports.getWebsiteNameAndLogo = catchAsyncError(async (req, res, next) => {
+  const tenant = req.tenant;
+  const settings = await User.findOne({tenant});
+  return res.status(200).json({
+    success: true,
+    message: "Website name and logo fetched",
+    settings,
+  });
+});
+
+// update website name and logo
+exports.updateWebsiteNameAndLogo = catchAsyncError(async (req, res, next) => {
+  const { website_name, logo } = req.body;
+  // logo is base64 string upload it on cloudinary
+  const data = {};
+  if(logo){
+    const logoUrl = await uploadToCloudinary(logo);
+    data.logo = logoUrl;
+  }
+
+  if(website_name){
+    data.website_name = website_name;
+  }
+
+  const tenant = req.tenant;
+  const settings = await User.findOneAndUpdate({tenant}, { ...data }, { new: true });
+  return res.status(200).json({
+    success: true,
+    message: "Website name and logo updated",
+    settings,
+  });
 });

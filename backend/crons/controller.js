@@ -36,3 +36,4 @@ exports.voiceAICredit = catchAsyncError(async (req, res, next) => {
     res.status(200).json({ status: true, message: "Cron in the process" });
     await voiceAICreditSync();
 });
+

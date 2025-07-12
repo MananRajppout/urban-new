@@ -6,7 +6,9 @@ const subjectTitle = {
     "message_quota_exceed" : "Important: Your UrbanChat.ai Message Quota has Been Reached",
     "payment_confirmation" : "Payment Confirmation - Your urbanchat.ai Subscription",
     "signup_confirmation" : "Welcome to UrbanChat.ai!" ,
-    "org_invite_user":"hey you are inviting on our website of urbanchat.ai"
+    "org_invite_user":"hey you are inviting on our website of urbanchat.ai",
+    "daily_call_summary": "Daily Call Summary - UrbanChat.ai",
+    "individual_call_summary": "Call Summary - UrbanChat.ai"
 };
 
 // function parse(str) {

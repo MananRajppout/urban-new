@@ -17,12 +17,13 @@ import { iosLogIn, logIn } from "@/lib/api/ApiAuth";
 import toast from "react-hot-toast";
 import { useGoogleLogin } from "@react-oauth/google";
 import { isIOS, isMacOs, browserName } from 'react-device-detect';
+import { useApp } from "@/context/AppContext";
 
 
 const SignInPage = () => {
   const router = useRouter();
   const { verified } = router.query;
-
+  const { websiteSettings } = useApp();
 
 
   //check for device and browser for login
@@ -81,7 +82,11 @@ const SignInPage = () => {
         window.dispatchEvent(event);
 
         toast.success("Signed in successfully!");
-        window.location.href = "/ai-voice-agent";
+        if(res.data.role === "admin" || res.data.role === "super-admin"){
+          window.location.href = "/super-admin";
+        }else{
+          window.location.href = "/ai-voice-agent";
+        }
       } else {
         toast.error(res.message || "An error occurred while logging in.");
         setGeneralError(res.message || "An error occurred while logging in.");
@@ -119,13 +124,18 @@ const SignInPage = () => {
         });
 
          const token=res.data.token;
+         const role=res.data.role;
       
         localStorage.setItem("access_token",token);
         const event = new Event("signup");
 
         window.dispatchEvent(event);
         setTimeout(() => {
-          router.push("/ai-voice-agent");
+          if(role === "admin" || role === "super-admin"){
+            router.push("/super-admin");
+          }else{
+            router.push("/ai-voice-agent");
+          }
         }, 500);
   
        
@@ -153,7 +163,7 @@ const SignInPage = () => {
             href="/"
             className="text-4xl md:text-5xl font-bold text-gradient inline-block mb-0"
           >
-            UrbanChat.ai
+            {websiteSettings?.website_name || "UrbanChat.ai"}
           </Link>
           <p className="text-foreground/70 mb-0">
             Welcome back! Sign in to continue
@@ -332,3 +342,7 @@ const SignInPage = () => {
 };
 
 export default SignInPage;
+
+
+
+

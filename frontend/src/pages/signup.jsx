@@ -21,6 +21,7 @@ import { GoogleLogin, useGoogleLogin } from "@react-oauth/google";
 import { checkSlug, iosLogIn, signUp } from "@/lib/api/ApiAuth";
 import toast from "react-hot-toast";
 import { useRouter } from "next/router";
+import { useApp } from "@/context/AppContext";
 
 
 const SignUpPage = () => {
@@ -41,7 +42,7 @@ const SignUpPage = () => {
   const [slugLoading, setSlugLoading] = useState(false);
   const [isSlugUnique, setIsSlugUnique] = useState(false);
   const [showWhiteLabelOpntion, setWhiteLabelOption] = useState(false);
-
+  const { websiteSettings } = useApp();
   useEffect(() => {
     if (typeof window !== "undefined") {
       const isOriginSame = window.location.hostname == process.env.NEXT_PUBLIC_MAIN_DOMAIN;
@@ -223,7 +224,7 @@ const SignUpPage = () => {
               href="/"
               className="text-4xl mb-0 md:text-5xl font-bold text-gradient inline-block"
             >
-              UrbanChat.ai
+              {websiteSettings?.website_name || "UrbanChat.ai"}
             </Link>
             <p className="text-foreground/70">
               Create your account to get started
