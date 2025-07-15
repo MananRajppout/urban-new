@@ -17,7 +17,7 @@ const Logo = () => {
         href="/"
         className="flex items-center transition-transform hover:scale-105 duration-200"
       >
-        <img src={ websiteSettings?.logo || logo} alt="logo" width={140} height={100} />
+        <img src={ websiteSettings?.logo || logo} alt="logo" width={140} height={100} className="w-[140px] h-[100px]"/>
       </Link>
     </div>
   );

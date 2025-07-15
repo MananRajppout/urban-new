@@ -3,8 +3,10 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer/Footer";
 import { Button } from "@/components/ui/button";
 import ParticleBackground from "@/components/ParticleBackground";
+import { useApp } from "@/context/AppContext";
 
 const ContactPage = () => {
+  const { websiteSettings } = useApp();
   useEffect(() => {
     document.title = "Contact Us | UrbanChat.ai";
   }, []);
@@ -49,10 +51,10 @@ const ContactPage = () => {
                         href="mailto:alex@urbanchat.ai"
                         className="text-brand-green hover:underline text-lg"
                       >
-                        alex@urbanchat.ai
+                        {websiteSettings?.email || "alex@urbanchat.ai"}
                       </a>
                     </div>
-                    <div>
+                    {/* <div>
                       <p className="text-foreground/70">For Sales Inquiries:</p>
                       <a
                         href="mailto:sales@urbanchat.ai"
@@ -69,11 +71,11 @@ const ContactPage = () => {
                       >
                         support@urbanchat.ai
                       </a>
-                    </div>
+                    </div> */}
                   </div>
                 </div>
 
-                <div
+                {/* <div
                   className="glass-panel border border-white/10 p-6 rounded-lg"
                   style={{
                     background: "rgb(255 255 255 / 0.05)",
@@ -90,7 +92,7 @@ const ContactPage = () => {
                   <Button className="w-full bg-brand-green border-0 cursor-pointer hover:bg-brand-green-dark text-black font-semibold py-6">
                     Book a Consultation
                   </Button>
-                </div>
+                </div> */}
               </div>
             </div>
           </div>

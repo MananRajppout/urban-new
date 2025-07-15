@@ -98,14 +98,14 @@ class DeepGramVoiceHelper {
 
     async fetchVoices() {
         return [
-            // {
-            //     "name": "Asteria",
-            //     "accent": "American",
-            //     "gender": "Female",
-            //     "voice_id": "aura-asteria-en",
-            //     "voice_url": "https://res.cloudinary.com/deepgram/video/upload/v1709565353/aura/asteria_docs_venw0r.wav",
-            //     "age" : "middle aged"
-            // },
+            {
+                "name": "Asteria",
+                "accent": "American",
+                "gender": "Female",
+                "voice_id": "aura-asteria-en",
+                "voice_url": "https://res.cloudinary.com/deepgram/video/upload/v1709565353/aura/asteria_docs_venw0r.wav",
+                "age" : "middle aged"
+            },
             // {
             //     "name": "Thalia",
             //     "accent": "American",

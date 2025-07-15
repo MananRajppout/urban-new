@@ -132,6 +132,8 @@ class AssistantFnc(llm.FunctionContext):
         try:
 
             transfer_to = f"tel:{transfer_to_number}"
+            # transfer_to = f"sip:{transfer_to_number}@40224295090396919.zt.plivo.com"
+            print(f"transfer_to: {transfer_to}")
         
 
             transfer_request = proto_sip.TransferSIPParticipantRequest(

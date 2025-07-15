@@ -96,8 +96,8 @@ const ModelSelection = ({
       voice.voice_id = "raman";
       voice.voice_engine_name = "smallest";
     } else if (value == "deepgram") {
-      voice.voice_name = "Luna";
-      voice.voice_id = "aura-luna-en";
+      voice.voice_name = "Asteria";
+      voice.voice_id = "aura-2-asteria-en";
       voice.voice_engine_name = "deepgram";
     } else if (value == "rime") {
       voice.voice_name = "abbie";
