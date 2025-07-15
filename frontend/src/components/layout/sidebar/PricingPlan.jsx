@@ -36,7 +36,7 @@ const PricingPlan = ({ activeService }) => {
     //   href="/subscription-plans"
     //   className="no-underline mx-2 mb-4 p-4 rounded-lg bg-glass-panel-light/20 border border-solid border-[rgba(255,255,255,0.1)] hover:bg-glass-panel-light/30 transition-colors"
     // >
-    <div>
+    <div className="mx-2 mb-4 p-4 rounded-lg bg-glass-panel-light/20 border border-solid border-[rgba(255,255,255,0.1)] hover:bg-glass-panel-light/30 transition-colors">
       <div className="flex justify-between items-center mb-2">
         <div className="flex items-center">
           <Crown className="h-4 w-4 text-yellow-400 mr-2" />
