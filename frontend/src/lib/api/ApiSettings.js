@@ -33,9 +33,11 @@ export async function getWebsiteSettings() {
   return await AxiosInstance.get("/api/get-website-name-and-logo", header);
 }
 
-export async function updateWebsiteSettings(websiteName, logoFile) {
+export async function updateWebsiteSettings(websiteName, logoFile, contactEmail, metaDescription) {
   const data = {
     website_name: websiteName,
+    contact_email: contactEmail,
+    meta_description: metaDescription,
   };
   
   // If logo file is provided, convert it to base64

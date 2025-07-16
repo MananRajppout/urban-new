@@ -3,11 +3,13 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer/Footer";
 import FeaturesSection from "@/components/FeaturesSection";
 import ParticleBackground from "@/components/ParticleBackground";
+import { useApp } from "@/context/AppContext";
 
 const FeaturesPage = () => {
+  const {websiteSettings} = useApp();
   useEffect(() => {
-    document.title = "Features | UrbanChat.ai";
-  }, []);
+    document.title = `Features | ${websiteSettings?.custom_domain || websiteSettings?.slug_name}`;
+  }, [websiteSettings]);
 
   return (
     <div className="relative min-h-screen">

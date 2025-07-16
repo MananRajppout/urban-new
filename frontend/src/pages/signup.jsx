@@ -98,8 +98,8 @@ const SignUpPage = () => {
 
 
   useEffect(() => {
-    document.title = "Sign Up | UrbanChat.ai";
-  }, []);
+    document.title = `Sign Up | ${websiteSettings?.custom_domain || websiteSettings?.slug_name}`;
+  }, [websiteSettings]);
 
   //use for signup with google signupGoogle function  remove the passport js 
   const handleGoogleSignUp = () => {
@@ -255,7 +255,7 @@ const SignUpPage = () => {
 
 
 
-              <Button
+              {/* <Button
                 variant="outline"
                 className="w-full cursor-pointer border-0 flex items-center justify-center gap-2 py-5 hover:bg-white/10"
                 onClick={signupGoogle}
@@ -300,13 +300,13 @@ const SignUpPage = () => {
                     Sign up with Google
 
                   </>}
-              </Button>
+              </Button> */}
 
-              <div className="flex items-center gap-2 py-2">
+              {/* <div className="flex items-center gap-2 py-2">
                 <div className="flex-grow bg-white/10 h-[1px]" />
                 <span className="text-xs text-foreground/50">OR</span>
                 <div className="flex-grow bg-white/10 h-[1px]" />
-              </div>
+              </div> */}
 
               <div className="space-y-2">
                 <label htmlFor="name" className="text-sm font-medium">

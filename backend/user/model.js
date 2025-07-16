@@ -105,6 +105,15 @@ const userSchema = new mongoose.Schema({
   website_name: {
     type: String,
     default: undefined
+  },
+
+  contact_email: {
+    type: String,
+    default: undefined
+  },
+  meta_description: {
+    type: String,
+    default: undefined
   }
   
 });

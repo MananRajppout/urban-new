@@ -218,3 +218,7 @@ export async function checkDuePayment(planId) {
     header
   });
 }
+
+export async function requestNumber() {
+  return await AxiosInstance.get("/api/request-number", header);
+}

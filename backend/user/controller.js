@@ -214,6 +214,27 @@ exports.getUserDetails = catchAsyncError(async (req, res, next) => {
   }
 });
 
+exports.requestNumber = catchAsyncError(async (req, res, next) => {
+  const user = req.user;
+  const tenant = req.tenant;
+  const tenant_user = await User.findOne({slug_name: tenant});
+  
+  const ctx = {
+    tenant_user_full_name: tenant_user.full_name,
+    user_full_name: user.full_name,
+    user_email: user.email,
+  }
+
+  const action = "request_number";
+
+  const result = await sendMailFun(action,ctx, tenant_user.email);
+
+  return res.status(200).json({
+    success: true,
+    message: "Request for a phone number sent",
+  });
+});
+
 exports.verifyUserHash = catchAsyncError(async (req, res, next) => {
   const { token } = req.query;
   const verificationToken = await VerificationToken.findOne({ token });
@@ -490,7 +511,7 @@ exports.getWebsiteNameAndLogo = catchAsyncError(async (req, res, next) => {
 
 // update website name and logo
 exports.updateWebsiteNameAndLogo = catchAsyncError(async (req, res, next) => {
-  const { website_name, logo } = req.body;
+  const { website_name, logo, contact_email, meta_description } = req.body;
   // logo is base64 string upload it on cloudinary
   const data = {};
   if(logo){
@@ -500,6 +521,13 @@ exports.updateWebsiteNameAndLogo = catchAsyncError(async (req, res, next) => {
 
   if(website_name){
     data.website_name = website_name;
+  }
+
+  if(contact_email){
+    data.contact_email = contact_email;
+  }
+  if(meta_description){
+    data.meta_description = meta_description;
   }
 
   const tenant = req.tenant;

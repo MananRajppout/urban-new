@@ -9,12 +9,14 @@ import { getPaymentSession, getPricingModelVoiceAi } from "@/lib/api/ApiExtra";
 import { loadStripe } from "@stripe/stripe-js";
 import { useRole } from "@/hooks/useRole";
 import toast from "react-hot-toast";
+import { useApp } from "@/context/AppContext";
 
 
 const PricingPage = () => {
+  const {websiteSettings} = useApp();
   useEffect(() => {
-    document.title = "Pricing Plans | UrbanChat.ai";
-  }, []);
+    document.title = `Pricing Plans | ${websiteSettings?.custom_domain || websiteSettings?.slug_name}`;
+  }, [websiteSettings]);
 
   // const plans = [
   //   {

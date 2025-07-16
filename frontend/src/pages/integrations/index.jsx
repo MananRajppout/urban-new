@@ -5,11 +5,13 @@ import IntegrationsSection from "@/components/IntegrationsSection";
 import ParticleBackground from "@/components/ParticleBackground";
 import { Button } from "@/components/ui/button";
 import { PlusCircle } from "lucide-react";
+import { useApp } from "@/context/AppContext";
 
 const IntegrationsPage = () => {
+  const {websiteSettings} = useApp();
   useEffect(() => {
-    document.title = "Integrations | UrbanChat.ai";
-  }, []);
+    document.title = `Integrations | ${websiteSettings?.custom_domain || websiteSettings?.slug_name}`;
+  }, [websiteSettings]);
 
   return (
     <div className="relative min-h-screen">
@@ -28,7 +30,7 @@ const IntegrationsPage = () => {
                 <span className="inline-block text-gradient">Integrations</span>
               </h1>
               <p className="text-xl text-foreground/70">
-                Connect UrbanChat.ai with your existing tools and platforms to
+                Connect {websiteSettings?.website_name || "UrbanChat.ai"} with your existing tools and platforms to
                 create a unified workflow.
               </p>
             </div>
@@ -58,7 +60,7 @@ const IntegrationsPage = () => {
                   <pre className="text-xs md:text-sm overflow-x-auto">
                     <code className="text-foreground/80">
                       {`// Example API usage
-const response = await fetch('https://api.urbanchat.ai/v1/calls', {
+const response = await fetch('https://api.${websiteSettings?.custom_domain || websiteSettings?.slug_name}.com/v1/calls', {
   method: 'POST',
   headers: {
     'Authorization': 'Bearer YOUR_API_KEY',

@@ -8,8 +8,8 @@ import { useApp } from "@/context/AppContext";
 const ContactPage = () => {
   const { websiteSettings } = useApp();
   useEffect(() => {
-    document.title = "Contact Us | UrbanChat.ai";
-  }, []);
+    document.title = `Contact Us | ${websiteSettings?.custom_domain || websiteSettings?.slug_name}`;
+  }, [websiteSettings]);
 
   return (
     <div className="relative min-h-screen">
@@ -51,7 +51,7 @@ const ContactPage = () => {
                         href="mailto:alex@urbanchat.ai"
                         className="text-brand-green hover:underline text-lg"
                       >
-                        {websiteSettings?.email || "alex@urbanchat.ai"}
+                        {websiteSettings?.contact_email || "alex@urbanchat.ai"}
                       </a>
                     </div>
                     {/* <div>

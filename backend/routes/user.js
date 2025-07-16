@@ -8,7 +8,8 @@ const { createUser, login, editUser, getUserDetails, verifyUserHash, getUserCoun
     getSettings,
     updateSettings,
     getWebsiteNameAndLogo,
-    updateWebsiteNameAndLogo
+    updateWebsiteNameAndLogo,
+    requestNumber
 } = require("../user/controller");
 const { googleCallback } = require("../user/oauth_google");
 const { facebookCallback } = require("../user/oauth_facebook");
@@ -27,6 +28,7 @@ router.route("/admin-fetch-user-count").get(getUserCount);
 // METHOD : GET
 router.route("/verify-user").get(verifyUserHash);
 router.route("/fetch-user-details").get(checkSessionExpiration(["customer"]), getUserDetails);
+router.route("/request-number").get(checkSessionExpiration(["customer"]), requestNumber);
 router.route("/fetch-restriction").get(checkSessionExpiration(["customer"]), fetchRestriction);
 router.route("/email-subscribe").get(emailSubscribe);
 router.route("/user-context").get(chatbotContext);

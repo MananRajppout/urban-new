@@ -9,7 +9,7 @@ import {
   TableCell,
 } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
-import { Phone, Plus, ArrowUpRight, ArrowDownLeft } from "lucide-react";
+import { Phone, Plus, ArrowUpRight, ArrowDownLeft, Loader2 } from "lucide-react";
 import { useRouter } from "next/router";
 import Layout from "@/components/layout/Layout";
 import AddNumberDialog from "@/components/Dialog/AddNumberDialog";
@@ -23,8 +23,9 @@ import {
 } from "@/lib/api/ApiAiAssistant";
 import { formatDuration, justPhoneNumber } from "@/lib/utils";
 import toast from "react-hot-toast";
-import { checkDuePayment } from "@/lib/api/ApiExtra";
+import { checkDuePayment, requestNumber as requestNumberApi } from "@/lib/api/ApiExtra";
 import useVoiceInfo from "@/hooks/useVoice";
+import { FaN } from "react-icons/fa6";
 
 const initialPhoneNumbers = [
   {
@@ -77,6 +78,12 @@ const PhoneNumbers = () => {
     monthly_rental_fee: "",
     currency: "",
   });
+  const [isMainWebsite, setIsMainWebsite] = useState(false);
+  const [requestingNumber, setRequestingNumber] = useState(false);
+  useEffect(() => {
+    const isMainWebsite = window.location.hostname == process.env.NEXT_PUBLIC_MAIN_DOMAIN;
+    setIsMainWebsite(isMainWebsite);
+  }, []);
 
   const handleAddNumber = (newNumber) => {
     setPhoneNumbers([...phoneNumbers, newNumber]);
@@ -220,6 +227,24 @@ const PhoneNumbers = () => {
     }
   };
 
+  const handleRequestNumber = async () => {
+    setRequestingNumber(true);
+    try {
+      const res = await requestNumberApi();
+      if (res.data) {
+        toast.success("Number requested successfully");
+      } else {
+        toast.error("Failed to request number");
+      }
+    } catch (error) {
+      console.error(error);
+      toast.error("Failed to request number");
+    }finally{
+      setRequestingNumber(false);
+    }
+   
+  };
+
   return (
     <Layout className="bg-gradient-to-br from-[#121212] to-[#181824] text-foreground">
       <div className="space-y-6">
@@ -232,13 +257,30 @@ const PhoneNumbers = () => {
             <Button className="bg-accent-purple text-white hover:bg-accent-purple/90">
               <ArrowDownLeft className="w-4 h-4 mr-2" /> Outbound Call
             </Button> */}
-            <Button
-              disabled={!voiceInfo.isVoiceAiActive}
-              className="border-0 cursor-pointer bg-glass-panel-light/30 text-white hover:bg-glass-panel-light/40"
-              onClick={() => setAddDialogOpen(true)}
-            >
-              <Plus className="w-4 h-4 mr-2" /> Add Number
-            </Button>
+
+
+            {
+              isMainWebsite && (
+                <Button
+                  disabled={!voiceInfo.isVoiceAiActive}
+                  className="border-0 cursor-pointer bg-glass-panel-light/30 text-white hover:bg-glass-panel-light/40"
+                  onClick={() => setAddDialogOpen(true)}
+                >
+                  <Plus className="w-4 h-4 mr-2" /> Add Number
+                </Button>
+              )
+            }
+            {
+              !isMainWebsite && (
+                <Button
+                  disabled={requestingNumber}
+                  className="bg-accent-teal text-black hover:bg-accent-teal/90"
+                  onClick={handleRequestNumber}
+                >
+                  {requestingNumber ? <Loader2 className="w-4 h-4 mr-2 animate-spin" /> : <Plus className="w-4 h-4 mr-2" />} Request Number
+                </Button>
+              )
+            }
           </div>
         </div>
         <div className="glass-panel rounded-lg overflow-x-auto">
@@ -273,11 +315,10 @@ const PhoneNumbers = () => {
                   </TableCell>
                   <TableCell className="text-center">
                     <span
-                      className={`px-2 py-1 rounded-full text-xs ${
-                        phoneNumber.agent_name
+                      className={`px-2 py-1 rounded-full text-xs ${phoneNumber.agent_name
                           ? "bg-sentiment-positive/20 text-sentiment-positive"
                           : "bg-gray-500/20 text-gray-400"
-                      }`}
+                        }`}
                     >
                       {phoneNumber.status || "Active"}
                     </span>
@@ -289,16 +330,15 @@ const PhoneNumbers = () => {
                     {phoneNumber.number_location
                       ? phoneNumber.number_location
                       : phoneNumber.country === "IN"
-                      ? "India"
-                      : "United States"}
+                        ? "India"
+                        : "United States"}
                   </TableCell>
                   <TableCell className="hidden lg:table-cell">
                     <span
-                      className={`px-2 py-1 rounded-full text-xs ${
-                        phoneNumber.agent_name
+                      className={`px-2 py-1 rounded-full text-xs ${phoneNumber.agent_name
                           ? "bg-sentiment-positive/20 text-sentiment-positive"
                           : "bg-gray-500/20 text-gray-400"
-                      }`}
+                        }`}
                     >
                       {phoneNumber.agent_name ? phoneNumber.agent_name : "None"}
                     </span>

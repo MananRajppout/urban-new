@@ -21,6 +21,11 @@ const Navbar = () => {
   const { globalProfileData } = useContext(ProfileContext);
   const agentId = globalProfileData?.agentId;
   const { websiteSettings } = useApp();
+  const [navItems, setNavItems] = useState([
+    { label: "Features", href: "/features" },
+    { label: "Integrations", href: "/integrations" },
+    { label: "Contact", href: "/contact" },
+  ]);
 
 
   const checkForToken = () => {
@@ -62,12 +67,13 @@ const Navbar = () => {
     }
   }, [agentId]);
 
-  const navItems = [
-    { label: "Features", href: "/features" },
-    { label: "Integrations", href: "/integrations" },
-    { label: "Pricing", href: "/pricing" },
-    { label: "Contact", href: "/contact" },
-  ];
+  
+
+  useEffect(() => {
+    if(window.location.hostname === process.env.NEXT_PUBLIC_MAIN_DOMAIN){
+      setNavItems([...navItems, { label: "Pricing", href: "/pricing" }]);
+    }
+  }, []);
 
   useEffect(() => {
     const handleScroll = () => {

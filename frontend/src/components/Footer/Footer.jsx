@@ -90,7 +90,7 @@ const Footer = () => {
           style={{ borderTop: "1px solid rgba(255, 255, 255, 0.1)" }}
         >
           <p className="text-foreground/60 text-sm">
-            &copy; {new Date().getFullYear()} PDVURBANCHAT PRIVATE LIMITED All rights reserved.
+            &copy; {new Date().getFullYear()}  {websiteSettings?.website_name || "UrbanChat.ai"} All rights reserved.
           </p>
           <div className="flex space-x-4 mt-4 md:mt-0">
             {socialLinks.map((social) => (

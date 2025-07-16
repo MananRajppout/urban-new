@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Phone Number Request</title>
+  <style>
+    body {
+      font-family: 'Arial', sans-serif;
+      background-color: #f4f4f4;
+      margin: 0;
+      padding: 0;
+    }
+    .container {
+      max-width: 600px;
+      margin: 20px auto;
+      padding: 20px;
+      background-color: #ffffff;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      border-radius: 8px;
+    }
+    h1 {
+      color: #333;
+      margin-bottom: 20px;
+    }
+    p {
+      color: #555;
+      line-height: 1.6;
+      margin-bottom: 15px;
+    }
+    .footer {
+      margin-top: 30px;
+      padding-top: 20px;
+      border-top: 1px solid #eee;
+      color: #777;
+      font-size: 14px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <p>Hello {{tenant_user_full_name}},</p>
+    <p>My name is {{user_full_name}} and I am from {{user_email}}. I need a phone number for my voice AI assistant.</p>
+    <p>Please let me know if you can provide me with a phone number.</p>
+    <p>Thank you</p>
+    <p>{{user_full_name}}</p>
+    <p>{{user_email}}</p>
+  </div>
+</body>
+</html>

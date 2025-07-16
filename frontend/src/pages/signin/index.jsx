@@ -34,7 +34,7 @@ const SignInPage = () => {
   const [emailError, setEmailError] = useState("");
   const [passwordError, setPasswordError] = useState("");
   const [generalError, setGeneralError] = useState("");
-    const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const formData = useRef({
     email: "",
@@ -42,13 +42,13 @@ const SignInPage = () => {
   });
 
   useEffect(() => {
-    document.title = "Sign In | UrbanChat.ai";
+    document.title = `Sign In | ${websiteSettings?.custom_domain || websiteSettings?.slug_name}`;
 
     console.log('check for ',verified)
     if (verified === "true") {
       toast.success("Account verified successfully, please login to continue.");
     }
-  }, [verified]);
+  }, [verified,websiteSettings]);
 
   const onSignInSubmit = async () => {
     if (isSubmit) return;
@@ -178,7 +178,7 @@ const SignInPage = () => {
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
-            <Button
+            {/* <Button
               variant="outline"
               className="w-full cursor-pointer border border-subtle-border rounded-sm flex items-center justify-center gap-2 py-5 hover:bg-white/10"
               onClick={loginGoogle}
@@ -223,13 +223,13 @@ const SignInPage = () => {
                     Sign in with Google
 
                   </>}
-            </Button>
+            </Button> */}
 
-            <div className="flex items-center gap-2 py-2">
+            {/* <div className="flex items-center gap-2 py-2">
               <div className="flex-grow bg-white/10 h-[1px]" />
               <span className="text-xs text-foreground/50">OR</span>
               <div className="flex-grow bg-white/10 h-[1px]" />
-            </div>
+            </div> */}
 
             <div className="space-y-2">
               <label htmlFor="email" className="text-sm font-medium">

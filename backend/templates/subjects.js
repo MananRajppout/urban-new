@@ -8,7 +8,8 @@ const subjectTitle = {
     "signup_confirmation" : "Welcome to UrbanChat.ai!" ,
     "org_invite_user":"hey you are inviting on our website of urbanchat.ai",
     "daily_call_summary": "Daily Call Summary - UrbanChat.ai",
-    "individual_call_summary": "Call Summary - UrbanChat.ai"
+    "individual_call_summary": "Call Summary - UrbanChat.ai",
+    "request_number": "Request for a phone number"
 };
 
 // function parse(str) {

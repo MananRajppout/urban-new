@@ -12,7 +12,9 @@ import useSWR from 'swr'
 const page = () => {
   const [settings, setSettings] = useState({
     websiteName: '',
-    logo: null
+    logo: null,
+    contactEmail: '',
+    metaDescription: ''
   })
   const [logoPreview, setLogoPreview] = useState(null)
   const [isLoading, setIsLoading] = useState(false)
@@ -27,6 +29,8 @@ const page = () => {
           setSettings(prev => ({
             ...prev,
             websiteName: response.data.settings.website_name || '',
+            contactEmail: response.data.settings.contact_email || '',
+            metaDescription: response.data.settings.meta_description || ''
           }))
           
           // If there's an existing logo URL, set it as preview
@@ -96,7 +100,9 @@ const page = () => {
     try {
       const response = await updateWebsiteSettings(
         settings.websiteName.trim(),
-        settings.logo
+        settings.logo,
+        settings.contactEmail,
+        settings.metaDescription
       )
       
       if (response.code === 200) {
@@ -195,6 +201,42 @@ const page = () => {
               </p>
             </div>
 
+            {/* Contact Email Field */}
+
+            <div className="space-y-2">
+              <Label htmlFor="contactEmail">Contact Email</Label>
+              <Input
+                id="contactEmail"
+                name="contactEmail"
+                type="email"
+                placeholder="Enter your contact email"
+                value={settings.contactEmail}
+                onChange={handleInputChange}
+                className="max-w-md text-white"
+                required
+              />
+              <p className="text-sm text-muted-foreground">
+                This will be displayed as your website's contact email.
+              </p>
+            </div>
+
+            {/* Meta Description Field */}
+            <div className="space-y-2 flex flex-col gap-2">
+              <Label htmlFor="metaDescription">Meta Description</Label>
+              <textarea
+                id="metaDescription"
+                name="metaDescription"
+                type="text"
+                placeholder="Enter your meta description"
+                value={settings.metaDescription}
+                onChange={handleInputChange}
+                className="max-w-md text-white h-20 border-2 border-gray-300 rounded-md p-2 bg-black text-sm placeholder:text-gray-500"
+                required
+              />
+              <p className="text-sm text-muted-foreground">
+                This will be displayed as your website's meta description.
+              </p>
+            </div>
             {/* Logo Upload Field */}
             <div className="space-y-2">
               <Label htmlFor="logo">Website Logo</Label>
@@ -214,7 +256,7 @@ const page = () => {
                   </p>
                 </div>
                 {logoPreview && (
-                  <div className="flex-shrink-0">
+                  <div className="flex-shrink-0 w-20 h-20 ml-10">
                     <div className="relative">
                       <img
                         src={logoPreview}

@@ -8,6 +8,7 @@ import HeroSection from "@/components/HeroSection";
 import FeaturesSection from "@/components/FeaturesSection";
 import LiveDemoSection from "@/components/LiveDemoSection";
 import IntegrationsSection from "@/components/IntegrationsSection";
+import { useApp } from "@/context/AppContext";
 
 function useQuery() {
   const router = useRouter();
@@ -22,6 +23,7 @@ function Home() {
   let query = useQuery();
   const [isUserExist, setIsUserExist] = useState(false);
   const router = useRouter();
+  const {websiteSettings} = useApp();
 
   useEffect(function () {
   
@@ -51,15 +53,17 @@ function Home() {
     <>
       <Head>
         <title>
-          UrbanChat.ai: Revolutionize Your Customer Engagement with Our AI
+          {websiteSettings?.custom_domain || websiteSettings?.slug_name}: Revolutionize Your Customer Engagement with Our AI
           Chatbot
         </title>
         <meta
           name="description"
-          content="Improve customer service with AI chatbots. Streamline interactions, boost engagement, and drive sales with 24/7 support in 40+ languages. Integrate with your website."
+          content={websiteSettings?.meta_description || "Improve customer service with AI chatbots. Streamline interactions, boost engagement, and drive sales with 24/7 support in 40+ languages. Integrate with your website."}
           key="desc"
         />
-      </Head>
+      </Head> 
+
+   
 
       <div className="relative min-h-screen">
         <ParticleBackground />
