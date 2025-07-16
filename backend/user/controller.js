@@ -501,7 +501,7 @@ exports.updateSettings = catchAsyncError(async (req, res, next) => {
 // get website name and logo
 exports.getWebsiteNameAndLogo = catchAsyncError(async (req, res, next) => {
   const tenant = req.tenant;
-  const settings = await User.findOne({tenant});
+  const settings = await User.findOne({slug_name: tenant});
   return res.status(200).json({
     success: true,
     message: "Website name and logo fetched",
