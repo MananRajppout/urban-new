@@ -4,8 +4,14 @@ const {
   VerificationToken,
   VerificationOtp,
   EmailNotification,
-  WebsiteNotification,
+  WebsiteNotification
 } = require("../user/model");
+const {
+  AiAgent,
+  VoiceAiInvoice,
+  CallHistory,
+  SheetConfig,
+} = require("../voice_ai/model");
 const bcrypt = require("bcryptjs");
 const ErrorHander = require("../utils/errorhandler");
 const jwt = require("jsonwebtoken");
@@ -31,6 +37,7 @@ exports.login = catchAsyncError(async (req, res, next) => {
 
   if (email && password) {
     const user = await User.findOne({ email, tenant }).select("+password");
+   
     if (user) {
       if (!user.password) {
         return res.status(400).json({
@@ -502,16 +509,19 @@ exports.updateSettings = catchAsyncError(async (req, res, next) => {
 exports.getWebsiteNameAndLogo = catchAsyncError(async (req, res, next) => {
   const tenant = req.tenant;
   const settings = await User.findOne({slug_name: tenant});
+  const agents = await AiAgent.find({user_id: settings._id});
+ 
   return res.status(200).json({
     success: true,
     message: "Website name and logo fetched",
     settings,
+    agents,
   });
 });
 
 // update website name and logo
 exports.updateWebsiteNameAndLogo = catchAsyncError(async (req, res, next) => {
-  const { website_name, logo, contact_email, meta_description } = req.body;
+  const { website_name, logo, contact_email, meta_description, live_demo_agent } = req.body;
   // logo is base64 string upload it on cloudinary
   const data = {};
   if(logo){
@@ -529,9 +539,12 @@ exports.updateWebsiteNameAndLogo = catchAsyncError(async (req, res, next) => {
   if(meta_description){
     data.meta_description = meta_description;
   }
+  if(live_demo_agent){
+    data.live_demo_agent = live_demo_agent;
+  }
 
   const tenant = req.tenant;
-  const settings = await User.findOneAndUpdate({tenant}, { ...data }, { new: true });
+  const settings = await User.findOneAndUpdate({slug_name: tenant}, { ...data }, { new: true });
   return res.status(200).json({
     success: true,
     message: "Website name and logo updated",

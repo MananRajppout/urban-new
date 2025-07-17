@@ -23,7 +23,7 @@ const WebDemoCall = ({ isWebCallActive, setIsWebCallActive }) => {
   const [callDuration, setCallDuration] = useState(0);
   const [isHangingUp, setIsHangingUp] = useState(false);
   const voiceCallRef = useRef(null);
-  const { token, identity, wsUrl, loading } = useConnect(process.env.NEXT_PUBLIC_DEMO_AGENT_ID);
+  const { token, identity, wsUrl, loading } = useConnect();
 
   useEffect(() => {
     let interval;

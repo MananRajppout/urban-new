@@ -114,6 +114,11 @@ const userSchema = new mongoose.Schema({
   meta_description: {
     type: String,
     default: undefined
+  },
+  live_demo_agent: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "AiAgent",
+    default: undefined
   }
   
 });

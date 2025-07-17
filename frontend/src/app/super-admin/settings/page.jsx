@@ -8,30 +8,40 @@ import { Upload, Save, Loader2 } from 'lucide-react'
 import { toast } from "sonner"
 import { getWebsiteSettings, updateWebsiteSettings } from '@/lib/api/ApiSettings'
 import useSWR from 'swr'
+import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from '@/components/ui/select'
 
 const page = () => {
   const [settings, setSettings] = useState({
     websiteName: '',
     logo: null,
     contactEmail: '',
-    metaDescription: ''
+    metaDescription: '',
+    liveDemoAgent: ''
   })
   const [logoPreview, setLogoPreview] = useState(null)
   const [isLoading, setIsLoading] = useState(false)
   const [isInitialLoading, setIsInitialLoading] = useState(true)
+  const [agents, setAgents] = useState([])
 
   // Load existing settings on component mount
   useEffect(() => {
     const loadSettings = async () => {
       try {
-        const response = await getWebsiteSettings()
+        const response = await getWebsiteSettings();
+        
         if (response.code === 200 && response.data && response.data.settings) {
           setSettings(prev => ({
             ...prev,
             websiteName: response.data.settings.website_name || '',
             contactEmail: response.data.settings.contact_email || '',
-            metaDescription: response.data.settings.meta_description || ''
+            metaDescription: response.data.settings.meta_description || '',
+            liveDemoAgent: response.data.settings.live_demo_agent || ''
           }))
+
+       
+
+          setAgents(response.data.agents);
+          
           
           // If there's an existing logo URL, set it as preview
           if (response.data.settings.logo) {
@@ -102,7 +112,8 @@ const page = () => {
         settings.websiteName.trim(),
         settings.logo,
         settings.contactEmail,
-        settings.metaDescription
+        settings.metaDescription,
+        settings.liveDemoAgent
       )
       
       if (response.code === 200) {
@@ -194,7 +205,7 @@ const page = () => {
                 value={settings.websiteName}
                 onChange={handleInputChange}
                 className="max-w-md text-white"
-                required
+                
               />
               <p className="text-sm text-muted-foreground">
                 This will be displayed as your website's title.
@@ -213,7 +224,7 @@ const page = () => {
                 value={settings.contactEmail}
                 onChange={handleInputChange}
                 className="max-w-md text-white"
-                required
+                
               />
               <p className="text-sm text-muted-foreground">
                 This will be displayed as your website's contact email.
@@ -231,7 +242,7 @@ const page = () => {
                 value={settings.metaDescription}
                 onChange={handleInputChange}
                 className="max-w-md text-white h-20 border-2 border-gray-300 rounded-md p-2 bg-black text-sm placeholder:text-gray-500"
-                required
+                
               />
               <p className="text-sm text-muted-foreground">
                 This will be displayed as your website's meta description.
@@ -280,6 +291,24 @@ const page = () => {
               </div>
             </div>
 
+            {/* Agents Select Live Demo Agent if no agent is selected then show a message to add an agent*/}
+            <div className="space-y-2">
+              <Label htmlFor="liveDemoAgent">Live Demo Agent</Label>
+              {agents.length > 0 ? (
+                <Select className='text-white' value={settings.liveDemoAgent} onValueChange={(value) => setSettings(prev => ({ ...prev, liveDemoAgent: value }))}>
+                  <SelectTrigger className='text-white'>
+                    <SelectValue placeholder="Select an agent" className='text-white'/>
+                  </SelectTrigger>
+                  <SelectContent className='text-white'>
+                    {agents.map((agent) => (
+                      <SelectItem key={agent._id} value={agent._id} className='text-white'>{agent.name}</SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              ) : (
+                <p className="text-sm text-muted-foreground">No agents found. Please add an agent first.</p>
+              )}
+            </div>
             {/* Submit Button */}
             <div className="flex justify-end pt-4">
               <Button 
