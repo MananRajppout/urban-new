@@ -16,6 +16,7 @@ import {
 } from "@livekit/components-react";
 import { Track } from "livekit-client";
 import Playground from "./dashboard/VoiceAgents/UpdateAgents/Playground";
+import { useApp } from "@/context/AppContext";
 
 
 const WebDemoCall = ({ isWebCallActive, setIsWebCallActive }) => {
@@ -121,6 +122,7 @@ const LiveDemoSection = () => {
   const timerRef = useRef(null); // Ref to store the timer interval
   const [callDuration, setCallDuration] = useState(0);
   const [isCallStarted, setIsCallStarted] = useState(false);
+  const { websiteSettings } = useApp();
 
   useEffect(() => {
     if (isCallStarted) {
@@ -152,7 +154,7 @@ const LiveDemoSection = () => {
     try {
       setCallRequested(true);
       const res = await makeOutboundCall2(
-        process.env.NEXT_PUBLIC_DEMO_VOICE_PHONE_NUMBER,
+        websiteSettings?.live_demo_phone_number,
         phoneNumber
       );
       if (res.data) {
@@ -246,7 +248,7 @@ const LiveDemoSection = () => {
                         value={phoneNumber}
                         onChange={(e) => setPhoneNumber(e.target.value)}
                         className="w-full bg-white/5 border border-white/10 py-6 px-4 rounded-lg focus:border-brand-green focus:ring-brand-green/20"
-                        placeholder="+918035743488"
+                        placeholder={`+${websiteSettings?.live_demo_phone_number}`}
                         required
                       />
                     </div>

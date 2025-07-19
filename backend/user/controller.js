@@ -28,6 +28,7 @@ const { getPricingPlan } = require("./impl");
 const { ChatModel } = require("../chatbot/model");
 const { uploadToCloudinary } = require("../utils/cloudinary");
 const { config } = require("dotenv");
+const { PlivoPhoneRecord } = require("../v2/model/plivoModel");
 config();
 
 exports.login = catchAsyncError(async (req, res, next) => {
@@ -510,18 +511,20 @@ exports.getWebsiteNameAndLogo = catchAsyncError(async (req, res, next) => {
   const tenant = req.tenant;
   const settings = await User.findOne({slug_name: tenant});
   const agents = await AiAgent.find({user_id: settings._id});
+  const phoneNumbers = await PlivoPhoneRecord.find({ user_id: settings._id });
  
   return res.status(200).json({
     success: true,
     message: "Website name and logo fetched",
     settings,
     agents,
+    phoneNumbers
   });
 });
 
 // update website name and logo
 exports.updateWebsiteNameAndLogo = catchAsyncError(async (req, res, next) => {
-  const { website_name, logo, contact_email, meta_description, live_demo_agent } = req.body;
+  const { website_name, logo, contact_email, meta_description, live_demo_agent, live_demo_phone_number } = req.body;
   // logo is base64 string upload it on cloudinary
   const data = {};
   if(logo){
@@ -541,6 +544,10 @@ exports.updateWebsiteNameAndLogo = catchAsyncError(async (req, res, next) => {
   }
   if(live_demo_agent){
     data.live_demo_agent = live_demo_agent;
+  }
+
+  if(live_demo_phone_number){
+    data.live_demo_phone_number = live_demo_phone_number;
   }
 
   const tenant = req.tenant;

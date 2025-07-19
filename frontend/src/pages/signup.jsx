@@ -42,6 +42,7 @@ const SignUpPage = () => {
   const [slugLoading, setSlugLoading] = useState(false);
   const [isSlugUnique, setIsSlugUnique] = useState(false);
   const [showWhiteLabelOpntion, setWhiteLabelOption] = useState(false);
+  const [isMainWebsite, setIsMainWebsite] = useState(false);
   const { websiteSettings } = useApp();
   useEffect(() => {
     if (typeof window !== "undefined") {
@@ -49,6 +50,12 @@ const SignUpPage = () => {
       setWhiteLabelOption(isOriginSame);
     }
   }, [])
+
+  useEffect(() => {
+    if(window.location.hostname === process.env.NEXT_PUBLIC_MAIN_DOMAIN){
+      setIsMainWebsite(true);
+    }
+  },[]);
 
 
   //check for device and browser for login
@@ -255,7 +262,9 @@ const SignUpPage = () => {
 
 
 
-              {/* <Button
+              {isMainWebsite && (
+                <>
+                <Button
                 variant="outline"
                 className="w-full cursor-pointer border-0 flex items-center justify-center gap-2 py-5 hover:bg-white/10"
                 onClick={signupGoogle}
@@ -300,13 +309,15 @@ const SignUpPage = () => {
                     Sign up with Google
 
                   </>}
-              </Button> */}
+              </Button>
 
-              {/* <div className="flex items-center gap-2 py-2">
+              <div className="flex items-center gap-2 py-2">
                 <div className="flex-grow bg-white/10 h-[1px]" />
                 <span className="text-xs text-foreground/50">OR</span>
                 <div className="flex-grow bg-white/10 h-[1px]" />
-              </div> */}
+              </div>
+              </>
+              )}
 
               <div className="space-y-2">
                 <label htmlFor="name" className="text-sm font-medium">

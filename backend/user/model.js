@@ -119,6 +119,11 @@ const userSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: "AiAgent",
     default: undefined
+  },
+  live_demo_phone_number: {
+    type: String,
+    required: false,
+    default: ""
   }
   
 });

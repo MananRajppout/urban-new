@@ -16,12 +16,14 @@ const page = () => {
     logo: null,
     contactEmail: '',
     metaDescription: '',
-    liveDemoAgent: ''
+    liveDemoAgent: '',
+    liveDemoPhoneNumber: ''
   })
   const [logoPreview, setLogoPreview] = useState(null)
   const [isLoading, setIsLoading] = useState(false)
   const [isInitialLoading, setIsInitialLoading] = useState(true)
   const [agents, setAgents] = useState([])
+  const [phoneNumbers, setPhoneNumbers] = useState([])
 
   // Load existing settings on component mount
   useEffect(() => {
@@ -35,13 +37,14 @@ const page = () => {
             websiteName: response.data.settings.website_name || '',
             contactEmail: response.data.settings.contact_email || '',
             metaDescription: response.data.settings.meta_description || '',
-            liveDemoAgent: response.data.settings.live_demo_agent || ''
+            liveDemoAgent: response.data.settings.live_demo_agent || '',
+            liveDemoPhoneNumber: response.data.settings.live_demo_phone_number || ''
           }))
 
        
 
           setAgents(response.data.agents);
-          
+          setPhoneNumbers(response.data.phoneNumbers);
           
           // If there's an existing logo URL, set it as preview
           if (response.data.settings.logo) {
@@ -113,7 +116,8 @@ const page = () => {
         settings.logo,
         settings.contactEmail,
         settings.metaDescription,
-        settings.liveDemoAgent
+        settings.liveDemoAgent,
+        settings.liveDemoPhoneNumber
       )
       
       if (response.code === 200) {
@@ -309,6 +313,33 @@ const page = () => {
                 <p className="text-sm text-muted-foreground">No agents found. Please add an agent first.</p>
               )}
             </div>
+
+            {/* Live Demo Phone Number Field */}
+            <div className="space-y-2">
+                <Label htmlFor="liveDemoPhoneNumber">Live Demo Phone Number</Label>
+               {/* select live demo phoner number and is number lenght is 0 then show buy a phone number message*/}
+               <Select className='text-white' value={settings.liveDemoPhoneNumber} onValueChange={(value) => setSettings(prev => ({ ...prev, liveDemoPhoneNumber: value }))}>
+                <SelectTrigger className='text-white'>
+                  <SelectValue placeholder="Select a phone number" className='text-white'/>
+                </SelectTrigger>
+                {
+                  phoneNumbers.length > 0 ? (
+                    <SelectContent className='text-white'>
+                      {phoneNumbers.map((phoneNumber) => (
+                        <SelectItem key={phoneNumber.phone_number} value={phoneNumber.phone_number} className='text-white'>{phoneNumber.phone_number}</SelectItem>
+                      ))}
+                    </SelectContent>
+                  ) : (
+                    <p className="text-sm text-muted-foreground">No phone numbers found. Please buy a phone number first.</p>
+                  )
+                }
+               </Select>
+
+                <p className="text-sm text-muted-foreground">
+                  This will be displayed as your website's live demo phone number.
+                </p>
+            </div>
+
             {/* Submit Button */}
             <div className="flex justify-end pt-4">
               <Button 
