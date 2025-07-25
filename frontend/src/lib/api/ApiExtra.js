@@ -222,3 +222,11 @@ export async function checkDuePayment(planId) {
 export async function requestNumber() {
   return await AxiosInstance.get("/api/request-number", header);
 }
+
+export async function changePassword(oldPassword, newPassword) {
+  let data = {
+    old_password: oldPassword,
+    new_password: newPassword,
+  };
+  return await AxiosInstance.post("/api/change-password", data, header);
+}

@@ -8,6 +8,7 @@ import {
   ChevronLeft,
   ChevronRight,
   Menu,
+  Lock,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useState, useEffect } from 'react';
@@ -28,11 +29,11 @@ const navItems = [
     label: 'Customers',
     href: '/super-admin/customers',
   },
-  // {
-  //   icon: CreditCard,
-  //   label: 'Payments',
-  //   href: '/super-admin/payments',
-  // },
+  {
+    icon: Lock,
+    label: 'Change Password',
+    href: '/super-admin/change-password',
+  },
     {
       icon: Settings,
       label: 'Settings',

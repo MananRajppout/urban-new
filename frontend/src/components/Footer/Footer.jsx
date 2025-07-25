@@ -12,7 +12,7 @@ const Footer = () => {
     { label: "Sign In", href: "/signin" },
     { label: "Sign Up", href: "/signup" },
     { label: "Terms of Service", href: "#" },
-    { label: "Privacy Policy", href: "#" },
+    { label: "Privacy Policy", href: "/privacy-policy" },
   ];
 
   const socialLinks = [

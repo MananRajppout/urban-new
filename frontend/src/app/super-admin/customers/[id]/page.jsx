@@ -91,10 +91,14 @@ export default function DashboardPage({ params }) {
     try {
       // TODO: Replace with actual API call to assign minutes
       const res = await superAdminUserassignminutes(id, assignMinutesValue)
-      toast.success(res.data?.message);
-      handleAssignDialogClose();
-      // Optionally refresh dashboard data here
-      fetchUsers(startDate, endDate);
+      if(res.data.success){
+        toast.success(res.data?.message);
+        handleAssignDialogClose();
+        fetchUsers(startDate, endDate);
+      }else{
+        toast.error(res.data?.message);
+      }
+    
     } catch (e) {
       toast.error('Failed to assign minutes.');
     } finally {

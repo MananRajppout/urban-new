@@ -524,7 +524,7 @@ exports.getWebsiteNameAndLogo = catchAsyncError(async (req, res, next) => {
 
 // update website name and logo
 exports.updateWebsiteNameAndLogo = catchAsyncError(async (req, res, next) => {
-  const { website_name, logo, contact_email, meta_description, live_demo_agent, live_demo_phone_number } = req.body;
+  const { website_name, logo, contact_email, meta_description, live_demo_agent, live_demo_phone_number, policy_text } = req.body;
   // logo is base64 string upload it on cloudinary
   const data = {};
   if(logo){
@@ -550,6 +550,10 @@ exports.updateWebsiteNameAndLogo = catchAsyncError(async (req, res, next) => {
     data.live_demo_phone_number = live_demo_phone_number;
   }
 
+  if(policy_text){
+    data.policy_text = policy_text;
+  }
+
   const tenant = req.tenant;
   const settings = await User.findOneAndUpdate({slug_name: tenant}, { ...data }, { new: true });
   return res.status(200).json({
@@ -557,4 +561,22 @@ exports.updateWebsiteNameAndLogo = catchAsyncError(async (req, res, next) => {
     message: "Website name and logo updated",
     settings,
   });
+});
+
+
+
+exports.changePassword = catchAsyncError(async (req, res, next) => {
+  const { old_password, new_password } = req.body;
+  const user = await User.findById(req.user.id).select("+password");
+
+  const isMatch = await bcrypt.compare(old_password, user.password);
+
+  if(!isMatch){
+    return res.status(400).json({ success: false, message: "Old password is incorrect" });
+  }
+  const salt = await bcrypt.genSalt(10);
+  const hashPassword = await bcrypt.hash(new_password, salt);
+  user.password = hashPassword;
+  await user.save();
+  return res.status(200).json({ success: true, message: "Password changed successfully" });
 });

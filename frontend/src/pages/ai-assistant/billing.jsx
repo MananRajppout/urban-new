@@ -114,7 +114,7 @@ useEffect(()=>{
 },[phoneNumbers,currentAiPlan])
   return (
     <Layout>
-      <div className="space-y-6">
+      {/* <div className="space-y-6">
         <div className="flex flex-col sm:flex-row justify-between sm:items-center gap-4 mb-6">
           <h1 className="text-xl font-medium text-white">Billing & Payments</h1>
           <DateRangeFilter 
@@ -165,7 +165,13 @@ useEffect(()=>{
             </TabsContent>
           </Tabs>
         </div>
-      </div>
+      </div> */}
+
+
+     <div className="w-full h-[85vh] flex flex-col items-center justify-center">
+     <h1 className='text-2xl font-bold text-white'>Coming Soon</h1>
+     <p className='text-white'>We are working on this feature. It will be available soon.</p>
+     </div>
     </Layout>
     
   );

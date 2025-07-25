@@ -17,7 +17,8 @@ const page = () => {
     contactEmail: '',
     metaDescription: '',
     liveDemoAgent: '',
-    liveDemoPhoneNumber: ''
+    liveDemoPhoneNumber: '',
+    policyText: ''
   })
   const [logoPreview, setLogoPreview] = useState(null)
   const [isLoading, setIsLoading] = useState(false)
@@ -38,7 +39,8 @@ const page = () => {
             contactEmail: response.data.settings.contact_email || '',
             metaDescription: response.data.settings.meta_description || '',
             liveDemoAgent: response.data.settings.live_demo_agent || '',
-            liveDemoPhoneNumber: response.data.settings.live_demo_phone_number || ''
+            liveDemoPhoneNumber: response.data.settings.live_demo_phone_number || '',
+            policyText: response.data.settings.policy_text || ''
           }))
 
        
@@ -117,7 +119,8 @@ const page = () => {
         settings.contactEmail,
         settings.metaDescription,
         settings.liveDemoAgent,
-        settings.liveDemoPhoneNumber
+        settings.liveDemoPhoneNumber,
+        settings.policyText
       )
       
       if (response.code === 200) {
@@ -250,6 +253,22 @@ const page = () => {
               />
               <p className="text-sm text-muted-foreground">
                 This will be displayed as your website's meta description.
+              </p>
+            </div>
+
+            {/* Policy Text Field */}
+            <div className="space-y-2 flex flex-col gap-2">
+              <Label htmlFor="policyText">Policy Text</Label>
+              <textarea
+                id="policyText"
+                name="policyText"
+                placeholder="Enter your policy text (terms of service, privacy policy, etc.)"
+                value={settings.policyText}
+                onChange={handleInputChange}
+                className="max-w-md text-white h-32 border-2 border-gray-300 rounded-md p-2 bg-black text-sm placeholder:text-gray-500"
+              />
+              <p className="text-sm text-muted-foreground">
+                This will be displayed as your website's policy text (terms of service, privacy policy, etc.).
               </p>
             </div>
             {/* Logo Upload Field */}

@@ -124,6 +124,10 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: false,
     default: ""
+  },
+  policy_text: {
+    type: String,
+    default: undefined
   }
   
 });

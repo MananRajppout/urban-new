@@ -1430,7 +1430,7 @@ exports.superAdminAssisgNumber = catchAsyncError(async (req, res) => {
     const restriction = await Restriction.findOne({ id: TenantProvider._id });
     const remaining = restriction.voice_trial_minutes_limit - restriction.voice_trial_minutes_used;
     if((remaining - Number(minutes)) <= 0){
-      return res.status(401).json({
+      return res.status(404).json({
         success: false,
         message: "You don't have enough minutes."
       });

@@ -9,7 +9,8 @@ const { createUser, login, editUser, getUserDetails, verifyUserHash, getUserCoun
     updateSettings,
     getWebsiteNameAndLogo,
     updateWebsiteNameAndLogo,
-    requestNumber
+    requestNumber,
+    changePassword
 } = require("../user/controller");
 const { googleCallback } = require("../user/oauth_google");
 const { facebookCallback } = require("../user/oauth_facebook");
@@ -51,6 +52,8 @@ router.route("/get-settings").get(checkSessionExpiration(["customer"]), getSetti
 router.route("/update-settings").post(checkSessionExpiration(["customer"]), updateSettings);
 router.route("/get-website-name-and-logo").get(getWebsiteNameAndLogo);
 router.route("/update-website-name-and-logo").post(checkSessionExpiration(["customer"]), updateWebsiteNameAndLogo);
+router.route("/change-password").post(checkSessionExpiration(["customer"]), changePassword);
+
 
 
 
