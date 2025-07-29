@@ -260,17 +260,24 @@ class ElevenLabsVoiceHelper {
     };
     try {
       const response = await axios.get(`${this.apiUrl}/voices`, options);
-
       // Transform the ElevenLabs response to match DeepGram's format
-      const transformedVoices = response.data.voices.map((voice) => ({
+      const transformedVoices = response.data.voices.map((voice) => {
+        if(!voice.fine_tuning.state.hasOwnProperty("eleven_flash_v2_5")){
+          return null;
+        }
+
+
+        return {
         name: voice.name,
         accent: voice.labels.accent,
         gender: voice.labels.gender,
         voice_id: voice.voice_id,
         voice_url: voice.preview_url,
         age: voice.labels.age,
-      }));
-      return transformedVoices;
+      }
+    });
+
+      return transformedVoices.filter(voice => voice !== null);
     } catch (error) {
       console.error("Error fetching voices:", error.message);
       return [];

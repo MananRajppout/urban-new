@@ -89,7 +89,7 @@ async def create_tts_engine(assistant_info: Assistant):
         return smallest.TTS(voice=voice_id,speed=assistant_info.get("voice_speed"))
     elif tts_engine_name == "elevenlabs":
         DEFAULT_VOICE = Voice(
-            id="EXAVITQu4vr4xnSDxMaL",
+            id=voice_id,
             name="Bella",
             category="premade",
             settings=VoiceSettings(
@@ -274,7 +274,7 @@ async def entrypoint(ctx: JobContext):
         tts=tts,
         fnc_ctx=fnc_ctx,
         noise_cancellation=noise_cancellation.BVC(),
-        chat_ctx=initial_ctx
+        chat_ctx=initial_ctx,
     )
 
 
