@@ -1,0 +1,15 @@
+README.md
+pyproject.toml
+setup.py
+livekit/plugins/kokoro/__init__.py
+livekit/plugins/kokoro/_utils.py
+livekit/plugins/kokoro/log.py
+livekit/plugins/kokoro/models.py
+livekit/plugins/kokoro/py.typed
+livekit/plugins/kokoro/tts.py
+livekit/plugins/kokoro/version.py
+livekit_plugins_kokoro.egg-info/PKG-INFO
+livekit_plugins_kokoro.egg-info/SOURCES.txt
+livekit_plugins_kokoro.egg-info/dependency_links.txt
+livekit_plugins_kokoro.egg-info/requires.txt
+livekit_plugins_kokoro.egg-info/top_level.txt

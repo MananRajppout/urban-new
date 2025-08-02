@@ -103,6 +103,10 @@ const ModelSelection = ({
       voice.voice_name = "abbie";
       voice.voice_id = "abbie";
       voice.voice_engine_name = "rime";
+    } else if (value == "kokoro") {
+      voice.voice_name = "Heart";
+      voice.voice_id = "af_heart";
+      voice.voice_engine_name = "kokoro";
     }
 
     setVoice(voice);

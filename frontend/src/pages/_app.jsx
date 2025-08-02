@@ -70,7 +70,6 @@ export default function App({ Component, pageProps }) {
           >
             <AppProvider>
               {/* <HomePageLayout> */}
-              
               <Component {...pageProps} />
               {/* </HomePageLayout> */}
             </AppProvider>

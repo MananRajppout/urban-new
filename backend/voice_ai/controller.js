@@ -20,7 +20,7 @@ const BookingHandler = require("./booking_handler");
 const { getPricingForCall } = require("../pricing/voice_ai_cost_cal");
 const ElevenLabsVoiceHelper = require("./elevenlabs");
 const DeepGramVoiceHelper = require("./deepgram");
-const { getSarvamVoices, getSmallestVoices, getRimeVoice } = require("../v2/utils");
+const { getSarvamVoices, getSmallestVoices, getRimeVoice,getKokoroVoices } = require("../v2/utils");
 const dayjs = require("dayjs");
 const AccessToken = twilio.jwt.AccessToken;
 const VoiceGrant = AccessToken.VoiceGrant;
@@ -931,13 +931,15 @@ exports.fetchVoices = catchAsyncError(async (req, res) => {
   const sarvamVoices = await getSarvamVoices();
   const smallestVoices = await getSmallestVoices();
   const rimeVoice = await getRimeVoice();
+  const kokoroVoices = await getKokoroVoices();
 
   return res.status(200).send({
     elevenlabs: elevenLabsVoices,
     deepgram: deepgramVoices,
     sarvam: sarvamVoices,
     smallest: smallestVoices,
-    rime: rimeVoice
+    rime: rimeVoice,
+    kokoro: kokoroVoices
   }); // add later deepgram: deepGramVoices
 });
 

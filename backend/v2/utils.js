@@ -773,6 +773,237 @@ exports.getRimeVoice = async () => {
   return voices;
 };
 
+
+exports.getKokoroVoices = async () => {
+  const voices = [
+    {
+      'name': 'Heart',
+      'accent': 'ENG',
+      'gender': 'Female',
+      'voice_id': 'af_heart',
+      'voice_url': '',
+      'age': null
+    },
+    {
+      'name': 'Bella',
+      'accent': 'ENG',
+      'gender': 'Female',
+      'voice_id': 'af_bella',
+      'voice_url': '',
+      'age': null
+    },
+    {
+      'name': 'Nicole',
+      'accent': 'ENG',
+      'gender': 'Female',
+      'voice_id': 'af_nicole',
+      'voice_url': '',
+      'age': null
+    },
+    {
+      'name': 'Aoede',
+      'accent': 'ENG',
+      'gender': 'Female',
+      'voice_id': 'af_aoede',
+      'voice_url': '',
+      'age': null
+    },
+    {
+      'name': 'Kore',
+      'accent': 'ENG',
+      'gender': 'Female',
+      'voice_id': 'af_kore',
+      'voice_url': '',
+      'age': null
+    },
+    {
+      'name': 'Sarah',
+      'accent': 'ENG',
+      'gender': 'Female',
+      'voice_id': 'af_sarah',
+      'voice_url': '',
+      'age': null
+    },
+    {
+      'name': 'Nova',
+      'accent': 'ENG',
+      'gender': 'Female',
+      'voice_id': 'af_nova',
+      'voice_url': '',
+      'age': null
+    },
+    {
+      'name': 'Sky',
+      'accent': 'ENG',
+      'gender': 'Female',
+      'voice_id': 'af_sky',
+      'voice_url': '',
+      'age': null
+    },
+    {
+      'name': 'Alloy',
+      'accent': 'ENG',
+      'gender': 'Female',
+      'voice_id': 'af_alloy',
+      'voice_url': '',
+      'age': null
+    },
+    {
+      'name': 'Jessica',
+      'accent': 'ENG',
+      'gender': 'Female',
+      'voice_id': 'af_jessica',
+      'voice_url': '',
+      'age': null
+    },
+    {
+      'name': 'River',
+      'accent': 'ENG',
+      'gender': 'Female',
+      'voice_id': 'af_river',
+      'voice_url': '',
+      'age': null
+    },
+    {
+      'name': 'Michael',
+      'accent': 'ENG',
+      'gender': 'Male',
+      'voice_id': 'am_michael',
+      'voice_url': '',
+      'age': null
+    },
+    {
+      'name': 'Fenrir',
+      'accent': 'ENG',
+      'gender': 'Male',
+      'voice_id': 'am_fenrir',
+      'voice_url': '',
+      'age': null
+    },
+    {
+      'name': 'Puck',
+      'accent': 'ENG',
+      'gender': 'Male',
+      'voice_id': 'am_puck',
+      'voice_url': '',
+      'age': null
+    },
+    {
+      'name': 'Echo',
+      'accent': 'ENG',
+      'gender': 'Male',
+      'voice_id': 'am_echo',
+      'voice_url': '',
+      'age': null
+    },
+    {
+      'name': 'Eric',
+      'accent': 'ENG',
+      'gender': 'Male',
+      'voice_id': 'am_eric',
+      'voice_url': '',
+      'age': null
+    },
+    {
+      'name': 'Liam',
+      'accent': 'ENG',
+      'gender': 'Male',
+      'voice_id': 'am_liam',
+      'voice_url': '',
+      'age': null
+    },
+    {
+      'name': 'Onyx',
+      'accent': 'ENG',
+      'gender': 'Male',
+      'voice_id': 'am_onyx',
+      'voice_url': '',
+      'age': null
+    },
+    {
+      'name': 'Santa',
+      'accent': 'ENG',
+      'gender': 'Male',
+      'voice_id': 'am_santa',
+      'voice_url': '',
+      'age': null
+    },
+    {
+      'name': 'Adam',
+      'accent': 'ENG',
+      'gender': 'Male',
+      'voice_id': 'am_adam',
+      'voice_url': '',
+      'age': null
+    },
+    {
+      'name': 'Emma',
+      'accent': 'UK',
+      'gender': 'Female',
+      'voice_id': 'bf_emma',
+      'voice_url': '',
+      'age': null
+    },
+    {
+      'name': 'Isabella',
+      'accent': 'UK',
+      'gender': 'Female',
+      'voice_id': 'bf_isabella',
+      'voice_url': '',
+      'age': null
+    },
+    {
+      'name': 'Alice',
+      'accent': 'UK',
+      'gender': 'Female',
+      'voice_id': 'bf_alice',
+      'voice_url': '',
+      'age': null
+    },
+    {
+      'name': 'Lily',
+      'accent': 'UK',
+      'gender': 'Female',
+      'voice_id': 'bf_lily',
+      'voice_url': '',
+      'age': null
+    },
+    {
+      'name': 'George',
+      'accent': 'UK',
+      'gender': 'Male',
+      'voice_id': 'bm_george',
+      'voice_url': '',
+      'age': null
+    },
+    {
+      'name': 'Fable',
+      'accent': 'UK',
+      'gender': 'Male',
+      'voice_id': 'bm_fable',
+      'voice_url': '',
+      'age': null
+    },
+    {
+      'name': 'Lewis',
+      'accent': 'UK',
+      'gender': 'Male',
+      'voice_id': 'bm_lewis',
+      'voice_url': '',
+      'age': null
+    },
+    {
+      'name': 'Daniel',
+      'accent': 'UK',
+      'gender': 'Male',
+      'voice_id': 'bm_daniel',
+      'voice_url': '',
+      'age': null
+    }
+  ];
+  return voices;
+}
+
 exports.buyNumberFunction = async (user_id, countryISO,plan_id,session_id,type='checkout') => {
   if (!countryISO) {
     return { success: false, message: "countryISO is required" };

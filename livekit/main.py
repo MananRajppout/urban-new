@@ -12,7 +12,7 @@ from livekit.agents import (
     metrics
 )
 from livekit.agents.pipeline import VoicePipelineAgent
-from livekit.plugins import deepgram, openai, silero, smallest, elevenlabs, sarvam
+from livekit.plugins import deepgram, openai, silero, smallest, elevenlabs, sarvam, kokoro
 from livekit.plugins.deepgram import tts
 from services.assistant_function_service import AssistantFnc
 from app_types.assistant_type import Assistant
@@ -112,6 +112,8 @@ async def create_tts_engine(assistant_info: Assistant):
             reduce_latency=True,
             api_key=assistant_info.get("rime_api_key")
         )
+    elif tts_engine_name == "kokoro":
+        return kokoro.TTS(voice_id="af_heart", speed=assistant_info.get("voice_speed"))
     else:
         # Default to fastest option
         return deepgram.TTS(model="aura-asteria-en")

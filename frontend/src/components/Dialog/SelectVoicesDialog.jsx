@@ -66,6 +66,14 @@ export default function SelectVoiceDialog({
               })),
             ];
           }
+          else if(voice_engine_name=="kokoro"){
+            voices = [
+              ...response.data.kokoro.map((voice) => ({
+                ...voice,
+                service: "kokoro",
+              })),
+            ];
+          }
           setVoiceData(voices);
         })
         .catch((error) => {

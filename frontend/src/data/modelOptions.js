@@ -43,6 +43,7 @@ export const TTSOptions = [
   { name: "SAi", value: "smallest" },
   { name: "Deepgram", value: "deepgram" },
   { name: "Rime", value: "rime" },
+  { name: "Kokoro", value: "kokoro" },
 ];
 
 export const VoiceOptions = [
