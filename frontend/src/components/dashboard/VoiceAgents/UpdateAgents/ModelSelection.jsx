@@ -84,8 +84,8 @@ const ModelSelection = ({
       voice_engine_name: "",
     };
     if (value == "elevenlabs") {
-      voice.voice_name = "Devi";
-      voice.voice_id = "MF4J4IDTRo0AxOO4dpFR";
+      voice.voice_name = "Liza";
+      voice.voice_id = "bb2q8Tox15YHJ7ceE9tu";
       voice.voice_engine_name = "elevenlabs";
     } else if (value == "sarvam") {
       voice.voice_name = "Meera";
@@ -107,6 +107,14 @@ const ModelSelection = ({
       voice.voice_name = "Heart";
       voice.voice_id = "af_heart";
       voice.voice_engine_name = "kokoro";
+    } else if (value == "smallest-v2") {
+      voice.voice_name = "Enzo";
+      voice.voice_id = "enzo";
+      voice.voice_engine_name = "smallest-v2";
+    } else if (value == "smallest-large") {
+      voice.voice_name = "Ronald";
+      voice.voice_id = "ronald";
+      voice.voice_engine_name = "smallest-large";
     }
 
     setVoice(voice);

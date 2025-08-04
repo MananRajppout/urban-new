@@ -74,6 +74,22 @@ export default function SelectVoiceDialog({
               })),
             ];
           }
+          else if(voice_engine_name=="smallest-v2"){
+            voices = [
+              ...response.data.smallestV2.map((voice) => ({
+                ...voice,
+                service: "smallest-v2",
+              })),
+            ];
+          }
+          else if(voice_engine_name=="smallest-large"){
+            voices = [
+              ...response.data.smallestLarge.map((voice) => ({
+                ...voice,
+                service: "smallest-large",
+              })),
+            ];
+          }
           setVoiceData(voices);
         })
         .catch((error) => {

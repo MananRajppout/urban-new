@@ -156,6 +156,10 @@ const VoiceSelector = ({
         return voicesData?.data?.rime || [];
       case "kokoro":
         return voicesData?.data?.kokoro || [];
+      case "smallest-v2":
+        return voicesData?.data?.smallestV2 || [];
+      case "smallest-large":
+        return voicesData?.data?.smallestLarge || [];
       default:
         return [];
     }

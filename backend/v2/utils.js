@@ -61,12 +61,12 @@ exports.getSmallestVoices = async () => {
   };
 
   try {
-    const response = await fetch(
+    const smallestResponse = await fetch(
       "https://waves-api.smallest.ai/api/v1/lightning/get_voices",
       options
     );
-    const data = await response.json();
-    return data.voices.map((v) => ({
+    const smallestData = await smallestResponse.json();
+    const smallest = smallestData.voices.map((v) => ({
       name: v.displayName,
       voice_id: v.voiceId,
       gender:v.tags.gender,
@@ -74,6 +74,33 @@ exports.getSmallestVoices = async () => {
       age:v.tags.age,
       accent:v.tags.accent
     }));
+    const smallestV2Response = await fetch(
+      "https://waves-api.smallest.ai/api/v1/lightning-v2/get_voices",
+      options
+    );
+    const smallestV2Data = await smallestV2Response.json();
+    const smallestV2 = smallestV2Data.voices.map((v) => ({
+      name: v.displayName,
+      voice_id: v.voiceId,
+      gender:v.tags.gender,
+      voice_url:"",
+      age:v.tags.age,
+      accent:v.tags.accent
+    }));
+    const smallestLargeResponse = await fetch(
+      "https://waves-api.smallest.ai/api/v1/lightning-large/get_voices",
+      options
+    );
+    const smallestLargeData = await smallestLargeResponse.json();
+    const smallestLarge = smallestLargeData.voices.map((v) => ({
+      name: v.displayName,
+      voice_id: v.voiceId,
+      gender:v.tags.gender,
+      voice_url:"",
+      age:v.tags.age,
+      accent:v.tags.accent
+    }));
+    return {smallest,smallestV2,smallestLarge};
   } catch (err) {
     console.error(err);
   }

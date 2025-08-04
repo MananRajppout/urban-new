@@ -23,6 +23,7 @@ from services.api_service import (
     call_webhook_hangup,
 )
 from utils.generate_prompt import generate_prompt
+from utils.get_welcome_message import get_welcome_message
 from livekit.agents import tokenize
 from time import time
 from dataclasses import dataclass
@@ -86,7 +87,7 @@ async def create_tts_engine(assistant_info: Assistant):
             pace=assistant_info.get("voice_speed")
         )
     elif tts_engine_name == "smallest":
-        return smallest.TTS(voice=voice_id,speed=assistant_info.get("voice_speed"))
+        return smallest.TTS(voice=voice_id,speed=assistant_info.get("voice_speed"),model="lightning")
     elif tts_engine_name == "elevenlabs":
         DEFAULT_VOICE = Voice(
             id=voice_id,
@@ -100,7 +101,7 @@ async def create_tts_engine(assistant_info: Assistant):
                 use_speaker_boost=True,
             ),
         )
-        return elevenlabs.TTS(api_key=assistant_info.get("elevenlabs_api_key"),voice=DEFAULT_VOICE)
+        return elevenlabs.TTS(api_key=assistant_info.get("elevenlabs_api_key"),model="eleven_flash_v2_5",voice=DEFAULT_VOICE)
     elif tts_engine_name == "rime":
         def transform(x):
             return 2.0 - x if x > 1.0 else x
@@ -114,6 +115,10 @@ async def create_tts_engine(assistant_info: Assistant):
         )
     elif tts_engine_name == "kokoro":
         return kokoro.TTS(voice_id="af_heart", speed=assistant_info.get("voice_speed"))
+    elif tts_engine_name == "smallest-v2":
+        return smallest.TTS(voice=voice_id,speed=assistant_info.get("voice_speed"),model="lightning-v2")
+    elif tts_engine_name == "smallest-large":
+        return smallest.TTS(voice=voice_id,speed=assistant_info.get("voice_speed"),model="lightning-large")
     else:
         # Default to fastest option
         return deepgram.TTS(model="aura-asteria-en")
@@ -288,7 +293,7 @@ async def entrypoint(ctx: JobContext):
     # Start welcome message immediately (non-blocking)
     welcome_task = asyncio.create_task(
         agent.say(
-            assistant_info.get("welcome_message_text"), 
+            get_welcome_message(assistant_info,call_ctx), 
             allow_interruptions=True
         )
     )

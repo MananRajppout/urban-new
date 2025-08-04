@@ -937,9 +937,11 @@ exports.fetchVoices = catchAsyncError(async (req, res) => {
     elevenlabs: elevenLabsVoices,
     deepgram: deepgramVoices,
     sarvam: sarvamVoices,
-    smallest: smallestVoices,
     rime: rimeVoice,
-    kokoro: kokoroVoices
+    kokoro: kokoroVoices,
+    smallest: smallestVoices.smallest,
+    smallestV2: smallestVoices.smallestV2,
+    smallestLarge: smallestVoices.smallestLarge
   }); // add later deepgram: deepGramVoices
 });
 
