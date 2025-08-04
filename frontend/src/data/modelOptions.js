@@ -42,7 +42,7 @@ export const TTSOptions = [
   { name: "SrAi", value: "sarvam" },
   { name: "SAi", value: "smallest" },
   { name: "SAi-v2", value: "smallest-v2" },
-  { name: "SAi-large", value: "smallest-large" },
+  // { name: "SAi-large", value: "smallest-large" },
   { name: "Deepgram", value: "deepgram" },
   { name: "Rime", value: "rime" },
   { name: "Kokoro", value: "kokoro" }
