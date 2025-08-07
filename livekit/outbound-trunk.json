@@ -1,9 +1,0 @@
-{
-    "trunk": {
-      "name": "My outbound trunk",
-      "address": "52339230624409574.zt.plivo.com",
-      "numbers": ["+18449921354"],
-      "auth_username": "livekit",
-      "auth_password": "Livekit0987@"
-    }
-  }

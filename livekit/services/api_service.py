@@ -49,12 +49,12 @@ def call_webhook_pickup(call_ctx: CallContext,assistant: Assistant):
 def call_webhook_hangup(call_ctx: CallContext,assistant: Assistant,chat_ctx: ChatContext):
     try:
         chat_history = []
-        for i,message in enumerate(chat_ctx.messages):
+        for i,message in enumerate(chat_ctx):
             if i == 0:
                 continue
             chat_history.append({
-                "role": "user" if message.role == "user" else "agent",
-                "content": message.content
+                "role": "user" if message.get("role") == "user" else "agent",
+                "content": message.get("content")[0]
             })
             
         url = f"{BACKEND_URL}/api/webcall/webhook/hangup"

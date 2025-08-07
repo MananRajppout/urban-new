@@ -11,11 +11,11 @@ from livekit.agents import (
     llm,
     metrics
 )
-from livekit.agents.pipeline import VoicePipelineAgent
-from livekit.plugins import deepgram, openai, silero, smallest, elevenlabs, sarvam, kokoro
-from livekit.plugins.deepgram import tts
-from services.assistant_function_service import AssistantFnc
-from app_types.assistant_type import Assistant
+
+from livekit.agents import AgentSession, Agent, RoomInputOptions
+from livekit.plugins import deepgram, openai, silero, elevenlabs, sarvam, smallest, assemblyai
+# from services.assistant_function_service import AssistantFnc
+from app_types.assistant_type import Assistant, Voice, VoiceSettings
 from app_types.callconfig_type import CallContext
 from services.api_service import (
     fetch_assistant_id,
@@ -24,9 +24,6 @@ from services.api_service import (
 )
 from utils.generate_prompt import generate_prompt
 from utils.get_welcome_message import get_welcome_message
-from livekit.agents import tokenize
-from time import time
-from dataclasses import dataclass
 import json
 from livekit.plugins import groq
 from livekit.plugins import noise_cancellation
@@ -34,25 +31,15 @@ import uuid
 from livekit.plugins import rime
 import os
 from livekit.plugins import groq
+from livekit.plugins.turn_detector.multilingual import MultilingualModel
+from services.agent_session import Assistant
+from livekit.agents import  MetricsCollectedEvent, UserStateChangedEvent, AgentStateChangedEvent
+from services.telemetry import setup_langfuse
 
 logger = logging.getLogger("voice-assistant")
 load_dotenv()
 
-@dataclass
-class VoiceSettings:
-    stability: float  # [0.0 - 1.0]
-    similarity_boost: float  # [0.0 - 1.0]
-    style: float | None = None  # [0.0 - 1.0]
-    speed: float | None = 1.0  # [0.8 - 1.2]
-    use_speaker_boost: bool | None = False
 
-
-@dataclass
-class Voice:
-    id: str
-    name: str
-    category: str
-    settings: VoiceSettings | None = None
 
 def prewarm(proc: JobProcess):
     """Optimized prewarm with faster VAD settings and caching"""
@@ -87,7 +74,7 @@ async def create_tts_engine(assistant_info: Assistant):
             pace=assistant_info.get("voice_speed")
         )
     elif tts_engine_name == "smallest":
-        return smallest.TTS(voice=voice_id,speed=assistant_info.get("voice_speed"),model="lightning")
+        return smallest.TTS(voice_id=voice_id,speed=assistant_info.get("voice_speed"),model="lightning")
     elif tts_engine_name == "elevenlabs":
         DEFAULT_VOICE = Voice(
             id=voice_id,
@@ -113,15 +100,16 @@ async def create_tts_engine(assistant_info: Assistant):
             reduce_latency=True,
             api_key=assistant_info.get("rime_api_key")
         )
-    elif tts_engine_name == "kokoro":
-        return kokoro.TTS(voice_id="af_heart", speed=assistant_info.get("voice_speed"))
+    # elif tts_engine_name == "kokoro":
+    #     return kokoro.TTS(voice_id="af_heart", speed=assistant_info.get("voice_speed"))
     elif tts_engine_name == "smallest-v2":
-        return smallest.TTS(voice=voice_id,speed=assistant_info.get("voice_speed"),model="lightning-v2")
+        return smallest.TTS(voice_id=voice_id,speed=assistant_info.get("voice_speed"),model="lightning-v2")
     elif tts_engine_name == "smallest-large":
-        return smallest.TTS(voice=voice_id,speed=assistant_info.get("voice_speed"),model="lightning-large")
+        return smallest.TTS(voice_id=voice_id,speed=assistant_info.get("voice_speed"),model="lightning-large")
     else:
         # Default to fastest option
         return deepgram.TTS(model="aura-asteria-en")
+
 
 
 async def create_llm_engine(assistant_info: Assistant):
@@ -131,7 +119,7 @@ async def create_llm_engine(assistant_info: Assistant):
     # Optimized LLM settings for speed
     base_config = {
         "parallel_tool_calls": True,
-        "max_tokens": 100,  # Limit response length for faster generation
+        # "max_tokens": 100,  # Limit response length for faster generation
         "temperature": 0.7,  # Slightly lower for faster, more focused responses
     }
     
@@ -151,6 +139,15 @@ async def create_llm_engine(assistant_info: Assistant):
     
     elif gpt_model == "llama3-8b-8192":
         return groq.LLM(model="llama3-8b-8192", **base_config)
+    
+    elif gpt_model == "cerebras/llama-4-maverick-17b-128e-instruct":
+        return openai.LLM.with_cerebras(model="llama-4-maverick-17b-128e-instruct", **base_config)
+    
+    elif gpt_model == "cerebras/llama-4-scout-17b-16e-instruct":
+        return openai.LLM.with_cerebras(model="llama-4-scout-17b-16e-instruct", **base_config)
+    
+    elif gpt_model == "cerebras/gpt-oss-120b":
+        return openai.LLM.with_cerebras(model="gpt-oss-120b", **base_config)
     
     else:
         return groq.LLM(model="llama-3.1-8b-instant", **base_config)
@@ -187,27 +184,22 @@ async def create_stt_engine(assistant_info: Assistant):
         return deepgram.STT(language=language, model="nova-3",smart_format=False,punctuate=False,filler_words=False)
     elif stt_engine == "nova-3-medical":
         return deepgram.STT(language=language, model="nova-3-medical",smart_format=False,punctuate=False,filler_words=False)
+    elif stt_engine == "assemblyai":
+        return assemblyai.STT(language=language)
     else:
         return deepgram.STT(language=language, model="nova-2-general",smart_format=False,punctuate=False,filler_words=False)
 
 async def get_assistant_info(proc_userdata: dict, agent_id: str) -> Assistant | None:
-    """Get assistant info with caching for faster retrieval"""
-    # cache = proc_userdata["assistant_cache"]
-    
-    # if agent_id in cache:
-    #     logger.info(f"Using cached assistant info for {agent_id}")
-    #     return cache[agent_id]
-    
+    """Get assistant info with caching for faster retrieval"""    
     assistant_info = fetch_assistant_id(agent_id)
     if assistant_info:
-        # cache[agent_id] = assistant_info
         logger.info(f"Cached assistant info for {agent_id}")
     
     return assistant_info
 
 
 async def entrypoint(ctx: JobContext):
-    timing = {"start": time()}
+    setup_langfuse()
     
     # Initialize connection
     logger.info(f"connecting to room {ctx.room.name}")
@@ -219,15 +211,12 @@ async def entrypoint(ctx: JobContext):
             ctx.wait_for_participant(), 
             timeout=10.0
         )
-        timing["participant_connected"] = time()
-        logger.info(f"Participant connected in {timing['participant_connected'] - timing['start']:.3f}s")
     except asyncio.TimeoutError:
         logger.error("Participant connection timeout")
         await ctx.api.room.delete_room(api.DeleteRoomRequest(room=ctx.room.name))
         return
 
     # Initialize function context
-    fnc_ctx = AssistantFnc(ctx.room.name, participant.identity)
     logger.info(f"starting voice assistant for participant {participant.identity}")
 
     # Parse call metadata
@@ -247,7 +236,6 @@ async def entrypoint(ctx: JobContext):
     logger.info(f"call_ctx: {call_ctx}")
 
     # Get assistant info (with caching)
-    timing["assistant_fetch_start"] = time()
     assistant_info = await get_assistant_info(ctx.proc.userdata, call_ctx.get("agentId"))
     print(assistant_info.get("voice_speed"))
     if assistant_info is None:
@@ -255,113 +243,58 @@ async def entrypoint(ctx: JobContext):
         await ctx.api.room.delete_room(api.DeleteRoomRequest(room=ctx.room.name))
         return
     
-    timing["assistant_fetched"] = time()
-    logger.info(f"Assistant info loaded in {timing['assistant_fetched'] - timing['assistant_fetch_start']:.3f}s")
 
-    # Create initial chat context
-    initial_ctx = llm.ChatContext().append(
-        role="system", text=generate_prompt(assistant_info,call_ctx)
-    )
 
     # Initialize TTS and LLM engines in parallel for faster setup
-    timing["engines_start"] = time()
+    
     tts_task = asyncio.create_task(create_tts_engine(assistant_info))
     llm_task = asyncio.create_task(create_llm_engine(assistant_info))
     stt_task = asyncio.create_task(create_stt_engine(assistant_info))
     
-    tts, gpt_llm, stt = await asyncio.gather(tts_task, llm_task, stt_task)
-    timing["engines_ready"] = time()
-    logger.info(f"Engines initialized in {timing['engines_ready'] - timing['engines_start']:.3f}s")
+    tts, llm, stt = await asyncio.gather(tts_task, llm_task, stt_task)
 
-    # Create voice pipeline agent
-    agent = VoicePipelineAgent(
-        vad=ctx.proc.userdata["vad"],
+    session = AgentSession(
         stt=stt,
-        llm=gpt_llm,
+        llm=llm,
         tts=tts,
-        fnc_ctx=fnc_ctx,
-        noise_cancellation=noise_cancellation.BVC(),
-        chat_ctx=initial_ctx,
+        vad=silero.VAD.load(),
+        preemptive_generation=True,
+        turn_detection=MultilingualModel()
     )
 
-
-
     # Start agent
-    agent.start(ctx.room, participant)
-    timing["agent_started"] = time()
-
-    # Start welcome message immediately (non-blocking)
-    welcome_task = asyncio.create_task(
-        agent.say(
-            get_welcome_message(assistant_info,call_ctx), 
-            allow_interruptions=True
+    await session.start(
+        room=ctx.room,
+        agent=Assistant(instructions=generate_prompt(assistant_info,call_ctx),ctx=ctx,assistant_info=assistant_info,room_name=ctx.room.name,participant_identity=participant.identity),
+        room_input_options=RoomInputOptions(
+            noise_cancellation=noise_cancellation.BVC(), 
         )
     )
 
-    # Register functions while welcome message is playing
-    fnc_ctx.register(
-        agent=agent,
-        chat_ctx=initial_ctx,
-        ctx=ctx,
-        assistant_info=assistant_info,
-        call_ctx=call_ctx,
+    session.say(
+        get_welcome_message(assistant_info,call_ctx), 
+        allow_interruptions=True
     )
-
-    # Wait for welcome message to complete
-    await welcome_task
-    timing["welcome_complete"] = time()
     
-    logger.info(f"Total setup time: {timing['welcome_complete'] - timing['start']:.3f}s")
 
     # Enhanced event handling with detailed timing
-    @agent.on("user_started_speaking")
-    def user_started_speaking():
-        timing["user_speech_start"] = time()
-        logger.info("User speaking started")
+    @session.on("user_state_changed")
+    def user_state_changed(event: UserStateChangedEvent):
+        logger.info(f"User state changed: {event.new_state}")
 
-    @agent.on("user_stopped_speaking")
-    def user_stopped_speaking():
-        timing["user_speech_end"] = time()
-        timing["stt_start"] = time()
-        speech_duration = timing["user_speech_end"] - timing["user_speech_start"]
-        logger.info(f"User speaking stopped (duration: {speech_duration:.3f}s)")
+    @session.on("agent_state_changed")
+    def agent_state_changed(event: AgentStateChangedEvent):
+        logger.info(f"Agent state changed: {event.new_state}")
 
-    @agent.on("agent_started_speaking")
-    def agent_started_speaking():
-        timing["agent_speech_start"] = time()
-        
-        # Calculate response components timing
-        if "stt_start" in timing:
-            total_response_time = timing["agent_speech_start"] - timing["user_speech_end"]
-            logger.info(f"Total response time: {total_response_time:.3f}s")
-            
-        logger.info("Agent speaking started")
-
-    @agent.on("agent_stopped_speaking")
-    def agent_stopped_speaking():
-        if "agent_speech_start" in timing:
-            speech_duration = time() - timing["agent_speech_start"]
-            logger.info(f"Agent speaking stopped (duration: {speech_duration:.3f}s)")
 
     # Enhanced disconnect handling
     async def log_usage():
-        disconnect_time = time()
-        total_session_time = disconnect_time - timing["start"]
-        
-        logger.info(f"User disconnected after {total_session_time:.3f}s")
-        logger.info("Session timing summary:")
-        logger.info(f"  - Setup: {timing.get('welcome_complete', 0) - timing['start']:.3f}s")
-        logger.info(f"  - Participant connection: {timing['participant_connected'] - timing['start']:.3f}s")
-        logger.info(f"  - Assistant fetch: {timing['assistant_fetched'] - timing['assistant_fetch_start']:.3f}s")
-        logger.info(f"  - Engine init: {timing['engines_ready'] - timing['engines_start']:.3f}s")
-        
-        # Call webhook hangup
-        call_webhook_hangup(call_ctx, assistant_info, initial_ctx)
+        logger.info(f"User disconnected")
 
-    # Handle web call pickup webhook
-    if call_ctx.get("callType") == "web":
-        logger.info("Web call detected")
-        # Call webhook in background to avoid blocking
+        # Call webhook hangup
+        chat_ctx = session.history.to_dict().get("items")
+        call_webhook_hangup(call_ctx, assistant_info, chat_ctx)
+
 
     if(call_ctx.get("isGoogleSheet") == True):
         print("Google sheet call detected")
@@ -370,7 +303,32 @@ async def entrypoint(ctx: JobContext):
             asyncio.to_thread(call_webhook_pickup, call_ctx, assistant_info)
         )
     
+    transcription_delay = 0
+    llm_latency = 0
+    tts_latency = 0
+    @session.on("metrics_collected")
+    def metrics_collected(event: MetricsCollectedEvent):
+        if(event.type != "metrics_collected"):
+            return
 
+        global end_of_utterance_delay, llm_latency, tts_latency
+        try:
+            if(event.metrics.type == "eou_metrics"):
+                end_of_utterance_delay = event.metrics.end_of_utterance_delay
+
+            if(event.metrics.type == "llm_metrics"):
+                llm_latency = event.metrics.ttft
+
+            if(event.metrics.type == "tts_metrics"):
+                tts_latency = event.metrics.ttfb
+                logger.info(f"Latency: Transcription Delay: {end_of_utterance_delay}s")
+                logger.info(f"Latency: LLM {llm_latency}s")
+                logger.info(f"Latency: TTS {tts_latency}s")
+                logger.info(f"Latency: Total {end_of_utterance_delay + llm_latency + tts_latency}s")
+
+        except Exception as e:
+            pass
+        
 
     # Register shutdown callback
     ctx.add_shutdown_callback(log_usage)

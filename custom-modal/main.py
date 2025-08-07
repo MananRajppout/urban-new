@@ -118,10 +118,10 @@ with image.imports():
     from scipy.io.wavfile import write
 
 @app.cls(
-    gpu="a100",
-    scaledown_window=600,  # Keep alive for 10 minutes
-    max_containers=10,
-    min_containers=1,  # Keep at least 1 container warm
+    gpu="a10g",
+    scaledown_window=60,  # Keep alive for 10 minutes
+    max_containers=1,
+    min_containers=0,  # Keep at least 1 container warm
     # region="us-west-1",
 )
 
@@ -230,6 +230,7 @@ class KokoroService:
         speed = item.get("speed", 1.0)
         sample_rate = int(item.get("sample_rate", 24000))
         add_wav_header = bool(item.get("add_wav_header", True))
+        print(f"Streaming audio for '{text}' with voice {voice_id} at speed {speed} and sample rate {sample_rate}")
 
         if not text:
             raise HTTPException(status_code=400, detail="Text is required")

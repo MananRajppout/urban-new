@@ -20,6 +20,7 @@ export const STTOptions = [
   { name: "nova-2-atc", value: "nova-2-atc" },
   { name: "distil-whisper-large-v3-en", value: "distil-whisper-large-v3-en" },
   { name: "whisper-large-v3-turbo", value: "whisper-large-v3-turbo" },
+  { name: "assemblyai", value: "assemblyai" },
 ];
 
 export const LLMOptions = [
@@ -29,6 +30,9 @@ export const LLMOptions = [
   { name: "llama3-8b-8192", value: "llama3-8b-8192" },
   { name: "GPT-4o Mini", value: "gpt-4o-mini" },
   { name: "gpt-4.1-nano", value: "gpt-4.1-nano-2025-04-14" },
+  { name: "cerebras/llama-4-scout-17b-16e-instruct", value: "cerebras/llama-4-scout-17b-16e-instruct" },
+  { name: "cerebras/llama-4-maverick-17b-128e-instruct", value: "cerebras/llama-4-maverick-17b-128e-instruct" },
+  { name: "cerebras/gpt-oss-120b", value: "cerebras/gpt-oss-120b" },
   // { name: "GPT-4.1", value: "gpt-4.1-2025-04-14" },
   // { name: "GPT 4o Realtime", value: "gpt-4o-realtime-preview-2024-12-17" },
   // {
@@ -45,7 +49,7 @@ export const TTSOptions = [
   // { name: "SAi-large", value: "smallest-large" },
   { name: "Deepgram", value: "deepgram" },
   { name: "Rime", value: "rime" },
-  { name: "Kokoro", value: "kokoro" }
+  // { name: "Kokoro", value: "kokoro" }
 ];
 
 export const VoiceOptions = [

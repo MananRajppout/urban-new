@@ -62,3 +62,20 @@ class Assistant:
     rime_api_key: str
     stt_engine: str
     language: str
+
+
+@dataclass
+class VoiceSettings:
+    stability: float  # [0.0 - 1.0]
+    similarity_boost: float  # [0.0 - 1.0]
+    style: float | None = None  # [0.0 - 1.0]
+    speed: float | None = 1.0  # [0.8 - 1.2]
+    use_speaker_boost: bool | None = False
+
+
+@dataclass
+class Voice:
+    id: str
+    name: str
+    category: str
+    settings: VoiceSettings | None = None
