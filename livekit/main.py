@@ -31,7 +31,7 @@ import uuid
 from livekit.plugins import rime
 import os
 from livekit.plugins import groq
-from livekit.plugins.turn_detector.multilingual import MultilingualModel
+# from livekit.plugins.turn_detector.multilingual import MultilingualModel
 from services.agent_session import Assistant
 from livekit.agents import  MetricsCollectedEvent, UserStateChangedEvent, AgentStateChangedEvent
 from services.telemetry import setup_langfuse
@@ -259,7 +259,7 @@ async def entrypoint(ctx: JobContext):
         tts=tts,
         vad=silero.VAD.load(),
         preemptive_generation=True,
-        turn_detection=MultilingualModel()
+        # turn_detection=MultilingualModel()
     )
 
     # Start agent

@@ -3,3 +3,4 @@ python-dotenv~=1.0
 aiofile~=3.8.8
 pytz
 livekit-plugins-noise-cancellation
+livekit-plugins-turn-detector
