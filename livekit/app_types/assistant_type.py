@@ -1,5 +1,6 @@
 from dataclasses import dataclass
 from typing import List, Optional
+from livekit.agents.types import DEFAULT_API_CONNECT_OPTIONS, NOT_GIVEN, NotGivenOr
 
 @dataclass
 class WelcomeMessageFile:
@@ -68,9 +69,9 @@ class Assistant:
 class VoiceSettings:
     stability: float  # [0.0 - 1.0]
     similarity_boost: float  # [0.0 - 1.0]
-    style: float | None = None  # [0.0 - 1.0]
-    speed: float | None = 1.0  # [0.8 - 1.2]
-    use_speaker_boost: bool | None = False
+    style: NotGivenOr[float] = NOT_GIVEN  # [0.0 - 1.0]
+    speed: NotGivenOr[float] = NOT_GIVEN  # [0.8 - 1.2]
+    use_speaker_boost: NotGivenOr[bool] = NOT_GIVEN
 
 
 @dataclass

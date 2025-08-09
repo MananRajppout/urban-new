@@ -40,6 +40,9 @@ def generate_prompt(assistant: Assistant,call_ctx):
         - Never use ‘*’ in your responses. Your responses must always be in plain text in paragraph style. Exactly the same way when a human is orally talking to another human.
         - Most important if the conversation is concluded or comes to an end or very important if the intent is to terminate the call you must call the hang_up_call() function.
         - Very important if you need ask for email always keep in mind user is orally speaking his information so you must carefully analyse. Users may say “at” or “at the rate” to mean “@”, and “dot”, “period”, or “d o t” to mean “.”. They may also say “underscore” for “_”, or “dash”/“hyphen” for “-”. For example, “prashantdotberichatgmaildotcom” should be understood as “prashant.berich@gmail.com”. People may speak their email in one go, with unclear pronunciation or in varied phrasing, so always normalize the spoken input, validate it, and repeat it back for confirmation. If the email sounds ambiguous or misheard, politely ask the user to spell it one letter at a time to ensure accuracy.
+        - never send emoji in the response. keep it simple and raw text.
+        - make sure you call hang_up_call function when you want to end the call no need to call without any reason.
+        - you talk in hindi language make sure you use only hindi words and if you talk in english make sure you use only english words.
         """
     else: 
         prompt = f"""
@@ -52,6 +55,9 @@ def generate_prompt(assistant: Assistant,call_ctx):
           - Never use ‘*’ in your responses. Your responses must always be in plain text in paragraph style. Exactly the same way when a human is orally talking to another human.
           - Most important if the conversation is concluded or comes to an end or very important if the intent is to terminate the call you must call the hang_up_call() function.
           - Very important if you need ask for email always keep in mind user is orally speaking his information so you must carefully analyse. Users may say “at” or “at the rate” to mean “@”, and “dot”, “period”, or “d o t” to mean “.”. They may also say “underscore” for “_”, or “dash”/“hyphen” for “-”. For example, “prashantdotberichatgmaildotcom” should be understood as “prashant.berich@gmail.com”. People may speak their email in one go, with unclear pronunciation or in varied phrasing, so always normalize the spoken input, validate it, and repeat it back for confirmation. If the email sounds ambiguous or misheard, politely ask the user to spell it one letter at a time to ensure accuracy.
+          - never send emoji in the response. keep it simple and raw text.
+          - make sure you call hang_up_call function when you want to end the call no need to call without any reason.
+          - you talk in hindi language make sure you use only hindi words and if you talk in english make sure you use only english words.
         """
     
     return prompt

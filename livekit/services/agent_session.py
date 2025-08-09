@@ -29,7 +29,7 @@ class Assistant(Agent):
         self.participant_identity = participant_identity
         self.livekit_api = api.LiveKitAPI(api_key=os.getenv("LIVEKIT_API_KEY"),api_secret=os.getenv("LIVEKIT_API_SECRET"),url=os.getenv("LIVEKIT_URL"))
     
-
+    
     @function_tool
     async def hang_up_call(
         self,

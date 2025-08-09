@@ -76,19 +76,16 @@ async def create_tts_engine(assistant_info: Assistant):
     elif tts_engine_name == "smallest":
         return smallest.TTS(voice_id=voice_id,speed=assistant_info.get("voice_speed"),model="lightning")
     elif tts_engine_name == "elevenlabs":
-        DEFAULT_VOICE = Voice(
-            id=voice_id,
-            name="Bella",
-            category="premade",
-            settings=VoiceSettings(
-                stability=0.71,
-                speed=assistant_info.get("voice_speed"),
-                similarity_boost=0.5,
-                style=0.0,
-                use_speaker_boost=True,
-            ),
-        )
-        return elevenlabs.TTS(api_key=assistant_info.get("elevenlabs_api_key"),model="eleven_flash_v2_5",voice=DEFAULT_VOICE)
+       
+        settings=elevenlabs.VoiceSettings(
+            stability=0.71,
+            speed=assistant_info.get("voice_speed"),
+            similarity_boost=0.5,
+            style=0.0,
+            use_speaker_boost=True,
+        ),
+        
+        return elevenlabs.TTS(api_key=assistant_info.get("elevenlabs_api_key"),model="eleven_flash_v2_5",voice_id=voice_id)
     elif tts_engine_name == "rime":
         def transform(x):
             return 2.0 - x if x > 1.0 else x
@@ -185,7 +182,7 @@ async def create_stt_engine(assistant_info: Assistant):
     elif stt_engine == "nova-3-medical":
         return deepgram.STT(language=language, model="nova-3-medical",smart_format=False,punctuate=False,filler_words=False)
     elif stt_engine == "assemblyai":
-        return assemblyai.STT(language=language)
+        return assemblyai.STT()
     else:
         return deepgram.STT(language=language, model="nova-2-general",smart_format=False,punctuate=False,filler_words=False)
 
@@ -285,6 +282,7 @@ async def entrypoint(ctx: JobContext):
     @session.on("agent_state_changed")
     def agent_state_changed(event: AgentStateChangedEvent):
         logger.info(f"Agent state changed: {event.new_state}")
+        
 
 
     # Enhanced disconnect handling
@@ -328,8 +326,8 @@ async def entrypoint(ctx: JobContext):
 
         except Exception as e:
             pass
-        
 
+    
     # Register shutdown callback
     ctx.add_shutdown_callback(log_usage)
 
