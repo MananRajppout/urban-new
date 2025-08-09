@@ -88,8 +88,8 @@ const ModelSelection = ({
       voice.voice_id = "bb2q8Tox15YHJ7ceE9tu";
       voice.voice_engine_name = "elevenlabs";
     } else if (value == "sarvam") {
-      voice.voice_name = "Meera";
-      voice.voice_id = "meera";
+      voice.voice_name = "Manisha";
+      voice.voice_id = "manisha";
       voice.voice_engine_name = "sarvam";
     } else if (value == "smallest") {
       voice.voice_name = "Raman";

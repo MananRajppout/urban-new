@@ -62,6 +62,7 @@ async def create_tts_engine(assistant_info: Assistant):
     """Create TTS engine asynchronously"""
     tts_engine_name = assistant_info.get("voice_engine_name")
     voice_id = assistant_info.get("voice_id")
+    language = assistant_info.get("language", "en")
 
     if tts_engine_name == "deepgram":
         # Deepgram is typically fastest
@@ -69,8 +70,8 @@ async def create_tts_engine(assistant_info: Assistant):
     elif tts_engine_name == "sarvam":
         return sarvam.TTS(
             speaker=voice_id, 
-            target_language_code="en-IN", 
-            model="bulbul:v1",
+            target_language_code=f"{language}-IN", 
+            model="bulbul:v2",
             pace=assistant_info.get("voice_speed")
         )
     elif tts_engine_name == "smallest":
