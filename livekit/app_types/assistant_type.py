@@ -63,6 +63,13 @@ class Assistant:
     rime_api_key: str
     stt_engine: str
     language: str
+    voice_loudness: float
+    voice_pitch: float
+    voice_consistency: float
+    voice_similarity: float
+    voice_enhancement: float
+    voice_stability: float
+    voice_style: float
 
 
 @dataclass

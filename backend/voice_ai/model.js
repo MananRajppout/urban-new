@@ -119,6 +119,39 @@ const aiAgentSchema = new mongoose.Schema({
     type: Number,
     default: 1,
   },
+  voice_loudness: {
+    type: Number,
+    default: 1, //(0.5 to 2.0)
+  },
+  voice_pitch: {
+    type: Number,
+    default: 0, //(-20.0 to 20.0)
+  },
+
+  //smallest perameters
+  voice_consistency: {
+    type: Number,
+    default: 0.5, //0 <= x <= 1
+  },
+  voice_similarity: {
+    type: Number,
+    default: 0, //0 <= x <= 1
+  },
+  voice_enhancement: {
+    type: Number,
+    default: 1, //0 <= x <= 2
+  },
+
+  //elevanlabs perameters
+  voice_stability: {
+    type: Number,
+    default: 0.5, //0 <= x <= 1
+  },
+  voice_style: {
+    type: Number,
+    default: 0, //0 <= x <= 1
+  },
+
   voice_temperature: {
     type: Number,
     default: 0,

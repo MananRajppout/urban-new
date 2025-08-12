@@ -1,7 +1,7 @@
 import React from "react";
 import VoiceSpeedControl from "./VoiceSpeedControl";
-import TemperatureControl from "./TemperatureControl";
-import VolumeControl from "./VolumeControl";
+import LoudnessControl from "./LoudnessControl";
+import PitchControl from "./PitchControl";
 import SilenceTimeControll from "./SilenceTimeControll";
 import SilenceSpeechUpdate from "./SilenceSpeechUpdate";
 

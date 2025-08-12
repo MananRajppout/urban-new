@@ -15,7 +15,8 @@ from livekit.agents import (
 from livekit.agents import AgentSession, Agent, RoomInputOptions
 from livekit.plugins import deepgram, openai, silero, elevenlabs, sarvam, smallest, assemblyai
 # from services.assistant_function_service import AssistantFnc
-from app_types.assistant_type import Assistant, Voice, VoiceSettings
+from app_types.assistant_type import Voice, VoiceSettings
+from app_types.assistant_type import  Assistant as AssistantData
 from app_types.callconfig_type import CallContext
 from services.api_service import (
     fetch_assistant_id,
@@ -58,11 +59,19 @@ def prewarm(proc: JobProcess):
     proc.userdata["timing"] = {}
 
 
-async def create_tts_engine(assistant_info: Assistant):
+async def create_tts_engine(assistant_info: AssistantData):
     """Create TTS engine asynchronously"""
     tts_engine_name = assistant_info.get("voice_engine_name")
     voice_id = assistant_info.get("voice_id")
     language = assistant_info.get("language", "en")
+    voice_loudness = assistant_info.get("voice_loudness", 1.0)
+    voice_pitch = assistant_info.get("voice_pitch", 0.0)
+    voice_consistency = assistant_info.get("voice_consistency", 0.5)
+    voice_similarity = assistant_info.get("voice_similarity", 0.0)
+    voice_enhancement = assistant_info.get("voice_enhancement", 1.0)
+    voice_stability = assistant_info.get("voice_stability", 0.5)
+    voice_style = assistant_info.get("voice_style", 0.0)
+    
 
     if tts_engine_name == "deepgram":
         # Deepgram is typically fastest
@@ -72,17 +81,26 @@ async def create_tts_engine(assistant_info: Assistant):
             speaker=voice_id, 
             target_language_code=f"{language}-IN", 
             model="bulbul:v2",
-            pace=assistant_info.get("voice_speed")
+            pace=assistant_info.get("voice_speed"),
+            loudness=voice_loudness,
+            pitch=voice_pitch
         )
     elif tts_engine_name == "smallest":
-        return smallest.TTS(voice_id=voice_id,speed=assistant_info.get("voice_speed"),model="lightning")
+        return smallest.TTS(
+            voice_id=voice_id,
+            speed=assistant_info.get("voice_speed"),
+            model="lightning",
+            consistency=voice_consistency,
+            similarity=voice_similarity,
+            enhancement=voice_enhancement
+        )
     elif tts_engine_name == "elevenlabs":
        
         settings=elevenlabs.VoiceSettings(
-            stability=0.71,
+            stability=voice_stability,
             speed=assistant_info.get("voice_speed"),
-            similarity_boost=0.5,
-            style=0.0,
+            similarity_boost=voice_similarity,
+            style=voice_style,
             use_speaker_boost=True,
         ),
         
@@ -101,16 +119,30 @@ async def create_tts_engine(assistant_info: Assistant):
     # elif tts_engine_name == "kokoro":
     #     return kokoro.TTS(voice_id="af_heart", speed=assistant_info.get("voice_speed"))
     elif tts_engine_name == "smallest-v2":
-        return smallest.TTS(voice_id=voice_id,speed=assistant_info.get("voice_speed"),model="lightning-v2")
+        return smallest.TTS(
+            voice_id=voice_id,
+            speed=assistant_info.get("voice_speed"),
+            model="lightning-v2",
+            consistency=voice_consistency,
+            similarity=voice_similarity,
+            # enhancement=0.8
+        )
     elif tts_engine_name == "smallest-large":
-        return smallest.TTS(voice_id=voice_id,speed=assistant_info.get("voice_speed"),model="lightning-large")
+        return smallest.TTS(
+            voice_id=voice_id,
+            speed=assistant_info.get("voice_speed"),
+            model="lightning-large",
+            consistency=voice_consistency,
+            similarity=voice_similarity,
+            enhancement=voice_enhancement
+        )
     else:
         # Default to fastest option
         return deepgram.TTS(model="aura-asteria-en")
 
 
 
-async def create_llm_engine(assistant_info: Assistant):
+async def create_llm_engine(assistant_info: AssistantData):
     """Create LLM engine with optimized settings"""
     gpt_model = assistant_info.get("chatgpt_model", "gpt-4o-mini")
     
@@ -151,7 +183,7 @@ async def create_llm_engine(assistant_info: Assistant):
         return groq.LLM(model="llama-3.1-8b-instant", **base_config)
 
 
-async def create_stt_engine(assistant_info: Assistant):
+async def create_stt_engine(assistant_info: AssistantData):
     stt_engine = assistant_info.get("stt_engine", "nova-2-general")
     language = assistant_info.get("language", "en")
     print(f"stt_engine: {stt_engine}, language: {language}")
@@ -187,7 +219,7 @@ async def create_stt_engine(assistant_info: Assistant):
     else:
         return deepgram.STT(language=language, model="nova-2-general",smart_format=False,punctuate=False,filler_words=False)
 
-async def get_assistant_info(proc_userdata: dict, agent_id: str) -> Assistant | None:
+async def get_assistant_info(proc_userdata: dict, agent_id: str) -> AssistantData | None:
     """Get assistant info with caching for faster retrieval"""    
     assistant_info = fetch_assistant_id(agent_id)
     if assistant_info:

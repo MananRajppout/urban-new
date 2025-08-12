@@ -69,6 +69,13 @@ const AgentDetail = () => {
     silence_2_timeout: 15,
     silence_1_speech: "You are here.",
     silence_2_speech: "Thank's you for calling.",
+    voice_loudness: 1,
+    voice_pitch: 0,
+    voice_consistency: 0.5,
+    voice_similarity: 0,
+    voice_enhancement: 1,
+    voice_stability: 0.5,
+    voice_style: 0,
   });
 
   const [prompt, setPrompt] = useState({
@@ -127,6 +134,13 @@ const AgentDetail = () => {
         silence_1_speech: agent.silence_1_speech || "You are here.",
         silence_2_speech: agent.silence_2_speech || "Thank's you for calling.",
         language: agent.language || "en", 
+        voice_loudness: agent.voice_loudness || 1,
+        voice_pitch: agent.voice_pitch || 0,
+        voice_consistency: agent.voice_consistency || 0.5,
+        voice_similarity: agent.voice_similarity || 0,
+        voice_enhancement: agent.voice_enhancement || 1,
+        voice_stability: agent.voice_stability || 0.5,
+        voice_style: agent.voice_style || 0,
       });
       setPrompt({
         old: agent.base_prompt || "",
@@ -398,6 +412,36 @@ const AgentDetail = () => {
             silence_2_speech={agent.silence_2_speech}
             set_silence_2_speech={(value) =>
               handleFieldChange("silence_2_speech", value[0])
+            }
+            tts_engine={agent.voice_engine_name}
+            
+            voice_loudness={agent.voice_loudness}
+            handleVoiceLoudnessChange={(value) =>
+              handleFieldChange("voice_loudness", value[0])
+            }
+            voice_pitch={agent.voice_pitch}
+            handleVoicePitchChange={(value) =>
+              handleFieldChange("voice_pitch", value[0])
+            }
+            voice_consistency={agent.voice_consistency}
+            handleVoiceConsistencyChange={(value) =>
+              handleFieldChange("voice_consistency", value[0])
+            }
+            voice_similarity={agent.voice_similarity}
+            handleVoiceSimilarityChange={(value) =>
+              handleFieldChange("voice_similarity", value[0])
+            }
+            voice_enhancement={agent.voice_enhancement}
+            handleVoiceEnhancementChange={(value) =>
+              handleFieldChange("voice_enhancement", value[0])
+            }
+            voice_stability={agent.voice_stability}
+            handleVoiceStabilityChange={(value) =>
+              handleFieldChange("voice_stability", value[0])
+            }
+            voice_style={agent.voice_style}
+            handleVoiceStyleChange={(value) =>
+              handleFieldChange("voice_style", value[0])
             }
           />
 

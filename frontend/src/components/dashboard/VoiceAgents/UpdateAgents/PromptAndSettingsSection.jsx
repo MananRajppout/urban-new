@@ -34,6 +34,21 @@ const PromptAndSettingsSection = ({
   set_silence_1_speech,
   silence_2_speech,
   set_silence_2_speech,
+  tts_engine,
+  voice_loudness,
+  handleVoiceLoudnessChange,
+  voice_pitch,
+  handleVoicePitchChange,
+  voice_consistency,
+  handleVoiceConsistencyChange,
+  voice_similarity,
+  handleVoiceSimilarityChange,
+  voice_enhancement,
+  handleVoiceEnhancementChange,
+  voice_stability,
+  handleVoiceStabilityChange,
+  voice_style,
+  handleVoiceStyleChange,
 }) => {
   return (
     <>
@@ -95,6 +110,21 @@ const PromptAndSettingsSection = ({
             handleTemperatureChange={handleTemperatureChange}
             agentId={agentId}
             mutate={mutate}
+            tts_engine={tts_engine}
+            voice_loudness={voice_loudness}
+            handleVoiceLoudnessChange={handleVoiceLoudnessChange}
+            voice_pitch={voice_pitch}
+            handleVoicePitchChange={handleVoicePitchChange}
+            voice_consistency={voice_consistency}
+            handleVoiceConsistencyChange={handleVoiceConsistencyChange}
+            voice_similarity={voice_similarity}
+            handleVoiceSimilarityChange={handleVoiceSimilarityChange}
+            voice_enhancement={voice_enhancement}
+            handleVoiceEnhancementChange={handleVoiceEnhancementChange}
+            voice_stability={voice_stability}
+            handleVoiceStabilityChange={handleVoiceStabilityChange}
+            voice_style={voice_style}
+            handleVoiceStyleChange={handleVoiceStyleChange}
           />
 
 
