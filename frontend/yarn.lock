@@ -13514,6 +13514,11 @@ react-popper@^2.3.0:
     react-fast-compare "^3.0.1"
     warning "^4.0.2"
 
+react-razorpay@^3.0.1:
+  version "3.0.1"
+  resolved "https://registry.npmjs.org/react-razorpay/-/react-razorpay-3.0.1.tgz"
+  integrity sha512-43P6VB20quinlUDN3dUdg0XlMtoClzfvhgpPWnGrLwLE6Pr570fXdA4kC+92Wqof48A/x96TXRpLnrQ/J1eXyw==
+
 react-refresh@^0.8.3, "react-refresh@>=0.8.3 <0.10.0":
   version "0.8.3"
   resolved "https://registry.npmjs.org/react-refresh/-/react-refresh-0.8.3.tgz"

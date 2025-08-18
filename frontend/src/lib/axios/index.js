@@ -66,7 +66,7 @@ AxiosInstance.interceptors.response.use(
       // The request was made, and the server responded with an error status
       if (error.response.status == 401 || error.response.status == 403) {
         localStorage.removeItem("access_token");
-        window.location.href = "/signin";
+        // window.location.href = "/signin";
       }
 
       res.code = error.response.status;

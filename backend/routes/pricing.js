@@ -11,7 +11,10 @@ const { editPriceModel, fetchPriceModels, createStripeSession,
     downloadInvoice,currentPlan,
     checkSubscriptionDue,
     getPaymentHistory,
-    editPaymentMethods} = require("../pricing/controller");
+    editPaymentMethods,
+    createRazorpaySession,
+    razorpaySuccessCallback
+  } = require("../pricing/controller");
 
 const router = express.Router();
 
@@ -29,6 +32,9 @@ router.route("/edit-price-model").post(checkSessionExpiration(["admin"]), editPr
 router.route("/create-payment-session").post(checkSessionExpiration(["customer"]), createStripeSession);
 router.route("/add-payment-methods").post(checkSessionExpiration(["customer"]), addPaymentMethods);
 // router.post("/webhook",express.raw({type: 'application/json'}),stripeWebhook);
+
+router.route("/create-razorpay-session").post(checkSessionExpiration(["customer"]), createRazorpaySession);
+router.route("/razorpay-success-callback").post(checkSessionExpiration(["customer"]), razorpaySuccessCallback);
 
 router.route("/make-default-card").post(checkSessionExpiration(["customer"]), makeDefaultCard)
 router.route("/delete-payment-method").delete(checkSessionExpiration(["customer"]), deletePaymentMethod)

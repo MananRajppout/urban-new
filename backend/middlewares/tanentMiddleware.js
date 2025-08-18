@@ -4,7 +4,7 @@ const { minimatch } = require("minimatch");
 
 
 config()
-const ignoreRoutes = ["/api/fetch-ai-agent/*","/api/webcall/webhook/pickup","/api/webcall/webhook/hangup","/api/verify-user?*","/api/stripe-success-callback?*","/api/stripe-failure-callback?*","/api/auth/google-ios-login"]
+const ignoreRoutes = ["/api/fetch-ai-agent/*","/api/webcall/webhook/pickup","/api/webcall/webhook/hangup","/api/verify-user?*","/api/stripe-success-callback?*","/api/stripe-failure-callback?*","/api/auth/google-ios-login","/api/create-payment-session","/api/create-razorpay-session"]
 
 function isIgnoredRoute(uri) {
   return ignoreRoutes.some((pattern) => minimatch(uri, pattern));

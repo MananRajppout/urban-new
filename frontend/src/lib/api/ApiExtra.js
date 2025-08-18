@@ -105,6 +105,14 @@ export async function getPaymentSession(data) {
   return await AxiosInstance.post("/api/create-payment-session", data, header);
 }
 
+export async function getRazorpaySession(data) {
+  return await AxiosInstance.post("/api/create-razorpay-session", data, header);
+}
+
+export async function getRazorpaySuccessCallback(data) {
+  return await AxiosInstance.post("/api/razorpay-success-callback", data, header);
+}
+
 export async function getAllBlogs(search, page) {
   return await AxiosInstance.get(
     `/api/fetch-blogs?page=${page}&limit=10&search=${search}`,

@@ -70,6 +70,7 @@
     "passport-google-oauth2": "^0.2.0",
     "path": "^0.12.7",
     "plivo": "^4.69.3",
+    "razorpay": "^2.9.6",
     "selenium-webdriver": "^4.13.0",
     "stripe": "^14.14.0",
     "telnyx": "^1.27.0",

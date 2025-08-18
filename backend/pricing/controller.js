@@ -6,9 +6,18 @@ const { sendMailFun } = require("../utils/infra");
 const { PlivoPhoneRecord } = require("../v2/model/plivoModel");
 const { buyNumberFunction, deletePhoneNumberPlan, makePlivoNumberActive, deletePlivoNumberPaymentFailed } = require("../v2/utils");
 const { handleSubscriptionCancellation, getThisMonthBilling, updatePaymentHistory } = require("./impl");
+const Razorpay = require("razorpay");
 const mongoose = require("mongoose");
-
+const { config } = require("dotenv");
+const crypto = require("crypto");
+config();
 const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
+
+
+const razorpayInstance = new Razorpay({
+  key_id: process.env.RAZARPAY_KEY,
+  key_secret: process.env.RAZARPAY_SECRET,
+});
 
 // some helper function
 async function getStripeCustomerID(user) {
@@ -222,6 +231,73 @@ exports.createStripeSession = catchAsyncError(async (req, res, next) => {
 });
 
 
+
+
+exports.createRazorpaySession = catchAsyncError(async (req, res, next) => {
+  let { pricing_plan_id, currency, country_iso } = req.body;
+
+
+
+
+
+  // Controller Code
+  const planDetails = await getPlanDetails(pricing_plan_id, country_iso);
+
+  pricing_plan_id = pricing_plan_id ? pricing_plan_id :generateUniqueId(18)
+  const { plan, planType } = planDetails;
+
+
+  console.log(plan, planType, 'check for plan type here>>>>>>>>>>>>')
+
+  if (!planDetails) {
+    return res.status(404).json({ message: "Plan not found", success: false });
+  }
+
+
+
+
+  const historyId= generateUniqueId(17);
+  
+  // Plan description here
+
+  const session = await razorpayInstance.orders.create({
+    amount: plan.cost * 100,
+    receipt: historyId,
+    notes: {
+      userId: req.user.id,
+      planType: planType,
+      plan_id: pricing_plan_id
+    }
+  });
+
+  // Payment history save
+  await PaymentHistory.create({
+    user_id: req.user.id,
+    currency: "inr",
+    cost: plan.cost,
+    plan_id: pricing_plan_id,
+    stripe_session_id: session.id,
+    plan_type: planType,
+    country_iso: country_iso ? country_iso : "",
+    unique_id:historyId
+  });
+
+
+
+  return res.status(200).json({
+    message: "success",
+    orderId: session.id,
+    planType: planType,
+    success: true,
+    price: plan.cost,
+    user:req.user
+  });
+});
+
+
+
+
+
 //this code is for recurring method testing locally plz comment off this code in production
 
 // setInterval(async () => {
@@ -316,6 +392,67 @@ exports.stripeSuccessCallback = catchAsyncError(async (req, res, next) => {
   // ?plan_type=${plan_type}`)
 });
 
+
+exports.razorpaySuccessCallback = catchAsyncError(async (req, res, next) => {
+  const { razorpay_order_id, razorpay_payment_id, razorpay_signature, plan_type, session_id } = req.body;
+
+
+    // Payment history fetch
+    const payment_history = await PaymentHistory.findOne({
+      stripe_session_id: session_id,
+    });
+
+    if (!payment_history) {
+      return res
+        .status(404)
+        .json({ message: "Payment record not found", success: false });
+    }
+
+    // Plan details fetch
+    let paid_plan;
+    if (plan_type === "chatbot") {
+      paid_plan = await PricePlan.findById(payment_history.plan_id);
+    } else if (plan_type === "ai_voice") {
+      paid_plan = await VoiceAIPricePlan.findById(payment_history.plan_id);
+    } else if (plan_type === "buy_number") {
+      paid_plan = "buy_number"
+    }
+
+    if (!paid_plan) {
+      return res
+        .status(404)
+        .json({ message: "Plan details not found", success: false });
+    }
+
+    payment_history.payment_status = "paid";
+    await payment_history.save();
+
+    if (paid_plan === "buy_number") {
+
+      console.log("Buying number")
+      await buyNumberFunction(payment_history.user_id, payment_history.country_iso, payment_history.plan_id, session_id);
+    } else {
+      await updatePricingPlan(payment_history.user_id, paid_plan, plan_type);
+
+    }
+
+    const user = await User.findById(payment_history.user_id);
+
+    // Payment details
+    const pay_amount = `${payment_history.cost} ${payment_history.currency}`;
+
+    const ctx = {
+      pay_amount,
+      subscription_plan: paid_plan.name,
+      payment_date: new Date(paid_plan.created_time).toLocaleDateString(),
+    };
+
+    // Confirmation email bhejna
+    await sendMailFun("payment_confirmation", ctx, user.email);
+
+    return res.redirect(`https://urbanchat.ai/success?plan_type=${plan_type}`);
+ 
+});
 
 exports.stripeFailedCallback = catchAsyncError(async (req, res, next) => {
   const { session_id } = req.query;
