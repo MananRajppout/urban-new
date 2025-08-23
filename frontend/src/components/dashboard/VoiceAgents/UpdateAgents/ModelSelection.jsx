@@ -84,8 +84,8 @@ const ModelSelection = ({
       voice_engine_name: "",
     };
     if (value == "elevenlabs") {
-      voice.voice_name = "Liza";
-      voice.voice_id = "bb2q8Tox15YHJ7ceE9tu";
+      voice.voice_name = "Nikita";
+      voice.voice_id = "SZfY4K69FwXus87eayHK";
       voice.voice_engine_name = "elevenlabs";
     } else if (value == "sarvam") {
       voice.voice_name = "Manisha";
