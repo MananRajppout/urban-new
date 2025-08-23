@@ -181,8 +181,3 @@ class Assistant(Agent):
         except Exception as e:
             print(f"Error transferring participant {self.participant_identity} to {transfer_to}: {e}")
             await self.session.say(error_message)
-        
-        
-    
-
-

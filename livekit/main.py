@@ -95,20 +95,38 @@ async def create_tts_engine(assistant_info: AssistantData):
             enhancement=voice_enhancement
         )
     elif tts_engine_name == "elevenlabs":
+        # apply linear mapping / rescaling to transform the speed 0.5-2.0 to 0.8-1.2
+        # formula: new_value = min_new + (value - min_old) * (max_new - min_new) / (max_old - min_old)
+
+        voice_speed = 0.8 + (assistant_info.get("voice_speed") - 0.5) * (1.2 - 0.8) / (2.0 - 0.5)
+        print(f"voice_speed: {voice_speed}")
+        return elevenlabs.TTS(
+            api_key=assistant_info.get("elevenlabs_api_key"),
+            model="eleven_flash_v2_5",
+            voice_id=voice_id,
+            voice_settings=elevenlabs.VoiceSettings(
+                stability=voice_stability,         # float 0.0 - 1.0
+                speed=voice_speed,             # default 0.8 - 1.2
+                similarity_boost=voice_similarity, # float 0.0 - 1.0
+                style=voice_style,        # 0.0 - 1.0
+                use_speaker_boost=True
+            )
+        )
+
        
-        settings=elevenlabs.VoiceSettings(
-            stability=voice_stability,
-            speed=assistant_info.get("voice_speed"),
-            similarity_boost=voice_similarity,
-            style=voice_style,
-            use_speaker_boost=True,
-        ),
-        
-        return elevenlabs.TTS(api_key=assistant_info.get("elevenlabs_api_key"),model="eleven_flash_v2_5",voice_id=voice_id)
+    
     elif tts_engine_name == "rime":
+
+        #apply linear mapping / rescaling to transform the speed 0.5-2.0 to 0.5-1.5
+        x = 0.5 + (assistant_info.get("voice_speed") - 0.5) * (1.5 - 0.5) / (2.0 - 0.5)
+        
+        # Mirror the speed range from 0.5 to 2.0
         def transform(x):
-            return 2.0 - x if x > 1.0 else x
-        speed = transform(assistant_info.get("voice_speed", 1.0))
+            return x if x <= 1.0 else 2.0 - x
+
+
+        speed = transform(x)
+        print(f"speed: {speed}")
         return rime.TTS(
             model="mistv2",
             speaker=voice_id,
