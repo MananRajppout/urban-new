@@ -11,7 +11,7 @@ const userSchema = new mongoose.Schema({
   profile_image: { type: String, default: "" },
   created_time: { type: Date, default: Date.now },
   last_mod_time: { type: Date, default: Date.now },
-  is_active: { type: Boolean, default: false },
+  is_active: { type: Boolean, default: true },
   pricing_plan: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "PricePlan",
@@ -32,7 +32,7 @@ const userSchema = new mongoose.Schema({
   org_id: { type: String, required: false },
   voice_ai_status: {
     type: String,
-    default: "inactive",
+    default: "free_trial",
     enum: ["active", "inactive", "free_trial"],
   },
   elevenlabs_api_key: {
