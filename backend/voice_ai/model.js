@@ -37,7 +37,7 @@ const aiAgentSchema = new mongoose.Schema({
   chatgpt_model: {
     type: String,
     required: true,
-    default: "gpt-4o-mini",
+    default: "cerebras/llama-4-scout-17b-16e-instruct",
   },
   STT_name: {
     type: String,
