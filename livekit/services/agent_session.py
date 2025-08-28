@@ -21,14 +21,14 @@ class Assistant(Agent):
     livekit_api: LiveKitAPI
     call_ctx: CallContext
 
-    def __init__(self,instructions:str,ctx:JobContext,assistant_info:None,room_name:str,participant_identity:str) -> None:
+    def __init__(self,instructions:str,ctx:JobContext,assistant_info:None,room_name:str,participant_identity:str,call_ctx:CallContext) -> None:
         super().__init__(instructions=instructions)
         self.ctx = ctx
         self.assistant_info = assistant_info
         self.room_name = room_name
         self.participant_identity = participant_identity
         self.livekit_api = api.LiveKitAPI(api_key=os.getenv("LIVEKIT_API_KEY"),api_secret=os.getenv("LIVEKIT_API_SECRET"),url=os.getenv("LIVEKIT_URL"))
-    
+        self.call_ctx = call_ctx
     
     @function_tool
     async def hang_up_call(

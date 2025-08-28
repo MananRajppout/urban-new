@@ -313,7 +313,7 @@ async def entrypoint(ctx: JobContext):
     # Start agent
     await session.start(
         room=ctx.room,
-        agent=Assistant(instructions=generate_prompt(assistant_info,call_ctx),ctx=ctx,assistant_info=assistant_info,room_name=ctx.room.name,participant_identity=participant.identity),
+        agent=Assistant(instructions=generate_prompt(assistant_info,call_ctx),ctx=ctx,assistant_info=assistant_info,room_name=ctx.room.name,participant_identity=participant.identity,call_ctx=call_ctx),
         room_input_options=RoomInputOptions(
             noise_cancellation=noise_cancellation.BVC(), 
         )
