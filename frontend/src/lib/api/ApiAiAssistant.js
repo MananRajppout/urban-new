@@ -67,7 +67,7 @@ export async function createAiAgent(
 ) {
   const data = {
     base_prompt,
-    chatgpt_model: chatgpt_model || "cerebras/llama-4-scout-17b-16e-instruct",
+    chatgpt_model: "meta-llama/llama-4-maverick-17b-128e-instruct",
     temperature,
     welcome_msg,
     voice_id,

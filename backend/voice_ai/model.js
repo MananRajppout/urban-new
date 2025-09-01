@@ -65,18 +65,18 @@ const aiAgentSchema = new mongoose.Schema({
   voice_engine_name: {
     type: String,
     required: false,
-    default: "smallest", //elevenlabs, sarvam
+    default: "deepgram", //elevenlabs, sarvam
   },
 
   voice_id: {
     type: String,
     required: true,
-    default: "raman",
+    default: "aura-2-asteria-en",
   },
   voice_name: {
     type: String,
     required: true,
-    default: "Raman",
+    default: "Asteria",
   },
   call_transfer_prompt: {
     type: String,
@@ -178,7 +178,7 @@ const aiAgentSchema = new mongoose.Schema({
   },
   language: {
     type: String,
-    default: "en",
+    default: "hi",
   },
   enable_speech_normalization: {
     type: Boolean,
