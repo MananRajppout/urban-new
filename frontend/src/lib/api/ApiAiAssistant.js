@@ -70,10 +70,10 @@ export async function createAiAgent(
     chatgpt_model: "meta-llama/llama-4-maverick-17b-128e-instruct",
     temperature,
     welcome_msg,
-    voice_id,
+    voice_id: "aura-2-asteria-en",
     transfer_call_number,
-    voice_name,
-    voice_engine_name,
+    voice_name: "Asteria",
+    voice_engine_name: "deepgram",
   };
 
   return await AxiosInstance.post("/api/create-ai-agent", data, header);
