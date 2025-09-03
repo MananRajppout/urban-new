@@ -141,6 +141,12 @@ const AddNumberDialog = ({ open, onOpenChange, onNumberPurchased, getBoughtPhone
     }));
   }, [countries]);
 
+
+  const inrTODollar = (price) => {
+    const priceWithoutSymbol = price.replace("₹", "").replace(" per month", "");
+    console.log("priceWithoutSymbol", Number(priceWithoutSymbol), price);
+    return Number(priceWithoutSymbol) * 0.013;
+  }
  
 
  
@@ -172,7 +178,7 @@ const AddNumberDialog = ({ open, onOpenChange, onNumberPurchased, getBoughtPhone
                             className="w-4 h-4"
                           /> */}
                       <span>{country.name}</span>
-                      <span className="text-accent-teal ml-2">{country.price}</span>
+                      <span className="text-accent-teal ml-2">{country.name == "USA" ? `$${inrTODollar(country.price)} per month`: country.price}</span>
                     </div>
                   </SelectItem>
                 ))}

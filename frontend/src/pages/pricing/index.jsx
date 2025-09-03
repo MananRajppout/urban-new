@@ -32,7 +32,7 @@ const PricingPage = () => {
 
   const [selectedModelId, setselectedModelId] = useState(null);
   const [pricingData, setPricingData] = useState([]);
-  const [selectedRegion, setSelectedRegion] = useState('india'); // 'india' or 'international'
+  const [selectedRegion, setSelectedRegion] = useState('international'); // 'india' or 'international'
 
   const [timeLeft, setTimeLeft] = useState({
     hours: 4,

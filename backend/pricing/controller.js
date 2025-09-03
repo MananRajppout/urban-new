@@ -104,7 +104,7 @@ exports.createStripeSession = catchAsyncError(async (req, res, next) => {
 
 
 
-
+console.log(country_iso, 'check for country iso here>>>>>>>>>>>>')
 
   // Controller Code
   const planDetails = await getPlanDetails(pricing_plan_id, country_iso);
@@ -163,14 +163,16 @@ exports.createStripeSession = catchAsyncError(async (req, res, next) => {
   // Plan description here
   var plan_description = plan.period === "month" ? "Billed monthly" : "Billed yearly";
 
+  console.log(plan.cost, 'check for plan cost here>>>>>>>>>>>>')
+
   const session = await stripe.checkout.sessions.create({
     payment_method_types: ["card"],
     mode: "subscription",
     line_items: [
       {
         price_data: {
-          currency: "inr",
-          unit_amount: Math.round(plan.cost * 100),
+          currency: country_iso === "US" ? "usd" : "inr",
+          unit_amount: country_iso === "US" ? Math.round((299 * 0.013) * 100) : Math.round(plan.cost * 100),
           product_data: {
             name: plan.name,
             description: plan_description,
