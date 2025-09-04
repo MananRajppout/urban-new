@@ -14,7 +14,7 @@ const VoicePricingSection = () => {
   };
 
   const handleContactSales = () => {
-    window.location.href = "mailto:alex@urbanchat.ai";
+    window.location.href = "mailto:urbanchatai@gmail.com";
   };
 
   const [selectedModelId, setselectedModelId] = useState(null);
@@ -98,7 +98,7 @@ const VoicePricingSection = () => {
         onContactSales={handleContactSales}
         title="Need More Minutes?"
         description="Contact our sales team for custom plans with additional minutes or special requirements"
-        buttonText="Contact Sales at alex@urbanchat.ai"
+        buttonText="Contact Sales at urbanchatai@gmail.com"
       />
     </>
   );

@@ -27,7 +27,7 @@ const PricingPage = () => {
   };
 
   const handleContactSales = () => {
-    window.location.href = "mailto:alex@urbanchat.ai";
+    window.location.href = "mailto:urbanchatai@gmail.com";
   };
 
   const [selectedModelId, setselectedModelId] = useState(null);
@@ -374,10 +374,10 @@ const PricingPage = () => {
                 <div className="text-sm md:text-base text-foreground/70">
                   Email:{" "}
                   <a
-                    href="mailto:alex@urbanchat.ai"
+                    href="mailto:urbanchatai@gmail.com"
                     className="text-brand-green hover:underline"
                   >
-                    alex@urbanchat.ai
+                    urbanchatai@gmail.com
                   </a>
                 </div>
               </div>

@@ -30,7 +30,7 @@ const IntegrationsSection = () => {
 
   // Create the mailto link with pre-filled subject and body
   const mailtoLink =
-    "mailto:alex@urbanchat.ai?subject=Requesting%20Custom%20Integration&body=Hello%20UrbanChat%20team,%0A%0AI'm%20interested%20in%20requesting%20a%20custom%20integration%20for%20your%20AI%20voice%20agent%20platform.%0A%0APlease%20contact%20me%20to%20discuss%20the%20details.%0A%0AThank%20you.";
+    "mailto:urbanchatai@gmail.com?subject=Requesting%20Custom%20Integration&body=Hello%20UrbanChat%20team,%0A%0AI'm%20interested%20in%20requesting%20a%20custom%20integration%20for%20your%20AI%20voice%20agent%20platform.%0A%0APlease%20contact%20me%20to%20discuss%20the%20details.%0A%0AThank%20you.";
 
   return (
     <section id="integrations" className="py-12 md:py-20 relative">
