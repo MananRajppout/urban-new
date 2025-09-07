@@ -110,7 +110,7 @@ const Navbar = () => {
       <div className="container mx-auto flex items-center justify-between py-4">
         {/* Logo */}
         <Link href="/" className="text-2xl font-bold text-gradient">
-          {websiteSettings?.website_name || "UrbanChat.ai"}
+          {websiteSettings?.website_name || "Loading..."}
         </Link>
 
         {/* Desktop Navigation */}

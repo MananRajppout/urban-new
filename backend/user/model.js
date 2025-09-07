@@ -169,7 +169,7 @@ const restrictionSchema = new mongoose.Schema({
   chat_credit_updated_on: { type: Date },
   //   voice ai
   voice_trial_minutes_used: { type: Number, default: 0 },
-  voice_trial_minutes_limit: { type: Number, default: 10 },
+  voice_trial_minutes_limit: { type: Number, default: 0 },
 });
 const emailNofificationSchema = new mongoose.Schema({
   email: { type: String, required: true },

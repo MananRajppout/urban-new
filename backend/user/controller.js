@@ -4,7 +4,8 @@ const {
   VerificationToken,
   VerificationOtp,
   EmailNotification,
-  WebsiteNotification
+  WebsiteNotification,
+  Restriction
 } = require("../user/model");
 const {
   AiAgent,
@@ -114,7 +115,8 @@ exports.createUser = catchAsyncError(async (req, res, next) => {
     email,
     password: hashPassword,
     full_name,
-    tenant
+    tenant ,
+    
   }
   if(slug){
     data["slug_name"] = slug;
@@ -123,6 +125,7 @@ exports.createUser = catchAsyncError(async (req, res, next) => {
   }
   
   user = await User.create(data);
+  await Restriction.create({ user_id: user,voice_trial_minutes_limit: tenant == "main" ? 10 : 0 });
 
   sendVerificationEmail(email);
 
