@@ -211,6 +211,11 @@ exports.getUserDetails = catchAsyncError(async (req, res, next) => {
       integrated_details["is_facebook_integrated"] = true;
     }
 
+
+    // remaining minutes for voice ai
+    const restriction = await Restriction.findOne({ user_id: req.user.id });
+    const remaining_minutes = restriction?.voice_trial_minutes_limit - restriction?.voice_trial_minutes_used;
+
     const current_plan = await getPricingPlan(req.user.id);
     return res.status(200).send({
       success: true,
@@ -218,6 +223,7 @@ exports.getUserDetails = catchAsyncError(async (req, res, next) => {
       chatbot_count: chatbot_count,
       integrated_details: integrated_details,
       // current_plan: current_plan,
+      remaining_minutes: remaining_minutes,
     });
   } catch (error) {
     console.log("getUserDetails SYSTEM ERROR : ", error);

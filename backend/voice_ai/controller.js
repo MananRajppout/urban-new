@@ -1378,7 +1378,10 @@ exports.getAllCustomers = catchAsyncError(async (req, res) => {
     ];
   }
 
-  query.tenant = tenant;
+  if(tenant !== "main"){
+    query.tenant = tenant;
+  }
+  // query.tenant = tenant;
   
   const skip = (parseInt(page) - 1) * parseInt(limit);
 

@@ -7,7 +7,7 @@ import PaymentsTabs from "@/components/admin/payments/PaymentsTabs";
 import PaymentsTable from "@/components/admin/payments/PaymentsTable";
 import PaymentsPagination from "@/components/admin/payments/PaymentsPagination";
 
-export default function Payments() {
+export default function Payments({ remainingMinutes }) {
   const [searchQuery, setSearchQuery] = useState("");
   const [activeTab, setActiveTab] = useState("all");
   const [, setDateRange] = useState([

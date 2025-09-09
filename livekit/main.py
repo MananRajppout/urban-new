@@ -168,7 +168,7 @@ async def create_llm_engine(assistant_info: AssistantData):
     base_config = {
         "parallel_tool_calls": True,
         # "max_tokens": 100,  # Limit response length for faster generation
-        "temperature": 0.0,  # Slightly lower for faster, more focused responses
+        "temperature": assistant_info.get("voice_temperature", 0.3),  # Slightly lower for faster, more focused responses
     }
     
     if gpt_model == "gpt-4o-mini":

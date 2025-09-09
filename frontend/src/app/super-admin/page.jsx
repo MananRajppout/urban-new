@@ -5,6 +5,7 @@ import DashboardHeader from '@/components/admin/dashboard/DashboardHeader';
 import StatCardsGrid from '@/components/admin/dashboard/StatCardsGrid';
 import { dateRangeOptions } from '@/data/dateRangeOption';
 import { superAdmindashboardStatsFetcher } from '@/lib/api/ApiDashboard';
+import { getUserDetail } from '@/lib/api/ApiExtra';
 import { Loader2 } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import useSWR, { mutate } from 'swr';
@@ -17,6 +18,17 @@ export default function DashboardPage() {
   const [endDate, setEndDate] = useState(dateRangeOptions[4].getRange()[1]);
   const [data, setData] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [remainingMinutes, setRemainingMinutes] = useState(0);
+
+
+  useEffect(() => {
+    const fetchRemainingMinutes = async () => {
+      const res = await getUserDetail();
+      setRemainingMinutes(res.data.remaining_minutes);
+      console.log(res.data.remaining_minutes);
+    }
+    fetchRemainingMinutes();
+  }, []);
 
   // const {
   //   data: dashboardStats,
@@ -66,7 +78,7 @@ export default function DashboardPage() {
 
       {
         !isLoading &&
-        <StatCardsGrid dashboardStats={data} />
+        <StatCardsGrid dashboardStats={data} remainingMinutes={remainingMinutes} />
       }
 
     </div>

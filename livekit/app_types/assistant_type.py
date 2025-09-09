@@ -70,6 +70,7 @@ class Assistant:
     voice_enhancement: float
     voice_stability: float
     voice_style: float
+    voice_temperature: float
 
 
 @dataclass

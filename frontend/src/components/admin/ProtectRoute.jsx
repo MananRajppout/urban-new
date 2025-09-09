@@ -52,12 +52,14 @@ const ProtectRoute = ({ children }) => {
             if(details.type == "subdomain"){
                 
                 if(user.slug_name == details.name && (user.role == "admin" || user.role == "super-admin")){
+                
                     return true;
                 }else{
                     router.push("/");
                 }
             }else{
                 if(user.custom_domain == details.name && (user.role == "admin" || user.role == "super-admin")){
+                    
                     return true;
                 }else{
                     router.push("/");

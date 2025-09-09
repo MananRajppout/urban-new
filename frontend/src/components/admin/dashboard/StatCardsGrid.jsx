@@ -14,7 +14,7 @@ function formatNumber(value) {
 }
 
 
-export default function StatCardsGrid({dashboardStats}) {
+export default function StatCardsGrid({dashboardStats, remainingMinutes}) {
   const statCards = [
     {
       title: 'Total Call Volume',
@@ -87,6 +87,15 @@ export default function StatCardsGrid({dashboardStats}) {
       accentColor: 'blue-accent',
       tooltip:
         'Total number of calls initiated by your system. Calculated by counting all calls your system made to external phone numbers. Useful for tracking outbound campaigns and follow-ups.',
+    },
+    {
+      title: 'My Remaining Minutes',
+      value: formatNumber(remainingMinutes),
+      icon: <Clock size={24} />,
+      trend: { value: 8.3, isPositive: true },
+      accentColor: 'blue-accent',
+      tooltip:
+        'Remaining minutes available in your current billing cycle.',
     },
   ];
 

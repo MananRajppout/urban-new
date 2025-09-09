@@ -285,7 +285,7 @@ const page = () => {
                     className="cursor-pointer text-white"
                   />
                   <p className="mt-2 text-sm text-muted-foreground">
-                    Upload a logo for your website. Recommended size: 200x200px or larger. 
+                    Upload a logo for your website. Recommended dimension: 16:9. 
                     Maximum file size: 5MB. Supported formats: JPG, PNG, GIF.
                   </p>
                 </div>
