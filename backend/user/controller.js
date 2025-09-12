@@ -300,7 +300,7 @@ const sendVerificationEmail = async (user_email) => {
     await verificationToken.save();
 
     // Send a verification email to the user
-    const verification_link = `https://backend.urbanchat.ai/api/verify-user?token=${token}&link=${ctx.login_link}`;
+    const verification_link = `https://backend.urbanchat.ai/api/verify-user?token=${token}&link=https://${ctx.login_link}`;
     console.log(verification_link)
     ctx["verification_link"] = verification_link; //user_email
     const result = await sendMailFun("account_verification", ctx, user_email);
