@@ -3,7 +3,7 @@ const crypto = require('crypto');
 const handlebars = require('handlebars');
 const fs = require('fs');
 const mailer = require('nodemailer');
-const {getMailSubject} = require("../templates/subjects");
+// const {getMailSubject} = require("../templates/subjects");
 const path = require('path');
 const AWS = require("aws-sdk");
 
@@ -106,7 +106,8 @@ function sendMailFun(action, ctx, to){
         var mail_options = { ...mailOptions };
         mail_options["to"] = to;
         
-        var subject = getMailSubject(action);
+        // var subject = getMailSubject(action);
+        let subject = `Verify your ${ctx.website_name} account`;
         const file_name =   `../templates/${action}.html`;
         const template_path = path.join(__dirname, file_name);
 

@@ -253,7 +253,7 @@ exports.requestNumber = catchAsyncError(async (req, res, next) => {
 });
 
 exports.verifyUserHash = catchAsyncError(async (req, res, next) => {
-  const { token } = req.query;
+  const { token, link } = req.query;
   const verificationToken = await VerificationToken.findOne({ token });
 
   if (!verificationToken) {
@@ -273,13 +273,24 @@ exports.verifyUserHash = catchAsyncError(async (req, res, next) => {
   await VerificationToken.deleteOne({ token });
   ctx = { login_link: url };
   sendMailFun("signup_confirmation", ctx, user.email);
-  console.log(`${url}?verified=true`)
-  res.redirect(`${url}?verified=true`);
+  console.log(`${link}?verified=true`)
+  res.redirect(`${link}?verified=true`);
 });
 
 const sendVerificationEmail = async (user_email) => {
   try {
     const user = await User.findOne({ email: user_email });
+    const tenant = user.tenant;
+    const tenant_user = await User.findOne({slug_name: tenant});
+    let ctx = {
+      tenant_user_full_name: tenant_user.full_name,
+      user_full_name: user.full_name,
+      user_email: user.email,
+      website_name: tenant_user.website_name,
+      logo: tenant_user.logo,
+      domain: tenant_user.custom_domain || `${tenant_user.slug_name}.${process.env.MAIN_DOMAIN}`,
+      login_link: `${tenant_user.custom_domain || `${tenant_user.slug_name}.${process.env.MAIN_DOMAIN}`}/signin`
+    }
     const token = crypto.randomBytes(20).toString("hex");
     const verificationToken = new VerificationToken({
       user_id: user._id,
@@ -289,9 +300,9 @@ const sendVerificationEmail = async (user_email) => {
     await verificationToken.save();
 
     // Send a verification email to the user
-    const verification_link = `https://backend.urbanchat.ai/api/verify-user?token=${token}`;
+    const verification_link = `https://backend.urbanchat.ai/api/verify-user?token=${token}&link=${ctx.login_link}`;
     console.log(verification_link)
-    ctx = { verification_link: verification_link }; //user_email
+    ctx["verification_link"] = verification_link; //user_email
     const result = await sendMailFun("account_verification", ctx, user_email);
 
     console.log("Verification email sent successfully.", result);
