@@ -840,7 +840,7 @@ exports.downloadInvoice = catchAsyncError(async (req, res, next) => {
 exports.currentPlan = catchAsyncError(async (req, res, next) => {
 
 
-  console.log(req.user.id)
+  console.log(req.user.id,"helloooooooooooo")
   // Fetch current plans from both collections
   const user = await User.findById(req.user.id);
   console.log(user);

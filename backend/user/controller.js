@@ -125,7 +125,8 @@ exports.createUser = catchAsyncError(async (req, res, next) => {
   }
   
   user = await User.create(data);
-  await Restriction.create({ user_id: user,voice_trial_minutes_limit: tenant == "main" ? 10 : 0 });
+  const restriction = await Restriction.create({ user_id: user._id,voice_trial_minutes_limit: tenant == "main" ? 10 : 0 });
+  console.log(restriction,"restriction",user._id)
 
   sendVerificationEmail(email);
 
