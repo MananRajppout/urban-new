@@ -26,15 +26,15 @@ const MobileMenu = ({ isOpen, onClose }) => {
       label: "AI Voice Agent",
       href: "/ai-voice-agent",
     },
-    {
-      icon: MessageSquare,
-      label: "AI Chatbot",
-      href: "/ai-chatbot",
-    },
+    // {
+    //   icon: MessageSquare,
+    //   label: "AI Chatbot",
+    //   href: "/ai-chatbot",
+    // },
     {
       icon: PhoneCall,
       label: "AI Agents",
-      href: "/ai-assistant/ai-agents",
+      href: "/voice-agents",
     },
     {
       icon: Phone,
@@ -46,36 +46,36 @@ const MobileMenu = ({ isOpen, onClose }) => {
       label: "Call History",
       href: "/ai-assistant/history",
     },
-    {
-      icon: CreditCard,
-      label: "Billings",
-      href: "/ai-assistant/billing",
-    },
-    {
-      icon: Key,
-      label: "API Management",
-      href: "/api-management",
-    },
-    {
-      icon: Palette,
-      label: "White Label Service",
-      href: "/white-label",
-    },
+    // {
+    //   icon: CreditCard,
+    //   label: "Billings",
+    //   href: "/ai-assistant/billing",
+    // },
+    // {
+    //   icon: Key,
+    //   label: "API Management",
+    //   href: "/api-management",
+    // },
+    // {
+    //   icon: Palette,
+    //   label: "White Label Service",
+    //   href: "/white-label",
+    // },
     {
       icon: Settings,
       label: "Settings",
       href: "/settings",
     },
-    {
-      icon: FileText,
-      label: "Documentation",
-      href: "/documentation",
-    },
-    {
-      icon:CircleDollarSign,
-      label:"Subscription",
-      href:"/subscription-plans",
-    }
+    // {
+    //   icon: FileText,
+    //   label: "Documentation",
+    //   href: "/documentation",
+    // },
+    // {
+    //   icon:CircleDollarSign,
+    //   label:"Subscription",
+    //   href:"/subscription-plans",
+    // }
 
   ];
 
