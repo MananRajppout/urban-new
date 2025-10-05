@@ -33,7 +33,7 @@ from livekit.plugins import rime
 import os
 from livekit.plugins import groq
 # from livekit.plugins.turn_detector.multilingual import MultilingualModel
-from services.agent_session import Assistant
+from services.agent_session import Assistant, AssistantWithoutCalendarTools
 from livekit.agents import  MetricsCollectedEvent, UserStateChangedEvent, AgentStateChangedEvent
 from services.telemetry import setup_langfuse
 
@@ -311,11 +311,21 @@ async def entrypoint(ctx: JobContext):
     )
 
     # Start agent
+    assistant = AssistantWithoutCalendarTools(instructions=generate_prompt(assistant_info,call_ctx),ctx=ctx,assistant_info=assistant_info,room_name=ctx.room.name,participant_identity=participant.identity,call_ctx=call_ctx)
+
+    calendar_tools = assistant_info.get('calendar_tools')
+    if len(calendar_tools) > 0:
+        print("Registering calendar tools")
+        assistant = Assistant(instructions=generate_prompt(assistant_info,call_ctx),ctx=ctx,assistant_info=assistant_info,room_name=ctx.room.name,participant_identity=participant.identity,call_ctx=call_ctx)
+    else:
+        assistant = AssistantWithoutCalendarTools(instructions=generate_prompt(assistant_info,call_ctx),ctx=ctx,assistant_info=assistant_info,room_name=ctx.room.name,participant_identity=participant.identity,call_ctx=call_ctx)
+        print("No calendar tools found")
+
     await session.start(
         room=ctx.room,
-        agent=Assistant(instructions=generate_prompt(assistant_info,call_ctx),ctx=ctx,assistant_info=assistant_info,room_name=ctx.room.name,participant_identity=participant.identity,call_ctx=call_ctx),
+        agent=assistant,
         room_input_options=RoomInputOptions(
-            noise_cancellation=noise_cancellation.BVC(), 
+            noise_cancellation=noise_cancellation.BVCTelephony(), 
         )
     )
 

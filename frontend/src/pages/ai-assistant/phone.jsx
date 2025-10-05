@@ -78,6 +78,7 @@ const PhoneNumbers = () => {
     monthly_rental_fee: "",
     currency: "",
   });
+  const [loadingPhoneNumber, setLoadingPhoneNumber] = useState(false);
   const [isMainWebsite, setIsMainWebsite] = useState(false);
   const [requestingNumber, setRequestingNumber] = useState(false);
   useEffect(() => {
@@ -155,6 +156,7 @@ const PhoneNumbers = () => {
   }
 
   const updatePhNo = async (agent_id) => {
+    setLoadingPhoneNumber(true);
     const res = await updatePhoneNumber(selectedNumberId, {
       agent_id: agent_id,
     });
@@ -166,6 +168,7 @@ const PhoneNumbers = () => {
     } else {
       toast.error("Failed to update Phone Number");
     }
+    setLoadingPhoneNumber(false);
   };
 
   async function getAgents() {
@@ -388,6 +391,7 @@ const PhoneNumbers = () => {
         formData={formData}
         agentsWithAssignedPhoneNumber={agentsWithAssignedPhoneNumber}
         updatePhNo={updatePhNo}
+        loadingPhoneNumber={loadingPhoneNumber}
       />
     </Layout>
   );

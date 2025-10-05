@@ -71,6 +71,7 @@ const PhoneNumberDetails = ({
   formData,
   agentsWithAssignedPhoneNumber,
   updatePhNo,
+  loadingPhoneNumber,
 }) => {
   const [selectedAgent, setSelectedAgent] = useState("");
   const [inboundDialogOpen, setInboundDialogOpen] = useState(false);
@@ -159,9 +160,12 @@ const PhoneNumberDetails = ({
                   <Select
                     value={formData?.agent_id}
                     onValueChange={(value) => updatePhNo(value)}
+                    disabled={loadingPhoneNumber}
                   >
                     <SelectTrigger className="bg-[#232330] border-[#2a2a35] text-white">
-                      <SelectValue placeholder="Select an AI agent" />
+                      {
+                        loadingPhoneNumber ? <p className="text-white text-sm font-medium">Loading...</p> : <SelectValue placeholder="Select an AI agent" />
+                      }
                     </SelectTrigger>
                     <SelectContent className="bg-[#232330] border-[#2a2a35] text-white">
                       {agentsWithAssignedPhoneNumber.map((agent) => (

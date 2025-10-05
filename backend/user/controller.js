@@ -122,6 +122,7 @@ exports.createUser = catchAsyncError(async (req, res, next) => {
     data["slug_name"] = slug;
     data["tenant"] = slug;
     data["role"] = "admin";
+    data["voice_ai_status"] = "active";
   }
   
   user = await User.create(data);

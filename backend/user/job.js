@@ -217,6 +217,7 @@ const sendIndividualCallSummary = catchAsyncFunc(async (callHistoryId) => {
  */
 const triggerCallSummaryIfEnabled = async (callHistoryId) => {
   try {
+    console.log(`Triggering individual call summary for call ${callHistoryId}`);
     await sendIndividualCallSummary(callHistoryId);
   } catch (error) {
     console.error(`Error triggering call summary for call ${callHistoryId}:`, error);
