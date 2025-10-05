@@ -148,7 +148,7 @@ const RecentCalls = ({ calls = [], pagination = null, onPageChange }) => {
                     Date
                   </th>
                   <th className="py-3 px-4 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
-                    Caller ID
+                    Phone
                   </th>
                   <th className="py-3 px-4 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
                     Agent
@@ -178,7 +178,7 @@ const RecentCalls = ({ calls = [], pagination = null, onPageChange }) => {
                       {call.date ? formatDate(call.date) : "N/A"}
                     </td>
                     <td className="py-2 px-4 text-sm text-white">
-                      {call.caller_id || "Unknown"}
+                      {call?.originalData?.plivo_phone_number || `web_${call.caller_id}` || "Unknown"}
                     </td>
                     <td className="py-2 px-4">
                       <div className="flex items-center">
