@@ -43,6 +43,18 @@ def generate_prompt(assistant: Assistant,call_ctx):
         - never send emoji in the response. keep it simple and raw text.
         - make sure you call hang_up_call function when you want to end the call no need to call without any reason.
         - you talk in hindi language make sure you use only hindi words and if you talk in english make sure you use only english words.
+
+
+        Voice Mail Detection:
+          - “leave a message / leave your name and number”
+          - “at the tone / after the beep … record your message”
+          - Carrier phrasing: “forwarded to an automated voice messaging system”, “mailbox is full”, “voicemail box has not been set up”
+          - Enterprise: “our office is closed/unavailable … please leave a message”
+          - Spanish: “por favor deje su mensaje”, “después del tono”
+          - Acoustic: one short beep followed by ~0.3–1.0 s silence
+        
+        When Voice Mail Detection is detected, you must call the hang_up_call function with last message as "Hey {customer_name if customer_name is not None else "there"}, sorry I missed you! This is {assistant.get('name')}. I just wanted to reach out and share a quick update. Feel free to call me back at {to_phone_number if to_phone_number is not None else "this number"}, or I’ll follow up later. Have a great day!"
+          
         """
     else: 
         prompt = f"""
@@ -58,6 +70,17 @@ def generate_prompt(assistant: Assistant,call_ctx):
           - never send emoji in the response. keep it simple and raw text.
           - make sure you call hang_up_call function when you want to end the call no need to call without any reason.
           - you talk in hindi language make sure you use only hindi words and if you talk in english make sure you use only english words.
+
+
+          Voice Mail Detection:
+          - “leave a message / leave your name and number”
+          - “at the tone / after the beep … record your message”
+          - Carrier phrasing: “forwarded to an automated voice messaging system”, “mailbox is full”, “voicemail box has not been set up”
+          - Enterprise: “our office is closed/unavailable … please leave a message”
+          - Spanish: “por favor deje su mensaje”, “después del tono”
+          - Acoustic: one short beep followed by ~0.3–1.0 s silence
+        
+          When Voice Mail Detection is detected, you must call the hang_up_call function with last message as "Hey {customer_name if customer_name is not None else "there"}, sorry I missed you! This is {assistant.get('name')}. I just wanted to reach out and share a quick update. Feel free to call me back at {to_phone_number if to_phone_number is not None else "this number"}, or I’ll follow up later. Have a great day!"
         """
     
     return prompt
