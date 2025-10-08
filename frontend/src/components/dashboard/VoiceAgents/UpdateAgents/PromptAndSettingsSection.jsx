@@ -49,6 +49,11 @@ const PromptAndSettingsSection = ({
   handleVoiceStabilityChange,
   voice_style,
   handleVoiceStyleChange,
+  levels,
+  handleAddLevel,
+  handleAddMoreLevel,
+  handleDeleteLevel,
+  handleSaveLevels
 }) => {
   return (
     <>
@@ -144,6 +149,11 @@ const PromptAndSettingsSection = ({
           set_silence_1_speech,
           silence_2_speech,
           set_silence_2_speech,
+          levels,
+          handleAddLevel,
+          handleAddMoreLevel,
+          handleDeleteLevel,
+          handleSaveLevels
         }
         }
       />

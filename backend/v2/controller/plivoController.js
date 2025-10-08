@@ -530,6 +530,7 @@ exports.hangupWebhook = catchAsyncError(async (req, res) => {
     CallTime,
     Event,
     Timestamp,
+    level,
   } = req.body;
   console.log("hangup webhook", req.body);
 
@@ -563,6 +564,7 @@ exports.hangupWebhook = catchAsyncError(async (req, res) => {
   callHistory.recording_url = RecordingUrl || "";
   callHistory.recording_sid = RecordingSid || "";
   callHistory.disconnection_reason = HangupCause || "";
+  callHistory.level = level || "No Level";
   callHistory.summary = callHistory.chat_history
     .map((msg) => `${msg.role}: ${msg.content}`)
     .join("\n");

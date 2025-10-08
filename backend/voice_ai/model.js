@@ -221,6 +221,7 @@ const aiAgentSchema = new mongoose.Schema({
   silence_2_speech: {type: String,default: "Thank's you for calling."},
   language: {type: String, default: "en"},
   stt_engine: {type: String, default: "nova-2-general"},
+  levels: {type: Array, default: []},
 });
 
 const twilioPhoneRecord = new mongoose.Schema({
@@ -356,6 +357,7 @@ const callHistorySchema = new mongoose.Schema({
     // enum: ["active", "completed", "failed"],
     default: "",
   },
+  level: { type: String, required: false, default: "No Level" },
  
 });
 

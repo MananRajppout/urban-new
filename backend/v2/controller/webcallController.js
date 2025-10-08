@@ -66,9 +66,10 @@ exports.hangupWebhook = catchAsyncError(async (req, res) => {
     disconnection_reason,
     direction,
     from,
-    to
+    to,
+    level
   } = req.body;
-  
+  console.log(req.body,"req.body from hangupWebhook");
   end_time = new Date(end_time);
   // console.log(
   //   chat_history,
@@ -112,13 +113,14 @@ exports.hangupWebhook = catchAsyncError(async (req, res) => {
   callHistory.calltype = callType;
   if (from) callHistory.from_phone_number = from
   if (to) callHistory.plivo_phone_number = to
-
+  if (level) callHistory.level = level
   const durationInMinutes = getMinutesDiff(
     callHistory.start_time,
     callHistory.end_time
   );
   callHistory.call_duration = durationInMinutes;
   callHistory.call_state = "completed";
+  console.log(callHistory,"callHistory from hangupWebhook");
   await callHistory.save();
 
   // Trigger individual call summary if enabled

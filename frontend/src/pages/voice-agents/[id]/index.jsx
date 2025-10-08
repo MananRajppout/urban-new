@@ -47,7 +47,7 @@ const AgentDetail = () => {
     voice_engine_name: "",
     voice_speed: 1.0,
     similarity: 0.7,
-    voice_temperature: 0.7,
+    voice_temperature: 0.0,
     ambient_sound: "none",
     ambient_sound_volume: 0.3,
     who_speaks_first: "ai",
@@ -76,6 +76,7 @@ const AgentDetail = () => {
     voice_enhancement: 1,
     voice_stability: 0.5,
     voice_style: 0,
+    levels: [],
   });
 
   const [prompt, setPrompt] = useState({
@@ -101,6 +102,7 @@ const AgentDetail = () => {
   useEffect(() => {
     if (agentData && agentData.ai_agents) {
       const agent = agentData.ai_agents;
+      console.log("agent changed")
       setAgent({
         name: agent.name || "",
         _id: agent._id || "",
@@ -110,7 +112,7 @@ const AgentDetail = () => {
         chatgpt_model: agent.chatgpt_model || "",
         voice_engine_name: agent.voice_engine_name || "",
         voice_speed: agent.voice_speed || 1.0,
-        voice_temperature: agent.voice_temperature || 0.7,
+        voice_temperature: agent.voice_temperature || 0.0,
         ambient_sound: agent.ambient_sound || "none",
         ambient_sound_volume: agent.ambient_sound_volume || 0.3,
         who_speaks_first: agent.who_speaks_first || "ai",
@@ -141,6 +143,7 @@ const AgentDetail = () => {
         voice_enhancement: agent.voice_enhancement || 1,
         voice_stability: agent.voice_stability || 0.5,
         voice_style: agent.voice_style || 0,
+        levels: agent.levels || [],
       });
       setPrompt({
         old: agent.base_prompt || "",
@@ -161,6 +164,31 @@ const AgentDetail = () => {
       });
     }
   }, [agentData]);
+
+
+  const handleAddLevel = (index,name,value) => {
+    setAgent((prev) => {
+      const copyPrev = JSON.parse(JSON.stringify(prev));
+      copyPrev.levels[index][name] = value;
+      return copyPrev;
+    });
+  }
+
+  const handleAddMoreLevel = () => {
+    setAgent((prev) => {
+      const copyPrev = JSON.parse(JSON.stringify(prev));
+      copyPrev.levels.push({});
+      return copyPrev;
+    });
+  }
+
+  const handleDeleteLevel = (index) => {
+    setAgent((prev) => {
+      const copyPrev = JSON.parse(JSON.stringify(prev));
+      copyPrev.levels.splice(index, 1);
+      return copyPrev;
+    });
+  }
 
   const handleFieldChange = (field, value, save = true) => {
     setAgent((prev) => ({ ...prev, [field]: value }));
@@ -188,7 +216,7 @@ const AgentDetail = () => {
       toast.error(response.data.message || "Failed to update agent");
       return;
     }
-    // mutate();
+    mutate();
   }, 800);
 
   const handleSavePrompt = async () => {
@@ -289,6 +317,11 @@ const AgentDetail = () => {
       setIsCalLoading(false);
     }
   };
+
+  const handleSaveLevels = () => {
+    setAgent((prev) => ({ ...prev, levels: agent.levels }));
+    debouncedUpdateAgent({ levels: agent.levels });
+  }
 
   if (isLoading) {
     return (
@@ -443,6 +476,12 @@ const AgentDetail = () => {
             handleVoiceStyleChange={(value) =>
               handleFieldChange("voice_style", value[0])
             }
+
+            levels={agent.levels}
+            handleAddLevel={handleAddLevel}
+            handleAddMoreLevel={handleAddMoreLevel}
+            handleDeleteLevel={handleDeleteLevel}
+            handleSaveLevels={handleSaveLevels}
           />
 
           <IntegrationsSection
