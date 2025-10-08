@@ -290,7 +290,6 @@ async def entrypoint(ctx: JobContext):
         logger.error(f"assistant info not found for {call_ctx.get('agentId')}")
         await ctx.api.room.delete_room(api.DeleteRoomRequest(room=ctx.room.name))
         return
-    
 
 
     # Initialize TTS and LLM engines in parallel for faster setup

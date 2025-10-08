@@ -71,6 +71,7 @@ class Assistant:
     voice_stability: float
     voice_style: float
     voice_temperature: float
+    levels: List[dict]
 
 
 @dataclass

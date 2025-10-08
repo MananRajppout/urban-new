@@ -45,4 +45,35 @@ def get_call_summary(chat_history: list):
     return result
     
 
-    
+
+def get_levels_summary(levels: list,chat_history: list):
+    chat_history_str = [f"{message.get('role')}: {message.get('content')}" for message in chat_history]
+    chat_history_str = "\n".join(chat_history_str)
+
+    levels_str = [f"level:{level.get('name')}, Description: {level.get('description')}" for level in levels]
+    levels_str = "\n".join(levels_str)
+
+    prompt = f"""
+    You are an AI assistant analyzing a conversation between a user and an AI agent. Based on the chat history provided below, generate:
+    and provide level of of user interaction with the agent. in single word.
+
+    ### Chat History:
+    {chat_history_str}
+
+    ### Levels:
+    {levels_str}
+
+
+    ### Response Format:
+    - just choose one from the levels based on level description.
+    """
+
+    response = client.responses.create(
+        model="gpt-4.1",
+        input=[{"role": "system", "content": prompt}],
+        temperature=0.3,
+    )
+
+    output = response.output_text
+
+    return output

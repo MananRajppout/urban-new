@@ -6,7 +6,7 @@ from app_types.callconfig_type import CallContext
 from app_types.assistant_type import Assistant
 from datetime import datetime, timezone
 from livekit.agents.llm import ChatContext
-from utils.get_call_summary import get_call_summary
+from utils.get_call_summary import get_call_summary, get_levels_summary
 
 dotenv.load_dotenv()
 BACKEND_URL = os.getenv("BACKEND_SERVER_URL")
@@ -61,6 +61,7 @@ def call_webhook_hangup(call_ctx: CallContext,assistant: Assistant,chat_ctx: Cha
         end_time = datetime.now(timezone.utc).isoformat(timespec='milliseconds')
         end_time = end_time.replace("+00:00", "Z")
         analysis = get_call_summary(chat_history)
+        level = get_levels_summary(assistant.get('levels'),chat_history) if len(assistant.get('levels',[])) > 0 else "No Level"
         data = {
             "agentId": call_ctx.get('agentId'),
             "callId": call_ctx.get('callId'),
@@ -69,6 +70,7 @@ def call_webhook_hangup(call_ctx: CallContext,assistant: Assistant,chat_ctx: Cha
             "end_time": end_time,
             "user_id": assistant.get('user_id'),
             "summary": analysis.get('summary'),
+            "level": level,
             "call_status": "Successful",
             "user_sentiment": analysis.get('user_sentiment'),
             "voice_engine_id": "meera",
