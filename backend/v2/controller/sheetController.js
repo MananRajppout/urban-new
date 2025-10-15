@@ -328,6 +328,8 @@ exports.processNextCall = catchAsyncError(async (req, res) => {
     });
   }
 
+  console.log(row,"uuuuuuuuuuuuuuuuuuuuuuuuuuuuuuu")
+
   // Make the call
   const response = await makeCall(agent, row.phone);
   if (!response.success) {
@@ -370,7 +372,6 @@ async function processNextCall(config, agent) {
         config.current_row
       );
 
-    
 
       if (!row) {
         config.status = 'completed';
@@ -422,7 +423,7 @@ async function processNextCall(config, agent) {
         })
         
         const callId = uuid.v4();
-        const sipCallId = await createSIPParticipant(phoneNumber, agent.plivo_phone_number, phoneRecord.sip_outbound_trunk_id, agent._id, customerName,context,callId,true);
+        const sipCallId = await createSIPParticipant(`+${phoneNumber}`, agent.plivo_phone_number, phoneRecord.sip_outbound_trunk_id, agent._id, customerName,context,callId,true);
         // Create a new CallHistory record with all required fields
         const callHistory = new CallHistory({
           caller_id: sipCallId,
@@ -432,7 +433,8 @@ async function processNextCall(config, agent) {
           voice_engine_id: "-",
           chatgpt_model: agent.chatgpt_model,
           voice_id: agent.voice_id,
-          plivo_phone_number: phoneNumber,
+          plivo_phone_number: phoneRecord.phone_number,
+          from_phone_number: phoneNumber,
           sheet_call: true,
           sheet_row: config.current_row,
           start_time: new Date(),

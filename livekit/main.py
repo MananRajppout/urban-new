@@ -11,7 +11,7 @@ from livekit.agents import (
     llm,
     metrics
 )
-
+import threading
 from livekit.agents import AgentSession, Agent, RoomInputOptions
 from livekit.plugins import deepgram, openai, silero, elevenlabs, sarvam, smallest, assemblyai
 # from services.assistant_function_service import AssistantFnc
@@ -36,7 +36,6 @@ from livekit.plugins import groq
 from services.agent_session import Assistant, AssistantWithoutCalendarTools
 from livekit.agents import  MetricsCollectedEvent, UserStateChangedEvent, AgentStateChangedEvent
 from services.telemetry import setup_langfuse
-
 logger = logging.getLogger("voice-assistant")
 load_dotenv()
 
@@ -334,14 +333,58 @@ async def entrypoint(ctx: JobContext):
     )
     
 
+    slice_1 = None
+    slice_2 = None
+    
+    try:
+        loop = asyncio.get_running_loop()
+    except RuntimeError:
+        loop = asyncio.new_event_loop()
+        asyncio.set_event_loop(loop)
+
+    def slice_1_task():
+        nonlocal slice_2
+        print("Scheduling slice_1 speech in event loop")
+
+        # ✅ Proper scheduling — not direct call!
+        session.say(assistant_info.get("silence_1_speech"), allow_interruptions=True)
+        # Schedule slice_2
+        slice_2 = threading.Timer(
+            assistant_info.get("silence_2_timeout"),
+            slice_2_task
+        )
+        print("slice_2 started", assistant_info.get("silence_2_timeout"))
+        slice_2.start()
+
+
+    def slice_2_task():
+        assistant.hang_up_call(assistant_info.get("silence_2_speech"))
+
     # Enhanced event handling with detailed timing
     @session.on("user_state_changed")
     def user_state_changed(event: UserStateChangedEvent):
+        nonlocal slice_1
+        nonlocal slice_2
         logger.info(f"User state changed: {event.new_state}")
+        if(event.new_state == "speaking"):
+            if(slice_1 is None):
+                slice_1.cancel()
+                slice_1 = None
+            if(slice_2 is None):
+                slice_2.cancel()
+                slice_2 = None
+            
 
     @session.on("agent_state_changed")
     def agent_state_changed(event: AgentStateChangedEvent):
+        nonlocal slice_1
+        nonlocal slice_2
         logger.info(f"Agent state changed: {event.new_state}")
+        if(event.new_state == "listening"):
+            if(slice_1 is None):
+                slice_1 = threading.Timer(assistant_info.get("silence_1_timeout"), lambda: slice_1_task(session))
+                slice_1.start()
+                print("slice_1 started", assistant_info.get("silence_1_timeout"))
         
 
 
