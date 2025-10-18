@@ -1311,6 +1311,7 @@ exports.createOutboundTrunk = async (phoneNumber) => {
 
 exports.createSIPParticipant = async (toNumber,fromNumber, trunkId,agentId,customer_name=undefined, context=undefined,callId=undefined,isGoogleSheet=false ) => {
   try {
+    console.log("creating sip participant", toNumber, fromNumber, trunkId, agentId, customer_name, context, callId, isGoogleSheet);
     const caller_id = callId || uuid.v4();
     const metadata = {
       agentId: agentId,
