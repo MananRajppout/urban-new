@@ -363,16 +363,16 @@ async def entrypoint(ctx: JobContext):
     # Enhanced event handling with detailed timing
     @session.on("user_state_changed")
     def user_state_changed(event: UserStateChangedEvent):
-        nonlocal slice_1
-        nonlocal slice_2
+        # nonlocal slice_1
+        # nonlocal slice_2
         logger.info(f"User state changed: {event.new_state}")
-        if(event.new_state == "speaking"):
-            if(slice_1 is None):
-                slice_1.cancel()
-                slice_1 = None
-            if(slice_2 is None):
-                slice_2.cancel()
-                slice_2 = None
+        # if(event.new_state == "speaking"):
+        #     if(slice_1 is None):
+        #         slice_1.cancel()
+        #         slice_1 = None
+        #     if(slice_2 is None):
+        #         slice_2.cancel()
+        #         slice_2 = None
             
 
     @session.on("agent_state_changed")
@@ -380,11 +380,11 @@ async def entrypoint(ctx: JobContext):
         nonlocal slice_1
         nonlocal slice_2
         logger.info(f"Agent state changed: {event.new_state}")
-        if(event.new_state == "listening"):
-            if(slice_1 is None):
-                slice_1 = threading.Timer(assistant_info.get("silence_1_timeout"), lambda: slice_1_task(session))
-                slice_1.start()
-                print("slice_1 started", assistant_info.get("silence_1_timeout"))
+        # if(event.new_state == "listening"):
+        #     if(slice_1 is None):
+        #         slice_1 = threading.Timer(assistant_info.get("silence_1_timeout"), lambda: slice_1_task(session))
+        #         slice_1.start()
+        #         print("slice_1 started", assistant_info.get("silence_1_timeout"))
         
 
 
