@@ -57,15 +57,28 @@ def get_levels_summary(levels: list,chat_history: list):
     You are an AI assistant analyzing a conversation between a user and an AI agent. Based on the chat history provided below, generate:
     and provide level of of user interaction with the agent. in single word.
 
-    ### Chat History:
+    Chat History:
     {chat_history_str}
 
-    ### Levels:
+    Levels:
     {levels_str}
 
 
-    ### Response Format:
+    Important:
     - just choose one from the levels based on level description.
+    - just return the level name, no other text or formatting. like level: level_name just return level_name.
+
+
+    Example 1 Output:
+       selled
+
+    Example 2 Output:
+       not_selled
+       
+    Example 3 Output:
+       not_interested
+
+
     """
 
     response = client.responses.create(

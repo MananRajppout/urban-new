@@ -532,7 +532,7 @@ exports.hangupWebhook = catchAsyncError(async (req, res) => {
     Timestamp,
     level,
   } = req.body;
-  console.log("hangup webhook", req.body);
+  console.log("hangup webhook 8888888", req.body);
 
   // Find the call history record
   const callHistory = await CallHistory.findOne({ caller_id: CallUUID });

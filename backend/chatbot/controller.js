@@ -10,6 +10,9 @@ const {
   ChatSessionLogs,
 } = require("./model");
 const handlebars = require("handlebars");
+const helpers = require('handlebars-helpers')({
+  handlebars: handlebars
+});
 const pdf = require("html-pdf");
 const https = require("https");
 

@@ -203,7 +203,7 @@ const RecentCalls = ({ calls = [], pagination = null, onPageChange }) => {
                           ? call.sentiment.charAt(0).toUpperCase() +
                             call.sentiment.slice(1)
                           : "Unknown"} */}
-                        {call.level || "No Level"}
+                        {call.originalData.level || "No Level"}
                       </span>
                     </td>
                     <td className="py-4 px-4 text-right">

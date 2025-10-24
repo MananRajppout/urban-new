@@ -1,6 +1,9 @@
 require('dotenv').config();
 const crypto = require('crypto');
 const handlebars = require('handlebars');
+const helpers = require('handlebars-helpers')({
+    handlebars: handlebars
+});
 const fs = require('fs');
 const mailer = require('nodemailer');
 // const {getMailSubject} = require("../templates/subjects");

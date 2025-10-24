@@ -50,6 +50,7 @@
     "google-libphonenumber": "^3.2.34",
     "googleapis": "^126.0.1",
     "handlebars": "^4.7.8",
+    "handlebars-helpers": "^0.10.0",
     "hono": "^4.4.3",
     "html-pdf": "^3.0.1",
     "http-proxy-middleware": "^3.0.0",

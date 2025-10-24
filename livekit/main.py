@@ -74,7 +74,7 @@ async def create_tts_engine(assistant_info: AssistantData):
 
     if tts_engine_name == "deepgram":
         # Deepgram is typically fastest
-        return deepgram.TTS(model="aura-2-asteria-en")
+        return deepgram.TTS(model=voice_id)
     elif tts_engine_name == "sarvam":
         return sarvam.TTS(
             speaker=voice_id, 
@@ -155,7 +155,7 @@ async def create_tts_engine(assistant_info: AssistantData):
         )
     else:
         # Default to fastest option
-        return deepgram.TTS(model="aura-asteria-en")
+        return deepgram.TTS(model=voice_id)
 
 
 
