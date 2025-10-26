@@ -222,6 +222,7 @@ const aiAgentSchema = new mongoose.Schema({
   language: {type: String, default: "en"},
   stt_engine: {type: String, default: "nova-2-general"},
   levels: {type: Array, default: []},
+  voice_mail_response: {type: String, default: "Thank's you for calling."},
 });
 
 const twilioPhoneRecord = new mongoose.Schema({

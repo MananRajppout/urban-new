@@ -72,6 +72,7 @@ class Assistant:
     voice_style: float
     voice_temperature: float
     levels: List[dict]
+    voice_mail_response: str
 
 
 @dataclass

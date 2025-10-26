@@ -53,7 +53,9 @@ const PromptAndSettingsSection = ({
   handleAddLevel,
   handleAddMoreLevel,
   handleDeleteLevel,
-  handleSaveLevels
+  handleSaveLevels,
+  voice_mail_response,
+  handleVoiceMailResponseChange
 }) => {
   return (
     <>
@@ -65,6 +67,8 @@ const PromptAndSettingsSection = ({
           <UpdateAgentWelcomeMessage
             welcome_message_text={welcome_message_text}
             handleWelcomeMessageChange={handleWelcomeMessageChange}
+            voice_mail_response={voice_mail_response}
+            handleVoiceMailResponseChange={handleVoiceMailResponseChange}
           />
           <AgentPromptInput
             prompt={prompt.new}
@@ -77,7 +81,7 @@ const PromptAndSettingsSection = ({
             hang_up_promt={hangUpPromt}
             handleHangUpPromptChange={handlehangUpPromtChange}
           />
-          {(prompt.new !== prompt.old || welcome_message_text.new !== welcome_message_text.old || hangUpPromt.new !== hangUpPromt.old) && (
+          {(prompt.new !== prompt.old || welcome_message_text.new !== welcome_message_text.old || hangUpPromt.new !== hangUpPromt.old || voice_mail_response.new !== voice_mail_response.old) && (
             <div className="flex space-x-4 mt-4">
               <Button
                 onClick={handleSavePrompt}

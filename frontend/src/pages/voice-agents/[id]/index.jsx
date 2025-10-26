@@ -95,6 +95,11 @@ const AgentDetail = () => {
     new: "",
   });
 
+  const [voiceMailResponse, setVoiceMailResponse] = useState({
+    old: "",
+    new: "",
+  });
+
   const [testDialogOpen, setTestDialogOpen] = useState(false);
 
   const [isCalLoading, setIsCalLoading] = useState(false);
@@ -162,6 +167,10 @@ const AgentDetail = () => {
           agent.hang_up_prompt ||
           "When the user say goodbye.",
       });
+      setVoiceMailResponse({
+        new: agent.voice_mail_response || "Thank's you for calling.",
+        old: agent.voice_mail_response || "Thank's you for calling.",
+      });
     }
   }, [agentData]);
 
@@ -225,6 +234,7 @@ const AgentDetail = () => {
         base_prompt: prompt.new,
         welcome_message_text: welcomeMessage.new,
         hang_up_prompt: hangUpPromt.new,
+        voice_mail_response: voiceMailResponse.new,
       };
       const res = await updateAiAgent(agent._id, updatedAgent);
       if (res.error) {
@@ -232,6 +242,9 @@ const AgentDetail = () => {
         return;
       }
       setPrompt((prev) => ({ ...prev, old: prompt.new }));
+      setWelcomeMessage((prev) => ({ ...prev, old: welcomeMessage.new }));
+      setHangUpPromt((prev) => ({ ...prev, old: hangUpPromt.new }));
+      setVoiceMailResponse((prev) => ({ ...prev, old: voiceMailResponse.new }));
       toast.success("Prompt saved successfully!");
       mutate();
     } catch (error) {
@@ -482,6 +495,11 @@ const AgentDetail = () => {
             handleAddMoreLevel={handleAddMoreLevel}
             handleDeleteLevel={handleDeleteLevel}
             handleSaveLevels={handleSaveLevels}
+
+            voice_mail_response={voiceMailResponse}
+            handleVoiceMailResponseChange={(value) =>
+              setVoiceMailResponse((prev) => ({ ...prev, new: value }))
+            }
           />
 
           <IntegrationsSection

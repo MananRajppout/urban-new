@@ -9,6 +9,7 @@ def generate_prompt(assistant: Assistant,call_ctx):
       print(e)
 
     instructions = assistant.get('base_prompt')
+    voice_mail_response = assistant.get('voice_mail_response')
     hang_up_prompt = assistant.get('hang_up_prompt')
     prompt = ""
 
@@ -18,13 +19,14 @@ def generate_prompt(assistant: Assistant,call_ctx):
 
     if customer_name:
       instructions = instructions.replace("{{customer_name}}", customer_name)
+      voice_mail_response = voice_mail_response.replace("{{customer_name}}", customer_name)
 
     if context:
       instructions = instructions.replace("{{context}}", context)
-
+      voice_mail_response = voice_mail_response.replace("{{context}}", context)
     if to_phone_number:
       instructions = instructions.replace("{{phone_number}}", to_phone_number)
-    
+      voice_mail_response = voice_mail_response.replace("{{phone_number}}", to_phone_number)
 
     
     if calendar_tools:
@@ -53,7 +55,7 @@ def generate_prompt(assistant: Assistant,call_ctx):
           - Spanish: “por favor deje su mensaje”, “después del tono”
           - Acoustic: one short beep followed by ~0.3–1.0 s silence
         
-        When Voice Mail Detection is detected, you must call the hang_up_call function with last message as "Hey {customer_name if customer_name is not None else "there"}, sorry I missed you! This is {assistant.get('name')}. I just wanted to reach out and share a quick update. Feel free to call me back at {to_phone_number if to_phone_number is not None else "this number"}, or I’ll follow up later. Have a great day!"
+        When Voice Mail Detection is detected, you must call the hang_up_call function with last message as "{voice_mail_response}".
           
         """
     else: 
@@ -80,7 +82,7 @@ def generate_prompt(assistant: Assistant,call_ctx):
           - Spanish: “por favor deje su mensaje”, “después del tono”
           - Acoustic: one short beep followed by ~0.3–1.0 s silence
         
-          When Voice Mail Detection is detected, you must call the hang_up_call function with last message as "Hey {customer_name if customer_name is not None else "there"}, sorry I missed you! This is {assistant.get('name')}. I just wanted to reach out and share a quick update. Feel free to call me back at {to_phone_number if to_phone_number is not None else "this number"}, or I’ll follow up later. Have a great day!"
+          When Voice Mail Detection is detected, you must call the hang_up_call function with last message as "{voice_mail_response}".
         """
     
     return prompt
