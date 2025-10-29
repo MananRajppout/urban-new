@@ -7,7 +7,10 @@ const {
   getSheetStatus,
   resetSheet,
   getSheetConfig,
-  getSheetHeader
+  getSheetHeader,
+  scheduleCalls,
+  cancelScheduledCalls,
+  getScheduledCallByAgentId
 } = require("../controller/sheetController");
 
 const router = express.Router();
@@ -20,5 +23,7 @@ router.post("/sheet/start", checkSessionExpiration(["customer"]), startCalls);
 router.post("/sheet/stop", checkSessionExpiration(["customer"]), stopCalls);
 router.post("/sheet/reset", checkSessionExpiration(["customer"]), resetSheet);
 router.post("/sheet/header", checkSessionExpiration(["customer"]), getSheetHeader);
-
+router.post("/sheet/schedule", checkSessionExpiration(["customer"]), scheduleCalls);
+router.post("/sheet/cancel", checkSessionExpiration(["customer"]), cancelScheduledCalls);
+router.get("/sheet/scheduled", checkSessionExpiration(["customer"]), getScheduledCallByAgentId);
 module.exports = router; 

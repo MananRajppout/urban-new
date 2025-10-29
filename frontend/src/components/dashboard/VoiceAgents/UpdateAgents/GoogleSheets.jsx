@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
-import { Link2, AlertCircle } from "lucide-react";
+import { Link2, AlertCircle, Calendar, Clock, X, CheckCircle, XCircle, Loader } from "lucide-react";
 import { toast } from "react-hot-toast";
 import {
   Select,
@@ -9,8 +9,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { da } from "date-fns/locale";
-import { se } from "date-fns/locale";
 
 const GoogleSheets = ({ agent }) => {
   // console.log('agentData',agentData)
@@ -32,6 +30,14 @@ const GoogleSheets = ({ agent }) => {
     summary: "",
     call_status: "",
   });
+
+  // Timer/Schedule state
+  const [scheduleDate, setScheduleDate] = useState("");
+  const [scheduleTime, setScheduleTime] = useState("");
+  const [timezone, setTimezone] = useState(Intl.DateTimeFormat().resolvedOptions().timeZone);
+  const [isScheduling, setIsScheduling] = useState(false);
+  const [scheduledTasks, setScheduledTasks] = useState([]);
+  const [isCancelling, setIsCancelling] = useState({});
 
   //   const agentId = "67e0517a7bfa14d48bcf43cd"; // Static agent ID
   const authToken =
@@ -80,7 +86,34 @@ const GoogleSheets = ({ agent }) => {
     };
 
     fetchSheetConfig();
+    fetchScheduledTasks();
   }, [agentId, authToken]);
+
+  // Fetch scheduled tasks
+  const fetchScheduledTasks = async () => {
+    if (!agentId) return;
+
+    try {
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_SERVER_URL}/api/sheet/scheduled?agent_id=${agentId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${authToken}`,
+          },
+        }
+      );
+      const data = await response.json();
+
+      if (data.success && data.tasks) {
+        setScheduledTasks(data.tasks);
+      } else {
+        setScheduledTasks([]);
+      }
+    } catch (error) {
+      console.error("Error fetching scheduled tasks:", error);
+      setScheduledTasks([]);
+    }
+  };
 
   // Function to configure the spreadsheet
   const handleConfigure = async () => {
@@ -252,6 +285,120 @@ const GoogleSheets = ({ agent }) => {
       console.error("Error fetching sheet header:", error);
     }
   }
+
+  // Function to schedule calls
+  const handleSchedule = async () => {
+    if (!scheduleDate || !scheduleTime) {
+      toast.error("Please select both date and time");
+      return;
+    }
+
+    if (!isConfigured) {
+      toast.error("Please configure the sheet first");
+      return;
+    }
+
+    try {
+      setIsScheduling(true);
+      const dateTimeString = `${scheduleDate}T${scheduleTime}`;
+      
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_SERVER_URL}/api/sheet/schedule`,
+        {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${authToken}`,
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            agent_id: agentId,
+            time: dateTimeString,
+            timezone: timezone,
+          }),
+        }
+      );
+      const data = await response.json();
+
+      if (data.success) {
+        toast.success("Calls scheduled successfully!");
+        setScheduleDate("");
+        setScheduleTime("");
+        fetchScheduledTasks(); // Refresh the list
+      } else {
+        toast.error(data.message || "Failed to schedule calls");
+      }
+    } catch (error) {
+      console.error("Error scheduling calls:", error);
+      toast.error("An error occurred while scheduling calls");
+    } finally {
+      setIsScheduling(false);
+    }
+  };
+
+  // Function to cancel scheduled calls
+  const handleCancelSchedule = async (taskId) => {
+    try {
+      setIsCancelling({ ...isCancelling, [taskId]: true });
+      
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_SERVER_URL}/api/sheet/cancel`,
+        {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${authToken}`,
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ task_id: taskId }),
+        }
+      );
+      const data = await response.json();
+
+      if (data.success) {
+        toast.success("Scheduled calls cancelled successfully!");
+        fetchScheduledTasks(); // Refresh the list
+      } else {
+        toast.error(data.message || "Failed to cancel scheduled calls");
+      }
+    } catch (error) {
+      console.error("Error cancelling scheduled calls:", error);
+      toast.error("An error occurred while cancelling scheduled calls");
+    } finally {
+      setIsCancelling({ ...isCancelling, [taskId]: false });
+    }
+  };
+
+  // Format date for display
+  const formatDate = (dateString) => {
+    const date = new Date(dateString);
+    return date.toLocaleString('en-US', {
+      year: 'numeric',
+      month: 'short',
+      day: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit',
+      timeZone: timezone
+    });
+  };
+
+  // Get status badge
+  const getStatusBadge = (status) => {
+    const statusConfig = {
+      pending: { color: 'bg-yellow-900/30 border-yellow-700 text-yellow-400', icon: Clock },
+      completed: { color: 'bg-green-900/30 border-green-700 text-green-400', icon: CheckCircle },
+      failed: { color: 'bg-red-900/30 border-red-700 text-red-400', icon: XCircle },
+      processing: { color: 'bg-blue-900/30 border-blue-700 text-blue-400', icon: Loader }
+    };
+
+    const config = statusConfig[status] || statusConfig.pending;
+    const StatusIcon = config.icon;
+
+    return (
+      <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium border ${config.color}`}>
+        <StatusIcon className="w-3 h-3 mr-1" />
+        {status}
+      </span>
+    );
+  };
 
   return (
     <div className="glass-panel p-6">
@@ -487,7 +634,120 @@ const GoogleSheets = ({ agent }) => {
               </Button>
             </div>
 
+            {/* Schedule Calls Section */}
+            <div className="border-t border-subtle-border pt-6">
+              <h3 className="text-base font-medium text-white mb-3 flex items-center">
+                <Calendar className="w-5 h-5 mr-2" />
+                Schedule Calls
+              </h3>
+              <p className="text-sm text-gray-400 mb-4">
+                Schedule your sheet calls to run at a specific date and time
+              </p>
 
+              <div className="space-y-4">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-sm text-gray-400 mb-1">
+                      Date
+                    </label>
+                    <input
+                      type="date"
+                      value={scheduleDate}
+                      onChange={(e) => setScheduleDate(e.target.value)}
+                      min={new Date().toISOString().split('T')[0]}
+                      className="glass-panel border border-subtle-border rounded-md px-4 py-2 w-full text-white bg-transparent focus:border-accent-teal focus:outline-none"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm text-gray-400 mb-1">
+                      Time
+                    </label>
+                    <input
+                      type="time"
+                      value={scheduleTime}
+                      onChange={(e) => setScheduleTime(e.target.value)}
+                      className="glass-panel border border-subtle-border rounded-md px-4 py-2 w-full text-white bg-transparent focus:border-accent-teal focus:outline-none"
+                    />
+                  </div>
+                </div>
+
+                <div>
+                  <label className="block text-sm text-gray-400 mb-1">
+                    Timezone
+                  </label>
+                  <input
+                    type="text"
+                    value={timezone}
+                    readOnly
+                    className="glass-panel border border-subtle-border rounded-md px-4 py-2 w-full text-gray-400 bg-transparent cursor-not-allowed"
+                  />
+                </div>
+
+                <Button
+                  variant="outline"
+                  className="border-subtle-border text-gray-300 hover:text-white"
+                  onClick={handleSchedule}
+                  disabled={isScheduling || !scheduleDate || !scheduleTime}
+                >
+                  <Clock className="w-4 h-4 mr-2" />
+                  {isScheduling ? "Scheduling..." : "Schedule Calls"}
+                </Button>
+              </div>
+
+              {/* Scheduled Tasks List */}
+              {scheduledTasks.length > 0 && (
+                <div className="mt-6">
+                  <h4 className="text-sm font-medium text-white mb-3">
+                    Scheduled Tasks ({scheduledTasks.length})
+                  </h4>
+                  <div className="space-y-3">
+                    {scheduledTasks.map((task) => (
+                      <div
+                        key={task._id}
+                        className="glass-panel border border-subtle-border rounded-md p-4"
+                      >
+                        <div className="flex items-start justify-between">
+                          <div className="flex-1">
+                            <div className="flex items-center space-x-3 mb-2">
+                              {getStatusBadge(task.status)}
+                              <span className="text-sm text-gray-300">
+                                {formatDate(task.time)}
+                              </span>
+                            </div>
+                            <p className="text-xs text-gray-500">
+                              Task ID: {task._id}
+                            </p>
+                          </div>
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            className="border-red-700 text-red-400 hover:bg-red-900/30 hover:text-red-300"
+                            onClick={() => handleCancelSchedule(task._id)}
+                            disabled={
+                              task.status === "completed" ||
+                              task.status === "failed" ||
+                              isCancelling[task._id]
+                            }
+                          >
+                            {isCancelling[task._id] ? (
+                              <>
+                                <Loader className="w-4 h-4 mr-1 animate-spin" />
+                                Cancelling...
+                              </>
+                            ) : (
+                              <>
+                                <X className="w-4 h-4 mr-1" />
+                                Cancel
+                              </>
+                            )}
+                          </Button>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
           </>
         )}
       </div>

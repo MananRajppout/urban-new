@@ -185,6 +185,16 @@ const websiteNotificationSchema = new mongoose.Schema({
   created_time: { type: Date, default: Date.now, expires: "24h" },
 });
 
+
+const outboundCallTask = new mongoose.Schema({
+  time: { type: Date, required: true },
+  user_id: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true },
+  agent_id: { type: mongoose.Schema.Types.ObjectId, ref: "AiAgent", required: true },
+  status: { type: String, required: true, default: "pending",enum: ["pending", "completed", "failed"] },
+  created_time: { type: Date, default: Date.now },
+  updated_time: { type: Date, default: Date.now },
+});
+
 module.exports = {
   User: mongoose.model("User", userSchema),
   VerificationToken: mongoose.model(
@@ -203,4 +213,5 @@ module.exports = {
     "WebsiteNotification",
     websiteNotificationSchema
   ),
+  OutboundCallTask: mongoose.model("OutboundCallTask", outboundCallTask),
 };

@@ -7,6 +7,9 @@ const { createSIPParticipant } = require("../utils.js");
 const { PlivoPhoneRecord } = require("../model/plivoModel.js");
 const CallHistory = require("../../voice_ai/model.js").CallHistory;
 const uuid = require("uuid")
+const schedulerService = require("../../services/schedulerService");
+const {DateTime} = require("luxon");
+const {OutboundCallTask} = require("../../user/model.js");
 exports.configureSheet = catchAsyncError(async (req, res) => {
   const { agent_id, spreadsheet_id, sheet_name, column_mappings,mapped } = req.body;
   const user_id = req.user.id;
@@ -88,6 +91,88 @@ exports.configureSheet = catchAsyncError(async (req, res) => {
   }
 });
 
+
+exports.scheduleCalls = catchAsyncError(async (req, res) => {
+  const { agent_id, time, timezone} = req.body;
+  const user_id = req.user.id;
+
+  if (!time || !timezone || !agent_id) {
+    return res.status(400).json({
+      success: false,
+      message: "Missing required fields: agent_id, time, or timezone"
+    });
+  }
+
+  const timeInUTC = DateTime.fromISO(time, { zone: timezone }).toUTC().toISO();
+  const outboundCallTask = new OutboundCallTask({
+    time: timeInUTC,
+    user_id,
+    agent_id,
+    status: "pending",
+  });
+  await outboundCallTask.save();
+  await schedulerService.schedule(timeInUTC, "execute user task", { user_id, agent_id, task_id: outboundCallTask._id });
+
+  res.status(200).json({
+    success: true,
+    message: "Calls scheduled successfully",
+    task: outboundCallTask
+  });
+})
+
+
+exports.cancelScheduledCalls = catchAsyncError(async (req, res) => {
+  const { task_id } = req.body;
+  const outboundCallTask = await OutboundCallTask.findById(task_id);
+  if (!outboundCallTask) {
+    return res.status(400).json({
+      success: false,
+      message: "Task not found"
+    });
+  }
+  await outboundCallTask.deleteOne();
+  await schedulerService.cancel({"data.task_id": task_id});
+  res.status(200).json({
+    success: true,
+    message: "Scheduled calls cancelled"
+  });
+});
+
+
+exports.getScheduledCallByAgentId = catchAsyncError(async (req, res) => {
+  const { agent_id } = req.query;
+  const user_id = req.user.id;
+
+  if (!agent_id) {
+    return res.status(400).json({
+      success: false,
+      message: "Agent ID is required"
+    });
+  }
+
+  const outboundCallTasks = await OutboundCallTask.find({ 
+    agent_id, 
+    user_id 
+  }).sort({ time: 1 });
+
+  if (!outboundCallTasks || outboundCallTasks.length === 0) {
+    return res.status(200).json({
+      success: true,
+      message: "No scheduled calls found",
+      tasks: [],
+      isScheduled: false
+    });
+  }
+
+  res.status(200).json({
+    success: true,
+    tasks: outboundCallTasks,
+    isScheduled: true
+  });
+});
+
+
+
 exports.startCalls = catchAsyncError(async (req, res) => {
   const { agent_id } = req.body;
   const user_id = req.user.id;
@@ -154,6 +239,8 @@ exports.startCalls = catchAsyncError(async (req, res) => {
     message: "Call processing started"
   });
 });
+
+
 
 exports.getSheetHeader = catchAsyncError(async (req, res) => {
   const { spreadsheet_id,sheet_name } = req.body;
