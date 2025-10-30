@@ -9,13 +9,16 @@ app.get("/", (req, res) => {
 
 
 const PORT = process.env.PORT || 8080;
-const server = app.listen(PORT, () => {
+const server = app.listen(PORT, async () => {
   console.log(`Server is port on the ${PORT}`);
+  await schedulerService.start();
+  console.log("Scheduler started");
 });
-schedulerService.start();
+
 connectDatabase();
 
 process.on("unhandledRejection", (err) => {
   console.log(`Error: ${err.message}`);
   console.log(`Shutting down the server due to Unhandled rejection`);
 });
+

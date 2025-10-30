@@ -103,7 +103,16 @@ exports.scheduleCalls = catchAsyncError(async (req, res) => {
     });
   }
 
+  console.log(time)
+
   const timeInUTC = DateTime.fromISO(time, { zone: timezone }).toUTC().toISO();
+  console.log(timeInUTC,"timeInUTC");
+  console.log(timezone,"timezone");
+  console.log(time,"time");
+  console.log(agent_id,"agent_id");
+  console.log(user_id,"user_id");
+  console.log(new Date(timeInUTC).toLocaleString(),"new Date(timeInUTC)");
+
   const outboundCallTask = new OutboundCallTask({
     time: timeInUTC,
     user_id,
@@ -111,7 +120,14 @@ exports.scheduleCalls = catchAsyncError(async (req, res) => {
     status: "pending",
   });
   await outboundCallTask.save();
-  await schedulerService.schedule(timeInUTC, "execute user task", { user_id, agent_id, task_id: outboundCallTask._id });
+
+  const dateToSchedule = new Date('2025-10-31T00:06:00');  // use 'Z' for UTC time
+  
+  const date = new Date(timeInUTC);
+
+  console.log(date.toISOString(),"date");
+  await schedulerService.schedule(date, 'make a call',  { user_id, agent_id, task_id: outboundCallTask._id });
+  // await schedulerService.schedule(date, "execute user task", { user_id, agent_id, task_id: outboundCallTask._id });
 
   res.status(200).json({
     success: true,
@@ -383,7 +399,7 @@ exports.getSheetConfig = catchAsyncError(async (req, res) => {
   });
 });
 
-exports.processNextCall = catchAsyncError(async (req, res) => {
+exports.processNextCallController = catchAsyncError(async (req, res) => {
   const { agentId } = req.body;
   const agent = await AiAgent.findById(agentId);
   if (!agent) {
@@ -440,7 +456,7 @@ exports.processNextCall = catchAsyncError(async (req, res) => {
   });
 });
 
-async function processNextCall(config, agent) {
+const processNextCall = async (config, agent) => {
   try {
     // Store the original base prompt
     const originalBasePrompt = agent.base_prompt;
@@ -458,6 +474,9 @@ async function processNextCall(config, agent) {
         config.sheet_name,
         config.current_row
       );
+
+
+      console.log(row,"row",config.current_row,config.sheet_name,config.spreadsheet_id);
 
 
       if (!row) {
