@@ -1,6 +1,7 @@
-livekit-agents[openai, elevenlabs, deepgram, silero, turn-detector, mcp,groq,rag,google,rag,rime,sarvam,assemblyai]>=1.2
+livekit-agents[openai, elevenlabs, silero, turn-detector, mcp,groq,rag,google,rag,rime,sarvam,assemblyai]>=1.2
 python-dotenv~=1.0
 aiofile~=3.8.8
 pytz
 livekit-plugins-noise-cancellation
 livekit-plugins-turn-detector
+livekit-plugins-deepgram==1.2.18

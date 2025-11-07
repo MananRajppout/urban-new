@@ -5,6 +5,7 @@ export const LanguageOptions = [
 
 
 export const STTOptions = [
+  { name: "flux-general-en", value: "flux-general-en" },
   { name: "nova-3", value: "nova-3" },
   { name: "nova-3-general", value: "nova-3-general" },
   { name: "nova-3-medical", value: "nova-3-medical" },

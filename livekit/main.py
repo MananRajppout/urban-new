@@ -188,10 +188,10 @@ async def create_llm_engine(assistant_info: AssistantData):
         return groq.LLM(model="llama3-8b-8192", **base_config)
     
     elif gpt_model == "cerebras/llama-4-maverick-17b-128e-instruct":
-        return openai.LLM.with_cerebras(model="llama-4-maverick-17b-128e-instruct", **base_config)
+        return openai.LLM.with_cerebras(model="llama3.3-70b", **base_config)
     
     elif gpt_model == "cerebras/llama-4-scout-17b-16e-instruct":
-        return openai.LLM.with_cerebras(model="llama-4-scout-17b-16e-instruct", **base_config)
+        return openai.LLM.with_cerebras(model="llama3.3-70b", **base_config)
     
     elif gpt_model == "cerebras/gpt-oss-120b":
         return openai.LLM.with_cerebras(model="gpt-oss-120b", **base_config)
@@ -231,6 +231,8 @@ async def create_stt_engine(assistant_info: AssistantData):
         return deepgram.STT(language=language, model="nova-3",smart_format=False,punctuate=False,filler_words=False)
     elif stt_engine == "nova-3-medical":
         return deepgram.STT(language=language, model="nova-3-medical",smart_format=False,punctuate=False,filler_words=False)
+    elif stt_engine == "flux-general-en":
+        return deepgram.STTv2(model="flux-general-en",eager_eot_threshold=0.4)
     elif stt_engine == "assemblyai":
         return assemblyai.STT()
     else:
