@@ -37,8 +37,8 @@ from services.agent_session import Assistant, AssistantWithoutCalendarTools
 from livekit.agents import  MetricsCollectedEvent, UserStateChangedEvent, AgentStateChangedEvent
 from services.telemetry import setup_langfuse
 logger = logging.getLogger("voice-assistant")
+from services.redis_service import publish_call_complete
 load_dotenv()
-
 
 
 def prewarm(proc: JobProcess):
@@ -392,6 +392,7 @@ async def entrypoint(ctx: JobContext):
 
     # Enhanced disconnect handling
     async def log_usage():
+        publish_call_complete(call_ctx.get("callId"), "completed")
         logger.info(f"User disconnected")
 
         # Call webhook hangup

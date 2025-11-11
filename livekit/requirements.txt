@@ -5,3 +5,4 @@ pytz
 livekit-plugins-noise-cancellation
 livekit-plugins-turn-detector
 livekit-plugins-deepgram==1.2.18
+redis

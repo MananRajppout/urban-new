@@ -1342,6 +1342,7 @@ exports.createSIPParticipant = async (toNumber,fromNumber, trunkId,agentId,custo
       roomName,
       sipParticipantOptions
     );
+    
     console.log("created sip participant", participant);
     return caller_id;
   } catch (error) {

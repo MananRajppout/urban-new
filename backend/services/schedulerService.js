@@ -7,6 +7,7 @@ const { PlivoPhoneRecord } = require("../v2/model/plivoModel");
 const { createSIPParticipant } = require("../v2/utils");
 const CallHistory = require("../voice_ai/model").CallHistory;
 const uuid = require("uuid");
+const { waitForCallComplete } = require("./redisService");
 dotenv.config();
 
 
@@ -123,7 +124,8 @@ const processNextCall = async (config, agent) => {
           await config.save();
   
           // Wait for configured delay between calls
-          await new Promise(resolve => setTimeout(resolve, config.call_delay));
+          // await new Promise(resolve => setTimeout(resolve, config.call_delay));
+          await waitForCallComplete(callId);
         } catch (error) {
           // Restore the original base prompt in case of error
           // agent.base_prompt = originalBasePrompt;

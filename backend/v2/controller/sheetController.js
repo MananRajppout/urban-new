@@ -10,6 +10,7 @@ const uuid = require("uuid")
 const schedulerService = require("../../services/schedulerService");
 const {DateTime} = require("luxon");
 const {OutboundCallTask} = require("../../user/model.js");
+const { waitForCallComplete } = require("../../services/redisService");
 exports.configureSheet = catchAsyncError(async (req, res) => {
   const { agent_id, spreadsheet_id, sheet_name, column_mappings,mapped } = req.body;
   const user_id = req.user.id;
@@ -567,7 +568,8 @@ const processNextCall = async (config, agent) => {
         await config.save();
 
         // Wait for configured delay between calls
-        await new Promise(resolve => setTimeout(resolve, config.call_delay));
+        // await new Promise(resolve => setTimeout(resolve, config.call_delay));
+        await waitForCallComplete(callId);
       } catch (error) {
         // Restore the original base prompt in case of error
         // agent.base_prompt = originalBasePrompt;
