@@ -195,9 +195,7 @@ const RecentCalls = ({ calls = [], pagination = null, onPageChange }) => {
                     </td>
                     <td className="py-4 px-4 text-center">
                       <span
-                        className={`inline-flex px-2.5 py-0.5 rounded-full text-xs font-medium ${getSentimentBadge(
-                          call.sentiment
-                        )}`}
+                        className={`inline-flex px-2.5 py-0.5 rounded-full text-xs font-medium bg-sentiment-positive/20 text-sentiment-positive`}
                       >
                         {/* {typeof call.sentiment === "string"
                           ? call.sentiment.charAt(0).toUpperCase() +
