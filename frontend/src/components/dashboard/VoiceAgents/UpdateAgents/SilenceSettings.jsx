@@ -24,12 +24,12 @@ const SilenceSetting = ({
   return (
     <>
       <div className="glass-panel p-6">
-        <h2 className="text-lg font-medium text-white mb-4">Add Levels</h2>
+        <h2 className="text-lg font-medium text-white mb-4">Add Labels</h2>
 
         <div className="space-y-6">
           <div className="space-y-6">
             <div className="flex justify-end items-center">
-              <Button onClick={() => handleAddMoreLevel()} className="border-none cursor-pointer text-white">Add Level</Button>
+              <Button onClick={() => handleAddMoreLevel()} className="border-none cursor-pointer text-white">Add Label</Button>
             </div>
 
             {
@@ -43,15 +43,15 @@ const SilenceSetting = ({
                         value={level.name}
                         onChange={(e) => handleAddLevel(index, "name", e.target.value)}
                         placeholder="Level Name"
-                        className="glass-panel border border-subtle-border rounded-md px-4 py-2 w-full text-sm text-white focus:border-accent-teal focus:outline-none resize-none"
+                        className="glass-panel border border-subtle-border rounded-md px-4 py-2 w-full text-sm text-white hover:border-accent-teal hover:outline-none resize-none"
                       />
                     </div>
                     <div>
                       <input
                         value={level.description}
                         onChange={(e) => handleAddLevel(index, "description", e.target.value)}
-                        placeholder="Level Description"
-                        className="glass-panel border border-subtle-border rounded-md px-4 py-2 w-full text-sm text-white focus:border-accent-teal focus:outline-none resize-none"
+                        placeholder="Label Description"
+                        className="glass-panel border border-subtle-border rounded-md px-4 py-2 w-full text-sm text-white hover:border-accent-teal hover:outline-none resize-none"
                       />
                     </div>
 

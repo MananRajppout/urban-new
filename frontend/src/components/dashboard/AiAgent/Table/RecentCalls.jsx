@@ -201,7 +201,7 @@ const RecentCalls = ({ calls = [], pagination = null, onPageChange }) => {
                           ? call.sentiment.charAt(0).toUpperCase() +
                             call.sentiment.slice(1)
                           : "Unknown"} */}
-                        {call.originalData.label || "No Label"}
+                        {call.originalData.level || "No Label"}
                       </span>
                     </td>
                     <td className="py-4 px-4 text-right">

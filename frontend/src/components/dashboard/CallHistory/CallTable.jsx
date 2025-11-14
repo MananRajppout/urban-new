@@ -85,7 +85,7 @@ const CallTable = ({
                   <span
                     className={`inline-flex px-2.5 py-0.5 rounded-full text-xs font-medium bg-sentiment-positive/20 text-sentiment-positive`}
                   >
-                    {call.originalData.label || "No Label"}
+                    {call.originalData.level || "No Label"}
                   </span>
                 </td>
                 <td className="py-4 px-4 text-right">
