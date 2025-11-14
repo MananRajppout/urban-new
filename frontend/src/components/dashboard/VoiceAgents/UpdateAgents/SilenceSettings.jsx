@@ -64,7 +64,7 @@ const SilenceSetting = ({
             {
               levels.length > 0 && (
                 <div className="flex justify-end items-center">
-                  <Button onClick={() => handleSaveLevels()} className="border-none cursor-pointer text-white">Save Levels</Button>
+                  <Button onClick={() => handleSaveLevels()} className="border-none cursor-pointer text-white">Save Labels</Button>
                 </div>
               )
             }
