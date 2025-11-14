@@ -157,7 +157,7 @@ const RecentCalls = ({ calls = [], pagination = null, onPageChange }) => {
                     Duration
                   </th>
                   <th className="py-3 px-4 text-center text-xs font-medium text-gray-400 uppercase tracking-wider">
-                    Level
+                    Label
                   </th>
                   <th className="py-3 px-4 text-right text-xs font-medium text-gray-400 uppercase tracking-wider">
                     Status
@@ -203,7 +203,7 @@ const RecentCalls = ({ calls = [], pagination = null, onPageChange }) => {
                           ? call.sentiment.charAt(0).toUpperCase() +
                             call.sentiment.slice(1)
                           : "Unknown"} */}
-                        {call.originalData.level || "No Level"}
+                        {call.originalData.label || "No Label"}
                       </span>
                     </td>
                     <td className="py-4 px-4 text-right">
